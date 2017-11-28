@@ -1,0 +1,139 @@
+﻿@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../SxcManage/Sxc_OrderInfo/GetPageListJson",
+            datatype: "json",           
+            colModel: [
+                { label: '主键', name: 'ID', hidden: true },
+                { label: '公司Id', name: 'OrganizeId', hidden: true },
+                { label: 'Sort', name: 'Sort', hidden: true },
+                { label: "订单时间", name: "CreateTime", width: 200, align: "left", sortable: false },
+                { label: "收件人", name: "Consignee", width: 100, align: "left", sortable: false },
+                { label: "收货地区", name: "AddressRegion", width: 200, align: "left", sortable: false },
+                { label: "收货地址", name: "AddressDetail", width: 400, align: "left", sortable: false },
+                { label: "邮政编码", name: "Zipcode", width: 100, align: "left", sortable: false },
+                { label: "联系电话", name: "Telephone", width: 100, align: "left", sortable: false },
+                { label: "商品数量", name: "TotalAmount", width: 60, align: "center", sortable: false },
+                { label: "支付积分", name: "TotalPoints", width: 60, align: "center", sortable: false },
+                { label: "购买备注", name: "UserNote", width: 400, align: "left", sortable: false }
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'CreateTime desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加Sxc_OrderInfo',
+            url: '/SxcManage/Sxc_OrderInfo/Sxc_OrderInfoForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑Sxc_OrderInfo',
+                url: '/SxcManage/Sxc_OrderInfo/Sxc_OrderInfoForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../SxcManage/Sxc_OrderInfo/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的Sxc_OrderInfo！', 0);
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="Account">账户</a></li>
+                            <li><a data-value="RealName">姓名</a></li>
+                            <li><a data-value="Mobile">手机</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>            
+        </div>
+        @*<script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

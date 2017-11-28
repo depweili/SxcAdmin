@@ -1,0 +1,124 @@
+﻿@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../SxcManage/Sxc_Commodity/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left',sortable: true  },
+                { label: 'Name', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
+                { label: 'CommodityUID', name: 'CommodityUID', index: 'CommodityUID', width: 100, align: 'left',sortable: true  },
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true  },
+                { label: 'Description', name: 'Description', index: 'Description', width: 100, align: 'left',sortable: true  },
+                { label: 'Details', name: 'Details', index: 'Details', width: 100, align: 'left',sortable: true  },
+                { label: 'Price', name: 'Price', index: 'Price', width: 100, align: 'left',sortable: true  },
+                { label: 'Stock', name: 'Stock', index: 'Stock', width: 100, align: 'left',sortable: true  },
+                { label: 'Points', name: 'Points', index: 'Points', width: 100, align: 'left',sortable: true  },
+                { label: 'Pic', name: 'Pic', index: 'Pic', width: 100, align: 'left',sortable: true  },
+                { label: 'Memo', name: 'Memo', index: 'Memo', width: 100, align: 'left',sortable: true  },
+                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
+                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
+                { label: 'CategoryID', name: 'CategoryID', index: 'CategoryID', width: 100, align: 'left',sortable: true  },
+                { label: 'IsReal', name: 'IsReal', index: 'IsReal', width: 100, align: 'left',sortable: true  },
+                { label: 'HasVideo', name: 'HasVideo', index: 'HasVideo', width: 100, align: 'left',sortable: true  },
+                { label: 'ArticleID', name: 'ArticleID', index: 'ArticleID', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'ID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加Sxc_Commodity',
+            url: '/SxcManage/Sxc_Commodity/Sxc_CommodityForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑Sxc_Commodity',
+                url: '/SxcManage/Sxc_Commodity/Sxc_CommodityForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../SxcManage/Sxc_Commodity/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的Sxc_Commodity！', 0);
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

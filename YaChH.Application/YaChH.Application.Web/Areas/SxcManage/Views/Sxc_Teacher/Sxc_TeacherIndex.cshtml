@@ -1,0 +1,118 @@
+﻿@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../SxcManage/Sxc_Teacher/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true  },
+                { label: 'Name', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
+                { label: 'IdentifyCode', name: 'IdentifyCode', index: 'IdentifyCode', width: 100, align: 'left',sortable: true  },
+                { label: 'Type', name: 'Type', index: 'Type', width: 100, align: 'left',sortable: true  },
+                { label: 'Title', name: 'Title', index: 'Title', width: 100, align: 'left',sortable: true  },
+                { label: 'Introduction', name: 'Introduction', index: 'Introduction', width: 100, align: 'left',sortable: true  },
+                { label: 'Pic', name: 'Pic', index: 'Pic', width: 100, align: 'left',sortable: true  },
+                { label: 'Order', name: 'Order', index: 'Order', width: 100, align: 'left',sortable: true  },
+                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
+                { label: 'ArticleID', name: 'ArticleID', index: 'ArticleID', width: 100, align: 'left',sortable: true  },
+                { label: 'Character', name: 'Character', index: 'Character', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'ID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加Sxc_Teacher',
+            url: '/SxcManage/Sxc_Teacher/Sxc_TeacherForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑Sxc_Teacher',
+                url: '/SxcManage/Sxc_Teacher/Sxc_TeacherForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../SxcManage/Sxc_Teacher/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的Sxc_Teacher！', 0);
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

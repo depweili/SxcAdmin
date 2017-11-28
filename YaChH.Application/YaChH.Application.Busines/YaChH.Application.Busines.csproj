@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F61C20BD-F3E5-42AA-A72A-32A413EB05F9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YaChH.Application.Busines</RootNamespace>
+    <AssemblyName>YaChH.Application.Busines</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountBLL.cs" />
+    <Compile Include="AppManage\App_ProjectBLL.cs" />
+    <Compile Include="AppManage\App_TemplatesBLL.cs" />
+    <Compile Include="AuthorizeManage\AuthorizeBLL.cs" />
+    <Compile Include="AuthorizeManage\FilterIPBLL.cs" />
+    <Compile Include="AuthorizeManage\FilterTimeBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleButtonBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleColumnBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleFormBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleFormInstanceBLL.cs" />
+    <Compile Include="AuthorizeManage\PermissionBLL.cs" />
+    <Compile Include="BaseManage\DepartmentBLL.cs" />
+    <Compile Include="BaseManage\JobBLL.cs" />
+    <Compile Include="BaseManage\OrganizeBLL.cs" />
+    <Compile Include="BaseManage\PostBLL.cs" />
+    <Compile Include="BaseManage\RoleBLL.cs" />
+    <Compile Include="BaseManage\studentBLL.cs" />
+    <Compile Include="BaseManage\UserBLL.cs" />
+    <Compile Include="BaseManage\UserGroupBLL.cs" />
+    <Compile Include="CustomerManage\CashBalanceBLL.cs" />
+    <Compile Include="CustomerManage\ChanceBLL.cs" />
+    <Compile Include="CustomerManage\CustomerBLL.cs" />
+    <Compile Include="CustomerManage\CustomerContactBLL.cs" />
+    <Compile Include="CustomerManage\ExpensesBLL.cs" />
+    <Compile Include="CustomerManage\InvoiceBLL.cs" />
+    <Compile Include="CustomerManage\OrderBLL.cs" />
+    <Compile Include="CustomerManage\OrderEntryBLL.cs" />
+    <Compile Include="CustomerManage\ReceivableBLL.cs" />
+    <Compile Include="CustomerManage\ReceivableReportBLL.cs" />
+    <Compile Include="CustomerManage\TrailRecordBLL.cs" />
+    <Compile Include="DemoManage\OfficeRkBLL.cs" />
+    <Compile Include="FlowManage\FormModuleBLL.cs" />
+    <Compile Include="FlowManage\FormModuleContentBLL.cs" />
+    <Compile Include="FlowManage\FormModuleInstanceBLL.cs" />
+    <Compile Include="FlowManage\FormModuleRelationBLL.cs" />
+    <Compile Include="FlowManage\WFDelegate.cs" />
+    <Compile Include="FlowManage\WFFrmMainBLL.cs" />
+    <Compile Include="FlowManage\WFRuntimeBLL.cs" />
+    <Compile Include="FlowManage\WFSchemeInfoBLL.cs" />
+    <Compile Include="MessageManage\IMContentBLL.cs" />
+    <Compile Include="MessageManage\IMGroupBLL.cs" />
+    <Compile Include="MessageManage\IMUserBLL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicInfoManage\EmailCategoryBLL.cs" />
+    <Compile Include="PublicInfoManage\EmailContentBLL.cs" />
+    <Compile Include="PublicInfoManage\FileFolderBLL.cs" />
+    <Compile Include="PublicInfoManage\FileInfoBLL.cs" />
+    <Compile Include="PublicInfoManage\NewsBLL.cs" />
+    <Compile Include="PublicInfoManage\NoticeBLL.cs" />
+    <Compile Include="PublicInfoManage\ScheduleBLL.cs" />
+    <Compile Include="ReportManage\RptTempBLL.cs" />
+    <Compile Include="SxcManage\Sxc_AgentBLL.cs" />
+    <Compile Include="SxcManage\Sxc_CommodityBLL.cs" />
+    <Compile Include="SxcManage\Sxc_OrderInfoBLL.cs" />
+    <Compile Include="SxcManage\Sxc_TeacherBLL.cs" />
+    <Compile Include="SxcManage\Sxc_UserPaymentBLL.cs" />
+    <Compile Include="SystemManage\AreaBLL.cs" />
+    <Compile Include="SystemManage\CodeRuleBLL.cs" />
+    <Compile Include="SystemManage\DataBaseBackupBll.cs" />
+    <Compile Include="SystemManage\DataBaseLinkBLL.cs" />
+    <Compile Include="SystemManage\DataBaseTableBLL.cs" />
+    <Compile Include="SystemManage\DataItemBLL.cs" />
+    <Compile Include="SystemManage\DataItemDetailBLL.cs" />
+    <Compile Include="SystemManage\DataSourceBLL.cs" />
+    <Compile Include="SystemManage\ExcelExportBLL.cs" />
+    <Compile Include="SystemManage\ExcelImportBLL.cs" />
+    <Compile Include="SystemManage\LogBLL.cs" />
+    <Compile Include="WeChatManage\WeChatAppBLL.cs" />
+    <Compile Include="WeChatManage\WeChatOrganizeBLL.cs" />
+    <Compile Include="WeChatManage\WeChatUserBLL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\YaChH.Cache\YaChH.Cache.Factory\YaChH.Cache.Factory.csproj">
+      <Project>{95ec708b-38a2-4a5f-a22a-ab0d3f0a04b5}</Project>
+      <Name>YaChH.Cache.Factory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Cache\YaChH.Cache\YaChH.Cache.csproj">
+      <Project>{fc9b88b5-272c-449d-bcd3-be2d3baf880d}</Project>
+      <Name>YaChH.Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Data\YaChH.Data.Repository\YaChH.Data.Repository.csproj">
+      <Project>{e382ba91-440a-42d1-bca6-2f5c748b4500}</Project>
+      <Name>YaChH.Data.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util.Extension\YaChH.Util.Extension.csproj">
+      <Project>{3e0de729-b70b-4964-844a-bdee5cdb28ea}</Project>
+      <Name>YaChH.Util.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util.Offices\YaChH.Util.Offices.csproj">
+      <Project>{e0bec2aa-22ad-416e-b61e-8c8c182b0cf2}</Project>
+      <Name>YaChH.Util.Offices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util.SignalR\YaChH.Util.SignalR.csproj">
+      <Project>{618372b4-cfc9-4762-9b55-0a359fc6fda8}</Project>
+      <Name>YaChH.Util.SignalR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util.WebControl\YaChH.Util.WebControl.csproj">
+      <Project>{523d59ea-17d2-4f1c-b113-3d2f5b27a738}</Project>
+      <Name>YaChH.Util.WebControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util.WeChat\YaChH.Util.WeChat.csproj">
+      <Project>{9affef96-1659-4264-85d7-14f2319b8fd6}</Project>
+      <Name>YaChH.Util.WeChat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YaChH.Util\YaChH.Util\YaChH.Util.csproj">
+      <Project>{c3f58de0-c221-427c-98e1-5a689cc3a35d}</Project>
+      <Name>YaChH.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YaChH.Application.Code\YaChH.Application.Code.csproj">
+      <Project>{aa1a507a-356f-4783-9b99-27c3531ceed1}</Project>
+      <Name>YaChH.Application.Code</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YaChH.Application.Entity\YaChH.Application.Entity.csproj">
+      <Project>{9e855fbe-0634-4198-b22d-873216e9b38c}</Project>
+      <Name>YaChH.Application.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YaChH.Application.IService\YaChH.Application.IService.csproj">
+      <Project>{9af803d0-1065-4c37-9ef0-c3fab46f7cb0}</Project>
+      <Name>YaChH.Application.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YaChH.Application.Service\YaChH.Application.Service.csproj">
+      <Project>{8ac0a18c-f1b7-441a-b3b1-6ac426b724d6}</Project>
+      <Name>YaChH.Application.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
