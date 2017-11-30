@@ -34,6 +34,15 @@ namespace YaChH.Application.Web
             return Content(data.ToJson());
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual ActionResult ToCamelCaseJson(object data)
+        {
+            return Content(data.ToCamelCaseJson());
+        }
+        /// <summary>
         /// 返回成功消息
         /// </summary>
         /// <param name="message">消息</param>

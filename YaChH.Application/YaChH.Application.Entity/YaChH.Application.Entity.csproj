@@ -114,6 +114,8 @@
     <Compile Include="SxcManage\Sxc_OrderInfoEntity.cs" />
     <Compile Include="SxcManage\Sxc_TeacherEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />
+    <Compile Include="SxcManage\Sxc_UserProfileEntity.cs" />
+    <Compile Include="SxcManage\ViewModel\AgentMemberTreeModel.cs" />
     <Compile Include="SystemManage\AreaEntity.cs" />
     <Compile Include="SystemManage\CodeRuleEntity.cs" />
     <Compile Include="SystemManage\CodeRuleFormatEntity.cs" />
@@ -142,8 +144,6 @@
       <Name>YaChH.Application.Code</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SxcManage\ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

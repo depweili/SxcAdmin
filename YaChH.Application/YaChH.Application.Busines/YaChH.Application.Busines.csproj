@@ -99,6 +99,7 @@
     <Compile Include="SxcManage\Sxc_OrderInfoBLL.cs" />
     <Compile Include="SxcManage\Sxc_TeacherBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentBLL.cs" />
+    <Compile Include="SxcManage\Sxc_UserProfileBLL.cs" />
     <Compile Include="SystemManage\AreaBLL.cs" />
     <Compile Include="SystemManage\CodeRuleBLL.cs" />
     <Compile Include="SystemManage\DataBaseBackupBll.cs" />

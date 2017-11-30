@@ -213,6 +213,7 @@
     <Compile Include="Areas\SxcManage\Controllers\Sxc_OrderInfoController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_TeacherController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserPaymentController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_UserProfileController.cs" />
     <Compile Include="Areas\SxcManage\SxcManageAreaRegistration.cs" />
     <Compile Include="Areas\SystemManage\Controllers\AreaController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\CodeRuleController.cs" />
@@ -689,6 +690,7 @@
     <Content Include="Content\scripts\plugins\dialog\default\sprite_main_png.png" />
     <Content Include="Content\scripts\plugins\dialog\dialog.css" />
     <Content Include="Content\scripts\plugins\dialog\dialog.js" />
+    <Content Include="Content\scripts\plugins\echarts3\echarts.min.js" />
     <Content Include="Content\scripts\plugins\echarts\charts_comm.js" />
     <Content Include="Content\scripts\plugins\echarts\charts_helper.js" />
     <Content Include="Content\scripts\plugins\echarts\china.js" />
@@ -1345,6 +1347,9 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Commodity\Sxc_CommodityIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Agent\MyMembers.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
