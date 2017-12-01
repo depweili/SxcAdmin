@@ -135,7 +135,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         [HttpGet]
         public ActionResult GetMyMemeberJson()
         {
-            var userId = OperatorProvider.Provider.Current().UserId;
+            var userId = OperatorProvider.Provider.Current().Account;
             var data = sxc_agentbll.GetMyMemberList(userId);
             //if (!string.IsNullOrEmpty(userId))
             //{

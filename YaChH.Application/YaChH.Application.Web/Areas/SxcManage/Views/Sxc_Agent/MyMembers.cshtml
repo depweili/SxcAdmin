@@ -50,8 +50,10 @@
             this.groups = {};
             //存放id与对应的name映射
             this.nameMap = {}
-            //存放id与对应的name映射
+            //存放id与对应的img映射
             this.imgMap = {}
+            //存放id与对应的value映射
+            this.valueMap = {}
             //得到每个点对应的层次,为了后期进行布局
             this.levelMap = {}
             //样式设计
@@ -62,6 +64,7 @@
                 this.group();
                 this.MapNamebyId();
                 this.MapImgbyId();
+                this.ValueImgbyId();
                 this.setIdLevel(pid);
                 return this.rescusive(pid);
             },
@@ -129,6 +132,12 @@
                     this.imgMap[map["id"]] = map["symbol"]
                 }
             },
+            ValueImgbyId: function () {
+                for (var i = 0; i < this.tree.length; i++) {
+                    map = this.tree[i]
+                    this.valueMap[map["id"]] = map["value"]
+                }
+            }, 
             //设置节点属性
             setNode: function (node, name, symbolize, value, children, symbol) {
                 node['name'] = name;
@@ -147,10 +156,11 @@
                 var a = this.groups[number];
                 var nodeName = this.nameMap[number];
                 var nodeImg = this.imgMap[number];
+                var nodeValue = this.valueMap[number];
                 if (a == null || a == undefined) {
                     styleValue = this.getStyleById(number)
                     //设置节点
-                    this.setNode(node, nodeName, styleValue['symbolSize'], styleValue['value'], [], nodeImg)
+                    this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, [], nodeImg)
                     return node;
                 }
                 for (var i = 0; i < a.length; i++) {
@@ -158,7 +168,7 @@
                     data.push(children);
                 }
                 styleValue = this.getStyleById(number)
-                this.setNode(node, nodeName, styleValue['symbolSize'], styleValue['value'], data, nodeImg)
+                this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, data, nodeImg)
                 return node;
             },
             //创建组织结构图
@@ -170,7 +180,7 @@
                             //$.get('detail?name=' + params.name, function (content) {
                             //    callback(ticket, toHTML(content));
                             //});
-                            return '<span>qwqw \n sdfasdf \n </span>';
+                            return params.value;
                         },
                         triggerOn: 'mousemove'
                     },
@@ -185,7 +195,7 @@
                             right: '20%',
                             nodePadding: 20,
                             symbolSize: 7,
-
+                            initialTreeDepth:-1,
                             label: {
                                 normal: {
                                     position: 'left',
@@ -227,7 +237,7 @@
         }
         function createTreeV(myChart, title, znodes) {
             var mytree = new treeMenu(znodes)
-            treeData = mytree.init(12)
+            treeData = mytree.init(znodes[0].id)
             data = []
             data.push(treeData)
             mytree.createTreeVisual(myChart, title, data)
@@ -238,10 +248,10 @@
     </script>
 
     <script type="text/javascript">
-        learun.dialogMsg({
-            msg: 'dddd',
-            //type: 
-        })
+        //learun.dialogMsg({
+        //    msg: 'dddd',
+        //    //type: 
+        //})
         $.ajax({
             url: "GetMyMemeberJson",
             dataType:"json",
@@ -255,9 +265,9 @@
                     { id: 27, pId: 11, name: "人事经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
                     { id: 18, pId: 12, name: "HR" },
                 ]
-                data = getData(res)
+               // data = getData(res)
                 var myChart = echarts.init(document.getElementById('main'), 'macarons');
-                createTreeV(myChart, "人事架构图", data)
+                createTreeV(myChart, "人事架构图", res)
             }
 
         })

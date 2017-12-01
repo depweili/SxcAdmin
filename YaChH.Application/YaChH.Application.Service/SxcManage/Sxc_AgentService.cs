@@ -58,16 +58,18 @@ namespace YaChH.Application.Service.SxcManage
         public IEnumerable<AgentMemberTreeModel> GetMyMemberList(string userId)
         {
             var strSql = new StringBuilder();
-            strSql.Append(@"SELECT Sxc_Agent.ID Id,
-            Sxc_Agent.PID PId,
-            	  (case isnull(RealName,'') when '' then NickName  else RealName end)Name,
-            	  '' Value,
-            	 Sxc_UserProfile.AvatarUrl Symbol
+            strSql.Append(string.Format(@"with Agent as ( select Sxc_Agent.Id from Sxc_Agent inner join Sxc_User
+			  on Sxc_Agent.ID=Sxc_User.ID where Sxc_User.SystemAccount='{0}' 
 
+    union all   select d.Id from   Agent
+    inner join Sxc_Agent d on Agent.Id = d.PID ) SELECT Sxc_Agent.ID Id,Sxc_Agent.PID PId,
+            	  (case isnull(RealName,'') when '' then NickName  else RealName end)Name,
+            	  '加入日期：'+CONVERT(varchar(100), Sxc_Agent.SupAgentBindTime, 23) Value, 'image://'+Sxc_UserProfile.AvatarUrl Symbol
               FROM Sxc_UserProfile  inner join Sxc_Agent 
-              on Sxc_UserProfile.ID=Sxc_Agent.ID
-            ");
+              on Sxc_UserProfile.ID=Sxc_Agent.ID 
+			   where   Sxc_Agent.ID in (select id from Agent ) order by pid ", userId));
             //            return this.BaseRepository().FindList(strSql.ToString());
+
             RepositoryFactory<AgentMemberTreeModel> rf = new RepositoryFactory<AgentMemberTreeModel>();
             var agentList= rf.BaseRepository(DbName).FindList(strSql.ToString());
 
