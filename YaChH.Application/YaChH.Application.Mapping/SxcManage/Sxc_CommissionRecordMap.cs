@@ -7,8 +7,8 @@ namespace YaChH.Application.Mapping.SxcManage
     /// 版 本
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-27 02:06
-    /// 描 述：Sxc_UserPayment
+    /// 日 期：2017-11-29 23:12
+    /// 描 述：Sxc_CommissionRecord
     /// </summary>
     public class Sxc_CommissionRecordMap : EntityTypeConfiguration<Sxc_CommissionRecordEntity>
     {

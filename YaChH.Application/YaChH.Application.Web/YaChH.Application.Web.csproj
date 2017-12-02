@@ -209,10 +209,13 @@
     <Compile Include="Areas\ReportManage\Controllers\ReportDemoController.cs" />
     <Compile Include="Areas\ReportManage\ReportManageAreaRegistration.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_AgentController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_CommissionRecordController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CommodityController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_CooperationController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_OrderInfoController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_TeacherController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserPaymentController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_UserProfileController.cs" />
     <Compile Include="Areas\SxcManage\SxcManageAreaRegistration.cs" />
     <Compile Include="Areas\SystemManage\Controllers\AreaController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\CodeRuleController.cs" />
@@ -1345,6 +1348,12 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Commodity\Sxc_CommodityIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_CommissionRecord\Sxc_CommissionRecordForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_CommissionRecord\Sxc_CommissionRecordIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationIndex.cshtml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

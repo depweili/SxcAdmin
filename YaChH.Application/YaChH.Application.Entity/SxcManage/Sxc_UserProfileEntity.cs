@@ -7,52 +7,72 @@ namespace YaChH.Application.Entity.SxcManage
     /// 版 本
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-29 23:12
-    /// 描 述：Sxc_CommissionRecord
+    /// 日 期：2017-11-29 11:51
+    /// 描 述：Sxc_UserProfile
     /// </summary>
-    public class Sxc_CommissionRecordEntity : BaseEntity
+    public class Sxc_UserProfileEntity : BaseEntity
     {
         #region 实体成员
         /// <summary>
         /// ID
         /// </summary>
         /// <returns></returns>
-        public int? ID { get; set; }
+        public int ID { get; set; }
         /// <summary>
-        /// Commission
+        /// NickName
         /// </summary>
         /// <returns></returns>
-        public decimal? Commission { get; set; }
+        public string NickName { get; set; }
         /// <summary>
-        /// UserPaymentID
+        /// RealName
         /// </summary>
         /// <returns></returns>
-        public int? UserPaymentID { get; set; }
+        public string RealName { get; set; }
         /// <summary>
-        /// AgentID
+        /// Gender
         /// </summary>
         /// <returns></returns>
-        public int? AgentID { get; set; }
+        public int? Gender { get; set; }
         /// <summary>
-        /// State
+        /// Age
         /// </summary>
         /// <returns></returns>
-        public int? State { get; set; }
+        public int? Age { get; set; }
+        /// <summary>
+        /// Email
+        /// </summary>
+        /// <returns></returns>
+        public string Email { get; set; }
+        /// <summary>
+        /// Address
+        /// </summary>
+        /// <returns></returns>
+        public string Address { get; set; }
+        /// <summary>
+        /// MobilePhone
+        /// </summary>
+        /// <returns></returns>
+        public string MobilePhone { get; set; }
+        /// <summary>
+        /// IDCard
+        /// </summary>
+        /// <returns></returns>
+        public string IDCard { get; set; }
         /// <summary>
         /// CreateTime
         /// </summary>
         /// <returns></returns>
         public DateTime? CreateTime { get; set; }
         /// <summary>
-        /// CheckTime
+        /// IsVerified
         /// </summary>
         /// <returns></returns>
-        public DateTime? CheckTime { get; set; }
+        public bool? IsVerified { get; set; }
         /// <summary>
-        /// Memo
+        /// AvatarUrl
         /// </summary>
         /// <returns></returns>
-        public string Memo { get; set; }
+        public string AvatarUrl { get; set; }
         #endregion
 
         #region 扩展操作

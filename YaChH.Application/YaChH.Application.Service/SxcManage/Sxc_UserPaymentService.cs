@@ -53,8 +53,6 @@ namespace YaChH.Application.Service.SxcManage
             }
 
             //var list= this.BaseRepository(DbName).FindList(expression, pagination);
-            
-
 
             return this.BaseRepository(DbName).FindList(expression, pagination);
         }
@@ -190,6 +188,7 @@ namespace YaChH.Application.Service.SxcManage
                     var amount1 = entity.DistrAmount * per1;
 
                     entity.Commission += amount1;
+                    agent1.Commission += amount1;
 
                     var record1 = new Sxc_CommissionRecordEntity
                     {
@@ -220,6 +219,7 @@ namespace YaChH.Application.Service.SxcManage
                         var amount2 = entity.DistrAmount * per2;
 
                         entity.Commission += amount2;
+                        agent2.Commission += amount2;
 
                         var record2 = new Sxc_CommissionRecordEntity
                         {
@@ -235,7 +235,88 @@ namespace YaChH.Application.Service.SxcManage
                 }
             }
 
+            if (agent.Type == 2 && agent.IsValid.Value)
+            {
+                if (agent.PID.HasValue)
+                {
+                    var agent1 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent.PID);
+
+                    var amount1 = GetFzxsCommission(agent1.Level);
+
+                    entity.Commission += amount1;
+                    agent1.Commission+= amount1;
+
+                    var record1 = new Sxc_CommissionRecordEntity
+                    {
+                        AgentID = agent1.ID,
+                        CreateTime = DateTime.Now,
+                        State = 0,
+                        UserPaymentID = entity.ID,
+                        Commission = amount1
+                    };
+
+                    db.Insert(record1);
+
+                    if (agent1.PID.HasValue)
+                    {
+                        var agent2 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent1.PID);
+
+                        var amount2 = 1000;
+
+                        entity.Commission += amount2;
+                        agent2.Commission += amount2;
+
+                        var record2 = new Sxc_CommissionRecordEntity
+                        {
+                            AgentID = agent2.ID,
+                            CreateTime = DateTime.Now,
+                            State = 0,
+                            UserPaymentID = entity.ID,
+                            Commission = amount2
+                        };
+
+                        db.Insert(record2);
+
+                        List<Sxc_AgentEntity> SupAgents = new List<Sxc_AgentEntity>();
+
+                        GetSupAgents(agent2, SupAgents);
+
+                        foreach (var sup in SupAgents)
+                        {
+                            var amountsup = 1000;
+
+                            entity.Commission += amountsup;
+                            sup.Commission += amountsup;
+
+                            var recordsup = new Sxc_CommissionRecordEntity
+                            {
+                                AgentID = sup.ID,
+                                CreateTime = DateTime.Now,
+                                State = 0,
+                                UserPaymentID = entity.ID,
+                                Commission = amountsup
+                            };
+
+                            db.Insert(recordsup);
+                        }
+                    }
+                }
+            }
+
             entity.FinalAmount = entity.Amount - entity.Commission;
+        }
+
+        private void GetSupAgents(Sxc_AgentEntity agent2, List<Sxc_AgentEntity> supAgents)
+        {
+            if (agent2.PID.HasValue)
+            {
+                if (agent2.ParentAgent.Level > agent2.Level)
+                {
+                    supAgents.Add(agent2.ParentAgent);
+                }
+
+                GetSupAgents(agent2.ParentAgent, supAgents);
+            }
         }
 
         public decimal GetZxsPercent(int level)
@@ -245,16 +326,41 @@ namespace YaChH.Application.Service.SxcManage
             switch (level)
             {
                 case 1:
-                    per = 0.25m;
+                    per = 0.4m;
                     break;
                 case 2:
-                    per = 0.3m;
-                    break;
-                case 3:
                     per = 0.35m;
                     break;
+                case 3:
+                    per = 0.3m;
+                    break;
                 case 4:
-                    per = 0.4m;
+                    per = 0.25m;
+                    break;
+                default:
+                    break;
+            }
+            return per;
+        }
+
+
+        public decimal GetFzxsCommission(int level)
+        {
+            decimal per = 0;
+
+            switch (level)
+            {
+                case 1:
+                    per = 8000;
+                    break;
+                case 2:
+                    per = 7000;
+                    break;
+                case 3:
+                    per = 6000;
+                    break;
+                case 4:
+                    per = 5000;
                     break;
                 default:
                     break;

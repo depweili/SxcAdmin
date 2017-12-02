@@ -100,10 +100,13 @@
     <Compile Include="PublicInfoManage\IScheduleService.cs" />
     <Compile Include="ReportManage\IRptTempService.cs" />
     <Compile Include="SxcManage\Sxc_AgentIService.cs" />
+    <Compile Include="SxcManage\Sxc_CommissionRecordIService.cs" />
     <Compile Include="SxcManage\Sxc_CommodityIService.cs" />
+    <Compile Include="SxcManage\Sxc_CooperationIService.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoIService.cs" />
     <Compile Include="SxcManage\Sxc_TeacherIService.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentIService.cs" />
+    <Compile Include="SxcManage\Sxc_UserProfileIService.cs" />
     <Compile Include="SystemManage\DataSourceIService.cs" />
     <Compile Include="SystemManage\ExcelExportIService.cs" />
     <Compile Include="SystemManage\ExcelImportIService.cs" />

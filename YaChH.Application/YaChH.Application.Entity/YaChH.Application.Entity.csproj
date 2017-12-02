@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -111,9 +114,11 @@
     <Compile Include="SxcManage\Sxc_AgentEntity.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordEntity.cs" />
     <Compile Include="SxcManage\Sxc_CommodityEntity.cs" />
+    <Compile Include="SxcManage\Sxc_CooperationEntity.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoEntity.cs" />
     <Compile Include="SxcManage\Sxc_TeacherEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />
+    <Compile Include="SxcManage\Sxc_UserProfileEntity.cs" />
     <Compile Include="SystemManage\AreaEntity.cs" />
     <Compile Include="SystemManage\CodeRuleEntity.cs" />
     <Compile Include="SystemManage\CodeRuleFormatEntity.cs" />
@@ -144,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SxcManage\ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

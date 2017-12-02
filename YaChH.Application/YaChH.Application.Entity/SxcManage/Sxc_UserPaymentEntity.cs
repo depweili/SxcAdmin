@@ -25,7 +25,7 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         [Column("USERID")]
-        public int? UserID { get; set; }
+        public int UserID { get; set; }
 
         [NotMapped]
         public string UserName { get; set; }

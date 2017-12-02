@@ -7,52 +7,77 @@ namespace YaChH.Application.Entity.SxcManage
     /// 版 本
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-29 23:12
-    /// 描 述：Sxc_CommissionRecord
+    /// 日 期：2017-11-29 23:25
+    /// 描 述：Sxc_Cooperation
     /// </summary>
-    public class Sxc_CommissionRecordEntity : BaseEntity
+    public class Sxc_CooperationEntity : BaseEntity
     {
         #region 实体成员
         /// <summary>
         /// ID
         /// </summary>
         /// <returns></returns>
-        public int? ID { get; set; }
+        public int ID { get; set; }
         /// <summary>
-        /// Commission
+        /// Name
         /// </summary>
         /// <returns></returns>
-        public decimal? Commission { get; set; }
+        public string Name { get; set; }
         /// <summary>
-        /// UserPaymentID
+        /// MobilePhone
         /// </summary>
         /// <returns></returns>
-        public int? UserPaymentID { get; set; }
+        public string MobilePhone { get; set; }
         /// <summary>
-        /// AgentID
+        /// AreaInfo
         /// </summary>
         /// <returns></returns>
-        public int? AgentID { get; set; }
+        public string AreaInfo { get; set; }
         /// <summary>
-        /// State
+        /// Address
         /// </summary>
         /// <returns></returns>
-        public int? State { get; set; }
+        public string Address { get; set; }
+        /// <summary>
+        /// Type
+        /// </summary>
+        /// <returns></returns>
+        public int? Type { get; set; }
+        /// <summary>
+        /// Level
+        /// </summary>
+        /// <returns></returns>
+        public int? Level { get; set; }
+        /// <summary>
+        /// AgentAreaInfo
+        /// </summary>
+        /// <returns></returns>
+        public string AgentAreaInfo { get; set; }
+        /// <summary>
+        /// Memo
+        /// </summary>
+        /// <returns></returns>
+        public string Memo { get; set; }
+        /// <summary>
+        /// ProcessDetail
+        /// </summary>
+        /// <returns></returns>
+        public string ProcessDetail { get; set; }
         /// <summary>
         /// CreateTime
         /// </summary>
         /// <returns></returns>
         public DateTime? CreateTime { get; set; }
         /// <summary>
-        /// CheckTime
+        /// UserID
         /// </summary>
         /// <returns></returns>
-        public DateTime? CheckTime { get; set; }
+        public int? UserID { get; set; }
         /// <summary>
-        /// Memo
+        /// AreaID
         /// </summary>
         /// <returns></returns>
-        public string Memo { get; set; }
+        public int? AreaID { get; set; }
         #endregion
 
         #region 扩展操作
@@ -62,7 +87,7 @@ namespace YaChH.Application.Entity.SxcManage
         public override void Create()
         {
             //this.ID = Guid.NewGuid().ToString();
-        }
+                                            }
         /// <summary>
         /// 编辑调用
         /// </summary>
@@ -70,7 +95,7 @@ namespace YaChH.Application.Entity.SxcManage
         public override void Modify(string keyValue)
         {
             this.ID = int.Parse(keyValue);
-        }
+                                            }
         #endregion
     }
 }

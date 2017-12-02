@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -73,6 +75,13 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public DateTime? SupAgentBindTime { get; set; }
+
+        [JsonIgnore]
+        public virtual Sxc_AgentEntity ParentAgent { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Sxc_AgentEntity> ChildAgents { get; set; }
+
         #endregion
 
         #region 扩展操作

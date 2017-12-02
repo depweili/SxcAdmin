@@ -103,10 +103,13 @@
     <Compile Include="PublicInfoManage\ScheduleService.cs" />
     <Compile Include="ReportManage\RptTempService.cs" />
     <Compile Include="SxcManage\Sxc_AgentService.cs" />
+    <Compile Include="SxcManage\Sxc_CommissionRecordService.cs" />
     <Compile Include="SxcManage\Sxc_CommodityService.cs" />
+    <Compile Include="SxcManage\Sxc_CooperationService.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoService.cs" />
     <Compile Include="SxcManage\Sxc_TeacherService.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentService.cs" />
+    <Compile Include="SxcManage\Sxc_UserProfileService.cs" />
     <Compile Include="SystemManage\AreaService.cs" />
     <Compile Include="SystemManage\CodeRuleService.cs" />
     <Compile Include="SystemManage\DataBaseBackupService.cs" />
