@@ -3,6 +3,7 @@ using YaChH.Application.Busines.SxcManage;
 using YaChH.Util;
 using YaChH.Util.WebControl;
 using System.Web.Mvc;
+using YaChH.Application.Code;
 
 namespace YaChH.Application.Web.Areas.SxcManage.Controllers
 {
@@ -111,6 +112,54 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         {
             sxc_agentbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
+        }
+        #endregion
+
+
+        #region 我的成员
+
+        /// <summary>
+        /// 我的成员视图
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult MyMembers()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <param name="queryJson">查询参数</param>
+        /// <returns>返回列表Json</returns>
+        [HttpGet]
+        public ActionResult GetMyMemeberJson()
+        {
+            var userId = OperatorProvider.Provider.Current().Account;
+            var data = sxc_agentbll.GetMyMemberList(userId);
+            //if (!string.IsNullOrEmpty(userId))
+            //{
+            //    data = data.TreeWhere(t => t..Contains(keyword), "DepartmentId");
+            //}
+            //var treeList = new List<TreeEntity>();
+            //foreach (DepartmentEntity item in data)
+            //{
+            //    TreeEntity tree = new TreeEntity();
+            //    bool hasChildren = data.Count(t => t.ParentId == item.DepartmentId) == 0 ? false : true;
+            //    tree.id = item.DepartmentId;
+            //    tree.text = item.FullName;
+            //    tree.value = item.DepartmentId;
+            //    tree.isexpand = true;
+            //    tree.complete = true;
+            //    tree.hasChildren = hasChildren;
+            //    tree.parentId = item.ParentId;
+            //    treeList.Add(tree);
+            //}
+            //return Content(treeList.TreeToJson());
+
+        
+            //var data = sxc_agentbll.GetMyMemberList(userId);
+            return ToCamelCaseJson(data);
         }
         #endregion
     }

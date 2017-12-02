@@ -8,6 +8,9 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
+using System;
+using YaChH.Application.Entity.SxcManage.ViewModel;
+using System.Text;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -20,7 +23,8 @@ namespace YaChH.Application.Service.SxcManage
     /// </summary>
     public class Sxc_AgentService : RepositoryFactory<Sxc_AgentEntity>, Sxc_AgentIService
     {
-        public string DbName = "SXC";
+        
+        private string DbName = "SXC";
         #region 获取数据
         /// <summary>
         /// 获取列表
@@ -49,6 +53,28 @@ namespace YaChH.Application.Service.SxcManage
         public Sxc_AgentEntity GetEntity(string keyValue)
         {
             return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+        }
+
+        public IEnumerable<AgentMemberTreeModel> GetMyMemberList(string userId)
+        {
+            var strSql = new StringBuilder();
+            strSql.Append(string.Format(@"with Agent as ( select Sxc_Agent.Id from Sxc_Agent inner join Sxc_User
+			  on Sxc_Agent.ID=Sxc_User.ID where Sxc_User.SystemAccount='{0}' 
+
+    union all   select d.Id from   Agent
+    inner join Sxc_Agent d on Agent.Id = d.PID ) SELECT Sxc_Agent.ID Id,Sxc_Agent.PID PId,
+            	  (case isnull(RealName,'') when '' then NickName  else RealName end)Name,
+            	  '加入日期：'+CONVERT(varchar(100), Sxc_Agent.SupAgentBindTime, 23) Value, 'image://'+Sxc_UserProfile.AvatarUrl Symbol
+              FROM Sxc_UserProfile  inner join Sxc_Agent 
+              on Sxc_UserProfile.ID=Sxc_Agent.ID 
+			   where   Sxc_Agent.ID in (select id from Agent ) order by pid ", userId));
+            //            return this.BaseRepository().FindList(strSql.ToString());
+
+            RepositoryFactory<AgentMemberTreeModel> rf = new RepositoryFactory<AgentMemberTreeModel>();
+            var agentList= rf.BaseRepository(DbName).FindList(strSql.ToString());
+
+            return agentList;
+           
         }
         #endregion
 
@@ -80,6 +106,8 @@ namespace YaChH.Application.Service.SxcManage
                 this.BaseRepository(DbName).Insert(entity);
             }
         }
+
+
         #endregion
     }
 }

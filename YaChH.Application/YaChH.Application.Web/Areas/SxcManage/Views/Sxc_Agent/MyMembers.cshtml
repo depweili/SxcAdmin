@@ -1,0 +1,280 @@
+﻿
+@{
+    ViewBag.Title = "列表页面";    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/scripts/jquery/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/scripts/plugins/echarts3/echarts.min.js"></script>
+    <script src="~/Content/scripts/utils/learun.js"></script>
+    <title>我的成员</title>
+</head>
+<body>
+    <div id="main" style="width: 100%;height:800px;">
+
+    </div>
+
+
+    <script>
+        function rescusive(number) {
+            //根节点
+            var node = {}
+            //存放子树
+            var data = []
+            childrenList = groups[number]
+            //如果不存在子节点,这里其实就是结束条件
+            if (!childenList || childrenList.length == 0) {
+                node['name'] = number;
+                node['children'] = []
+                return node;
+            }
+            for (var i = 0; i < childrenList.length; i++) {
+                //递归该节点下的子树来建构该子树
+                var children = rescusive(childrenList[i]["id"])
+                //将该子树加入根节点中
+                data.push(children)
+            }
+            node['name'] = number
+            //根节点中的子树集合
+            node['children'] = data
+            return node
+        }
+
+        function treeMenu(a) {
+            //列表map形式
+            this.tree = a || [];
+            this.groups = {};
+            //存放id与对应的name映射
+            this.nameMap = {}
+            //存放id与对应的img映射
+            this.imgMap = {}
+            //存放id与对应的value映射
+            this.valueMap = {}
+            //得到每个点对应的层次,为了后期进行布局
+            this.levelMap = {}
+            //样式设计
+            this.style = { "symbolSize": [60, 60], "value": [8, 6, 4, 2, 1] }
+        };
+        treeMenu.prototype = {
+            init: function (pid) {
+                this.group();
+                this.MapNamebyId();
+                this.MapImgbyId();
+                this.ValueImgbyId();
+                this.setIdLevel(pid);
+                return this.rescusive(pid);
+            },
+            group: function () {
+                for (var i = 0; i < this.tree.length; i++) {
+                    //存在该grops则直接添加
+                    if (this.groups[this.tree[i].pId]) {
+                        this.groups[this.tree[i].pId].push(this.tree[i]);
+                    } else {
+                        this.groups[this.tree[i].pId] = [];
+                        this.groups[this.tree[i].pId].push(this.tree[i]);
+                    }
+                }
+            },
+            //得到每个点的层次
+            setIdLevel: function (pid) {
+                var level = 1;
+                this.levelMap[pid] = level;
+                var gs = this.groups[pid];
+                //str=JSON.stringify(gs)
+                //alert("json:"+str)
+                var temp = []
+                while (gs) {
+                    level++;
+                    if (gs == null || gs == undefined || gs.length == 0)
+                        break;
+                    temp = []
+                    for (var i = 0; i < gs.length; i++) {
+                        var myid = gs[i]["id"];
+                        this.levelMap[myid] = level;
+                        subgs = this.groups[myid];
+                        if (subgs instanceof Array && subgs != null) {
+                            for (var j = 0; j < subgs.length; j++) {
+                                temp.push(subgs[j]);
+                            }
+                        }
+                    }
+                    gs = temp;
+                }
+
+            },
+            //根据所在层次设计不同大小的样式
+            getStyleById: function (id) {
+                var level = this.levelMap[id]
+                if (level >= 5)
+                    level = 5;
+                var symbolize = 0
+                var value = 0
+                symbolize = this.style['symbolSize']
+                value = this.style['value'][level - 1]
+                var styleValue = {}
+                styleValue['symbolSize'] = symbolize
+                styleValue['value'] = value              
+                return styleValue
+            },
+            MapNamebyId: function () {
+                for (var i = 0; i < this.tree.length; i++) {
+                    map = this.tree[i]
+                    this.nameMap[map["id"]] = map["name"]
+                }
+            },
+            MapImgbyId: function () {
+                for (var i = 0; i < this.tree.length; i++) {
+                    map = this.tree[i]
+                    this.imgMap[map["id"]] = map["symbol"]
+                }
+            },
+            ValueImgbyId: function () {
+                for (var i = 0; i < this.tree.length; i++) {
+                    map = this.tree[i]
+                    this.valueMap[map["id"]] = map["value"]
+                }
+            }, 
+            //设置节点属性
+            setNode: function (node, name, symbolize, value, children, symbol) {
+                node['name'] = name;
+                node['symbolSize'] = symbolize;
+                node['value'] = value
+                node['children'] = children
+                node['symbol'] = symbol
+                return node;
+            },
+            rescusive: function (number) {
+                //这里是构建数据源的重点
+                var data = []
+                var node = {}
+                var styleValue = {}
+                //某个节点下的子节点
+                var a = this.groups[number];
+                var nodeName = this.nameMap[number];
+                var nodeImg = this.imgMap[number];
+                var nodeValue = this.valueMap[number];
+                if (a == null || a == undefined) {
+                    styleValue = this.getStyleById(number)
+                    //设置节点
+                    this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, [], nodeImg)
+                    return node;
+                }
+                for (var i = 0; i < a.length; i++) {
+                    children = this.rescusive(a[i].id);
+                    data.push(children);
+                }
+                styleValue = this.getStyleById(number)
+                this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, data, nodeImg)
+                return node;
+            },
+            //创建组织结构图
+            createTreeVisual: function (myChart, title, data) {
+                var option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params, ticket, callback) {
+                            //$.get('detail?name=' + params.name, function (content) {
+                            //    callback(ticket, toHTML(content));
+                            //});
+                            return params.value;
+                        },
+                        triggerOn: 'mousemove'
+                    },
+                    series: [
+                        {
+                            type: 'tree',                           
+                            data: data,
+
+                            top: '1%',
+                            left: '7%',
+                            bottom: '1%',
+                            right: '20%',
+                            nodePadding: 20,
+                            symbolSize: 7,
+                            initialTreeDepth:-1,
+                            label: {
+                                normal: {
+                                    position: 'left',
+                                    verticalAlign: 'middle',
+                                    align: 'right',
+                                    fontSize: 9
+                                }
+                            },
+
+                            leaves: {
+                                label: {
+                                    normal: {
+                                        position: 'right',
+                                        verticalAlign: 'middle',
+                                        align: 'left'
+                                    }
+                                }
+                            },
+
+                            expandAndCollapse: true,
+                            animationDuration: 550,
+                            animationDurationUpdate: 750
+                        }
+                    ]
+
+                }
+                myChart.setOption(option);
+            }
+        }
+        //得到数据
+        function getData(zNodes) {
+            var mytree = new treeMenu(zNodes)
+            treeData = mytree.init(0)
+            data = []
+            data.push(treeData)
+            return data;
+            //str=JSON.stringify(menu);
+            //alert("responsing json:"+str)
+        }
+        function createTreeV(myChart, title, znodes) {
+            var mytree = new treeMenu(znodes)
+            treeData = mytree.init(znodes[0].id)
+            data = []
+            data.push(treeData)
+            mytree.createTreeVisual(myChart, title, data)
+        }
+
+
+
+    </script>
+
+    <script type="text/javascript">
+        //learun.dialogMsg({
+        //    msg: 'dddd',
+        //    //type: 
+        //})
+        $.ajax({
+            url: "GetMyMemeberJson",
+            dataType:"json",
+            success: function (res) {
+                var zNodes = [
+                    { id: 1, pId: 0, name: "董事长", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 11, pId: 1, name: "经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 12, pId: 1, name: "副总", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 13, pId: 1, name: "秘书", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 16, pId: 11, name: "财务经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 27, pId: 11, name: "人事经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 18, pId: 12, name: "HR" },
+                ]
+               // data = getData(res)
+                var myChart = echarts.init(document.getElementById('main'), 'macarons');
+                createTreeV(myChart, "人事架构图", res)
+            }
+
+        })
+
+    
+
+
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ using YaChH.Application.Service.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using System;
+using YaChH.Application.Entity.SxcManage.ViewModel;
 
 namespace YaChH.Application.Busines.SxcManage
 {
@@ -38,6 +39,17 @@ namespace YaChH.Application.Busines.SxcManage
         {
             return service.GetList(queryJson);
         }
+
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <param name="queryJson">查询参数</param>
+        /// <returns>返回列表</returns>
+        public IEnumerable<AgentMemberTreeModel> GetMyMemberList(string userId)
+        {
+            return service.GetMyMemberList(userId);
+        }
+
         /// <summary>
         /// 获取实体
         /// </summary>

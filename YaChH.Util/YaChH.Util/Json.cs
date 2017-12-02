@@ -25,6 +25,15 @@ namespace YaChH.Util
             var timeConverter = new IsoDateTimeConverter { DateTimeFormat = datetimeformats };
             return JsonConvert.SerializeObject(obj, timeConverter);
         }
+
+        public static string ToCamelCaseJson(this object obj)
+        {
+            string json = JsonConvert.SerializeObject(
+       obj,
+       Formatting.Indented,
+       new JsonSerializerSettings { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            return json;
+        }
         public static T ToObject<T>(this string Json)
         {
             return Json == null ? default(T) : JsonConvert.DeserializeObject<T>(Json);

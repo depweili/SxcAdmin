@@ -692,6 +692,7 @@
     <Content Include="Content\scripts\plugins\dialog\default\sprite_main_png.png" />
     <Content Include="Content\scripts\plugins\dialog\dialog.css" />
     <Content Include="Content\scripts\plugins\dialog\dialog.js" />
+    <Content Include="Content\scripts\plugins\echarts3\echarts.min.js" />
     <Content Include="Content\scripts\plugins\echarts\charts_comm.js" />
     <Content Include="Content\scripts\plugins\echarts\charts_helper.js" />
     <Content Include="Content\scripts\plugins\echarts\china.js" />
@@ -1354,6 +1355,9 @@
     <Content Include="Areas\SxcManage\Views\Sxc_CommissionRecord\Sxc_CommissionRecordIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Agent\MyMembers.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
