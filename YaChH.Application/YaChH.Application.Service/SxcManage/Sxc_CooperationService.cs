@@ -30,7 +30,31 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns>返回分页列表</returns>
         public IEnumerable<Sxc_CooperationEntity> GetPageList(Pagination pagination, string queryJson)
         {
-            return this.BaseRepository(DbName).FindList(pagination);
+            var expression = LinqExtensions.True<Sxc_CooperationEntity>();
+            var queryParam = queryJson.ToJObject();
+
+
+            //查询条件
+            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            {
+                string condition = queryParam["condition"].ToString();
+                string keyword = queryParam["keyword"].ToString();
+                switch (condition)
+                {
+                    case "MobilePhone":           
+                        expression = expression.And(t => t.MobilePhone.Contains(keyword));
+                        break;
+                    case "Name":        
+                        expression = expression.And(t => t.Name.Contains(keyword));
+                        break;
+                    default:
+                        break;
+                }
+            }       
+           
+            return this.BaseRepository(DbName).FindList(expression, pagination);
+
+           // return this.BaseRepository(DbName).FindList(pagination);
         }
         /// <summary>
         /// 获取列表

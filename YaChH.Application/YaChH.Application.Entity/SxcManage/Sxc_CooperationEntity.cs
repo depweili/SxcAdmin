@@ -43,11 +43,13 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public int? Type { get; set; }
+       
         /// <summary>
         /// Level
         /// </summary>
         /// <returns></returns>
         public int? Level { get; set; }
+       
         /// <summary>
         /// AgentAreaInfo
         /// </summary>
