@@ -1,18 +1,14 @@
 ﻿using System;
-using YaChH.Application.Code;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace YaChH.Application.Entity.SxcManage
+namespace YaChH.Application.Entity.SxcManage.ViewModel
 {
-    /// <summary>
-    /// 版 本
-    /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
-    /// 创 建：超级管理员
-    /// 日 期：2017-11-29 23:25
-    /// 描 述：Sxc_Cooperation
-    /// </summary>
-    public class Sxc_CooperationEntity : BaseEntity
+   public class Sxc_CooperationModel
     {
-        #region 实体成员
+     
         /// <summary>
         /// ID
         /// </summary>
@@ -43,13 +39,13 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public int? Type { get; set; }
-       
+
         /// <summary>
         /// Level
         /// </summary>
         /// <returns></returns>
         public int? Level { get; set; }
-       
+
         /// <summary>
         /// AgentAreaInfo
         /// </summary>
@@ -80,24 +76,8 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public int? AreaID { get; set; }
-        #endregion
-
-        #region 扩展操作
-        /// <summary>
-        /// 新增调用
-        /// </summary>
-        public override void Create()
-        {
-            //this.ID = Guid.NewGuid().ToString();
-                                            }
-        /// <summary>
-        /// 编辑调用
-        /// </summary>
-        /// <param name="keyValue"></param>
-        public override void Modify(string keyValue)
-        {
-            this.ID = int.Parse(keyValue);
-                                            }
-        #endregion
+     
+        public string TypeName { get; set; }
+        public string LevelName { get; set; }
     }
 }

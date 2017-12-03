@@ -38,7 +38,7 @@ Loading = function (bool, text) {
     if (!!text) {
         top.$("#loading_manage").html(text);
     } else {
-        top.$("#loading_manage").html("正在拼了命为您加载…");
+        top.$("#loading_manage").html("正在努力为您加载…");
     }
     top.$("#loading_manage").css("left", (top.$('body').width() - top.$("#loading_manage").width()) / 2 - 54);
     top.$("#loading_manage").css("top", (top.$('body').height() - top.$("#loading_manage").height()) / 2);
