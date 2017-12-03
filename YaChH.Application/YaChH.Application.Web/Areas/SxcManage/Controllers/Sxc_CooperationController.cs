@@ -7,6 +7,7 @@ using YaChH.Application.Cache;
 using System.Collections.Generic;
 using YaChH.Application.Entity.SxcManage.ViewModel;
 using System.Linq;
+using YaChH.Application.Code;
 
 namespace YaChH.Application.Web.Areas.SxcManage.Controllers
 {
@@ -146,6 +147,19 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         {
             sxc_cooperationbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        [HandlerAuthorize(PermissionMode.Ignore)]
+        public ActionResult ApproveApplication(string keyValue)
+        {
+            sxc_cooperationbll.AuditingApplication(keyValue,1);
+            return Success("申请成功通过！");
         }
         #endregion
     }

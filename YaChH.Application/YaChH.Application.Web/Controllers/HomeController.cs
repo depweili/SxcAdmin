@@ -16,6 +16,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using YaChH.Application.Busines.PublicInfoManage;
+using YaChH.Util.WebControl;
 
 namespace YaChH.Application.Web.Controllers
 {
@@ -31,7 +33,8 @@ namespace YaChH.Application.Web.Controllers
     {
         UserBLL user = new UserBLL();
         DepartmentBLL department = new DepartmentBLL();
-
+        private NoticeBLL noticeBLL = new NoticeBLL();
+        private NewsBLL newsBLL = new NewsBLL();
         #region 视图功能
         /// <summary>
         /// 后台框架页
@@ -39,6 +42,16 @@ namespace YaChH.Application.Web.Controllers
         /// <returns></returns>
         public ActionResult AdminDefault()
         {
+
+            //Pagination pagination = new Pagination
+            //{
+            //    page = 1,
+            //    rows = 30,
+
+            //};
+            //var queryJson = "";
+            //var data = newsBLL.GetPageList(pagination, queryJson);
+            //var data1 = noticeBLL.GetPageList(pagination, queryJson);
             return View();
         }
         public ActionResult AdminLTE()

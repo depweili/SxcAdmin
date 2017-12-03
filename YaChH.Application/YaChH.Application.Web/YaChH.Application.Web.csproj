@@ -209,6 +209,7 @@
     <Compile Include="Areas\ReportManage\Controllers\ReportDemoController.cs" />
     <Compile Include="Areas\ReportManage\ReportManageAreaRegistration.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_AgentController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_Base_AreaController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CommissionRecordController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CommodityController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CooperationController.cs" />
@@ -1358,6 +1359,8 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Agent\MyMembers.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaIndex.cshtml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

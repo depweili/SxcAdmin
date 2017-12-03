@@ -106,6 +106,7 @@
     <Compile Include="PublicInfoManage\ScheduleMap.cs" />
     <Compile Include="ReportManage\RptTempMap.cs" />
     <Compile Include="SxcManage\Sxc_AgentMap.cs" />
+    <Compile Include="SxcManage\Sxc_Base_AreaMap.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordMap.cs" />
     <Compile Include="SxcManage\Sxc_CommodityMap.cs" />
     <Compile Include="SxcManage\Sxc_CooperationMap.cs" />

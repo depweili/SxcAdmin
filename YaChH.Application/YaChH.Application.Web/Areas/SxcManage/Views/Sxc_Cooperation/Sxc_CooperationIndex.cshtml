@@ -36,7 +36,7 @@
                 { label: '代理类型', name: 'TypeName', index: 'Type', width: 100, align: 'left',sortable: true  },
                 { label: '代理级别', name: 'LevelName', index: 'Level', width: 100, align: 'left',sortable: true  },
                 { label: '备注信息', name: 'Memo', index: 'Memo', width: 200, align: 'left',sortable: true  },
-                { label: 'ProcessDetail', name: 'ProcessDetail', index: 'ProcessDetail', width: 100, align: 'left',sortable: true  },
+                { label: '审核结果', name: 'ProcessDetail', index: 'ProcessDetail', width: 300, align: 'left',sortable: true  },
                 { label: '申请时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
             ],
             viewrecords: true,
@@ -114,6 +114,22 @@
         }
     }
 
+    //审核通过
+    function btn_approve() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.ConfirmAjax({
+                msg: "注：您确定要【通过】申请？",
+                url: '../../SxcManage/Sxc_Cooperation/ApproveApplication',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要审核通过的数据！', 0);
+        }
+    }
 
 
 </script>
@@ -142,9 +158,11 @@
     </div>
     <div class="toolbar">
         <div class="btn-group">
+           
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>           
-            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            @*<a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>*@
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-approve" class="btn btn-default" onclick="btn_approve()"><i class="fa fa-check"></i>&nbsp;审核通过</a>   
         </div>
     </div>
 </div>
