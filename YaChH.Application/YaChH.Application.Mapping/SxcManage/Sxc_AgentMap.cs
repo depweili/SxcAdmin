@@ -25,7 +25,7 @@ namespace YaChH.Application.Mapping.SxcManage
 
             this.HasOptional(t => t.ParentAgent).WithMany(t => t.ChildAgents).HasForeignKey(t => t.PID);
 
-            //this.HasRequired(t => t.User).WithRequiredDependent(t => t.Agent);
+            this.HasRequired(t => t.User).WithRequiredDependent(t => t.Agent);
 
             #endregion
         }

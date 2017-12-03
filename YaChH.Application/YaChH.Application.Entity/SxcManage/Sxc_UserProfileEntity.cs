@@ -73,6 +73,8 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public string AvatarUrl { get; set; }
+        
+        public virtual Sxc_UserEntity User { get; set; }
         #endregion
 
         #region 扩展操作

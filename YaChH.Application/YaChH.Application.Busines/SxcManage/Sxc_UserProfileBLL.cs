@@ -4,6 +4,7 @@ using YaChH.Application.Service.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace YaChH.Application.Busines.SxcManage
 {
@@ -25,9 +26,31 @@ namespace YaChH.Application.Busines.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_UserProfileEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_UserProfileEntity> GetPageList1(Pagination pagination, string queryJson)
         {
             return service.GetPageList(pagination, queryJson);
+        }
+
+        public IEnumerable<dynamic> GetPageList(Pagination pagination, string queryJson)
+        {
+            var data= service.GetPageList(pagination, queryJson);
+
+            var res = data.Select(t => new
+            {
+                t.ID,
+                t.NickName,
+                t.RealName,
+                t.IDCard,
+                t.Gender,
+                t.Age,
+                t.AvatarUrl,
+                t.Email,
+                t.Address,
+                t.MobilePhone,
+                t.User.SystemAccount
+            });
+
+            return res;
         }
         /// <summary>
         /// 获取列表

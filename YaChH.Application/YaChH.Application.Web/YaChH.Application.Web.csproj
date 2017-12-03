@@ -253,6 +253,8 @@
   <ItemGroup>
     <Content Include="Areas\BaseManage\Views\student\studentForm.cshtml" />
     <Content Include="Areas\BaseManage\Views\student\studentIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <Content Include="Content\adminDefault\css\index.css" />
     <Content Include="Content\adminDefault\img\arrow1.png" />
     <Content Include="Content\adminDefault\img\tab_close.png" />
@@ -1349,15 +1351,11 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Commodity\Sxc_CommodityIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPaymentIndex.cshtml" />
-    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
-    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_CommissionRecord\Sxc_CommissionRecordForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_CommissionRecord\Sxc_CommissionRecordIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Cooperation\Sxc_CooperationIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Agent\MyMembers.cshtml" />
-    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileForm.cshtml" />
-    <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

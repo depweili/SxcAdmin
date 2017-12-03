@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -7,56 +8,66 @@ namespace YaChH.Application.Entity.SxcManage
     /// 版 本
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-29 23:12
-    /// 描 述：Sxc_CommissionRecord
+    /// 日 期：2017-05-04 13:25
+    /// 描 述：Sxc_User
     /// </summary>
-    public class Sxc_CommissionRecordEntity : BaseEntity
+    public class Sxc_UserEntity : BaseEntity
     {
         #region 实体成员
         /// <summary>
         /// ID
         /// </summary>
         /// <returns></returns>
+        [Column("ID")]
         public int ID { get; set; }
         /// <summary>
-        /// Commission
+        /// UserName
         /// </summary>
         /// <returns></returns>
-        public decimal? Commission { get; set; }
+        [Column("USERNAME")]
+        public string UserName { get; set; }
         /// <summary>
-        /// UserPaymentID
+        /// Password
         /// </summary>
         /// <returns></returns>
-        public int UserPaymentID { get; set; }
-
-        public virtual Sxc_UserPaymentEntity UserPayment { get; set; }
+        [Column("PASSWORD")]
+        public string Password { get; set; }
         /// <summary>
-        /// AgentID
+        /// AuthID
         /// </summary>
         /// <returns></returns>
-        public int AgentID { get; set; }
-
-        public virtual Sxc_AgentEntity Agent { get; set; }
+        [Column("AUTHID")]
+        public Guid AuthID { get; set; }
         /// <summary>
-        /// State
+        /// IsValid
         /// </summary>
         /// <returns></returns>
-        public int? State { get; set; }
+        [Column("ISVALID")]
+        public bool? IsValid { get; set; }
         /// <summary>
         /// CreateTime
         /// </summary>
         /// <returns></returns>
+        [Column("CREATETIME")]
         public DateTime? CreateTime { get; set; }
         /// <summary>
-        /// CheckTime
+        /// LastActiveTime
         /// </summary>
         /// <returns></returns>
-        public DateTime? CheckTime { get; set; }
+        [Column("LASTACTIVETIME")]
+        public DateTime? LastActiveTime { get; set; }
         /// <summary>
-        /// Memo
+        /// SystemAccount
         /// </summary>
         /// <returns></returns>
-        public string Memo { get; set; }
+        [Column("SYSTEMACCOUNT")]
+        public string SystemAccount { get; set; }
+
+
+        public virtual Sxc_UserProfileEntity UserProfile { get; set; }
+
+        public virtual Sxc_AgentEntity Agent { get; set; }
+
         #endregion
 
         #region 扩展操作

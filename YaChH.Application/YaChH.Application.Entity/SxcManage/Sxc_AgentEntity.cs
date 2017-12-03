@@ -82,6 +82,8 @@ namespace YaChH.Application.Entity.SxcManage
         [JsonIgnore]
         public virtual ICollection<Sxc_AgentEntity> ChildAgents { get; set; }
 
+        public virtual Sxc_UserEntity User { get; set; }
+
         #endregion
 
         #region 扩展操作

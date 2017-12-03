@@ -27,6 +27,8 @@ namespace YaChH.Application.Entity.SxcManage
         [Column("USERID")]
         public int UserID { get; set; }
 
+        public virtual Sxc_UserEntity User { get; set; }
+
         [NotMapped]
         public string UserName { get; set; }
         /// <summary>

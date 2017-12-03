@@ -16,6 +16,8 @@
                 param: { keyValue: keyValue },
                 success: function (data) {
                     $("#form1").SetWebControls(data);
+                    $("#Commission").attr('disabled', 'disabled');
+                    $("#CreateTime").attr('disabled', 'disabled');
                 }
             })
         }
@@ -39,43 +41,25 @@
 <div style="margin-top: 20px; margin-right: 30px;">
     <table class="form">
         <tr>
-            <td class="formTitle">ID</td>
-            <td class="formValue">
-                <input id="ID" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">Commission</td>
+            <td class="formTitle">金额</td>
             <td class="formValue">
                 <input id="Commission" type="text" class="form-control"  />
             </td>
+            
         </tr>
         <tr>
-            <td class="formTitle">UserPaymentID</td>
+            <td class="formTitle">时间</td>
             <td class="formValue">
-                <input id="UserPaymentID" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">AgentID</td>
-            <td class="formValue">
-                <input id="AgentID" type="text" class="form-control"  />
+                <input id="CreateTime" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">State</td>
+            <td class="formTitle">备注</td>
+            @*<td class="formValue" >
+                <input id="Memo" type="text" class="form-control" />
+            </td>*@
             <td class="formValue">
-                <input id="State" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">CreateTime</td>
-            <td class="formValue">
-                <input id="CreateTime" type="text" class="form-control"  />
-            </td>
-        </tr>
-        <tr>
-            <td class="formTitle">CheckTime</td>
-            <td class="formValue">
-                <input id="CheckTime" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">Memo</td>
-            <td class="formValue">
-                <input id="Memo" type="text" class="form-control"  />
+                <textarea id="Memo" class="form-control" style="height: 70px;"></textarea>
             </td>
         </tr>
        

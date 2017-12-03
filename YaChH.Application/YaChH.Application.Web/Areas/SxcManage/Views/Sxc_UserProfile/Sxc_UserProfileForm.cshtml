@@ -100,7 +100,8 @@
         <tr>
             <td class="formTitle">加入时间</td>
             <td class="formValue">
-                <input id="CreateTime" type="text" class="form-control input-datepicker" />
+                <input id="CreateTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                @*<input id="CreateTime" type="text" class="form-control input-datepicker" />*@
             </td>
             <td class="formTitle">验证</td>
             <td class="formValue">
@@ -108,10 +109,16 @@
             </td>
         </tr>
         <tr>
+            <td class="formTitle">后台账号</td>
+            <td class="formValue">
+                <div id="SystemAccount" type="text" class="form-control"></div>
+            </td>
+        </tr>
+        @*<tr>
             <td class="formTitle">头像</td>
             <td class="formValue">
                 <input id="AvatarUrl" type="text" class="form-control hide" />
             </td>
-        </tr>
+        </tr>*@
     </table>
 </div>

@@ -69,8 +69,11 @@
     <Compile Include="DbContext\IDbContext.cs" />
     <Compile Include="DbContext\MySqlDbContext.cs" />
     <Compile Include="DbContext\SqlServerDbContext.cs" />
+    <Compile Include="Extension\CollectionsExtensions.cs" />
     <Compile Include="Extension\DbContextExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\Function.cs" />
+    <Compile Include="Tool\PropertySortCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

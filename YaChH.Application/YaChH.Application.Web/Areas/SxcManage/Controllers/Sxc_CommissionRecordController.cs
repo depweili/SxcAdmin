@@ -109,7 +109,13 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         [AjaxOnly]
         public ActionResult SaveForm(string keyValue, Sxc_CommissionRecordEntity entity)
         {
-            sxc_commissionrecordbll.SaveForm(keyValue, entity);
+            var obj = sxc_commissionrecordbll.GetEntity(keyValue);
+            if (TryUpdateModel(obj,new string[] { "Memo"}))
+            {
+                sxc_commissionrecordbll.SaveForm(keyValue, obj);
+            }
+            //页面未传入全部数据会有外键问题
+            //sxc_commissionrecordbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
         }
         #endregion

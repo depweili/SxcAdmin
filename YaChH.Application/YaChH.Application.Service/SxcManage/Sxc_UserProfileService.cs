@@ -8,6 +8,10 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
+using YaChH.Data.EF.Tool;
+using System.ComponentModel;
+using System.Data.Entity;
+using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -28,9 +32,45 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_UserProfileEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_UserProfileEntity> GetPageList1(Pagination pagination, string queryJson)
         {
             return this.BaseRepository(DbName).FindList(pagination);
+        }
+
+        public IEnumerable<Sxc_UserProfileEntity> GetPageList(Pagination pagination, string queryJson)
+        {
+            int total;
+
+            var expression = LinqExtensions.True<Sxc_UserProfileEntity>();
+            var queryParam = queryJson.ToJObject();
+
+            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            {
+                string condition = queryParam["condition"].ToString();
+                string keyord = queryParam["keyword"].ToString();
+                switch (condition)
+                {
+                    case "Name":            
+                        expression = expression.And(t => t.NickName.Contains(keyord) || t.RealName.Contains(keyord));
+                        break;
+                    case "IDCard":          //姓名
+                        expression = expression.And(t => t.IDCard.Contains(keyord));
+                        break;
+                    case "Mobile":          //手机
+                        expression = expression.And(t => t.MobilePhone.Contains(keyord));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            //Include("Agent").Include("UserPayment").  Where(x=>true  
+            //Include(t=>t.UserPayment.User.UserProfile).
+            var query = this.BaseRepository(DbName).IQueryable().Include(t => t.User).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
         }
         /// <summary>
         /// 获取列表
