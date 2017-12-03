@@ -111,6 +111,7 @@
     <Compile Include="SxcManage\Sxc_CooperationMap.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoMap.cs" />
     <Compile Include="SxcManage\Sxc_TeacherMap.cs" />
+    <Compile Include="SxcManage\Sxc_UserMap.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentMap.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileMap.cs" />
     <Compile Include="SystemManage\AreaMap.cs" />
