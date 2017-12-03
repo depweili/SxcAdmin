@@ -8,31 +8,24 @@ namespace YaChH.Application.IService.SxcManage
     /// 版 本 6.1
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-29 23:25
-    /// 描 述：Sxc_Cooperation
+    /// 日 期：2017-12-03 20:43
+    /// 描 述：Sxc_Base_Area
     /// </summary>
-    public interface Sxc_CooperationIService
+    public interface Sxc_Base_AreaIService
     {
         #region 获取数据
         /// <summary>
         /// 获取列表
         /// </summary>
-        /// <param name="pagination">分页</param>
-        /// <param name="queryJson">查询参数</param>
-        /// <returns>返回分页列表</returns>
-        IEnumerable<Sxc_CooperationEntity> GetPageList(Pagination pagination, string queryJson);
-        /// <summary>
-        /// 获取列表
-        /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表</returns>
-        IEnumerable<Sxc_CooperationEntity> GetList(string queryJson);
+        IEnumerable<Sxc_Base_AreaEntity> GetList(string queryJson);
         /// <summary>
         /// 获取实体
         /// </summary>
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
-        Sxc_CooperationEntity GetEntity(string keyValue);
+        Sxc_Base_AreaEntity GetEntity(string keyValue);
         #endregion
 
         #region 提交数据
@@ -47,9 +40,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="keyValue">主键值</param>
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
-        void SaveForm(string keyValue, Sxc_CooperationEntity entity);
-
-        void AuditingApplication(string keyValue, int result);
+        void SaveForm(string keyValue, Sxc_Base_AreaEntity entity);
         #endregion
     }
 }

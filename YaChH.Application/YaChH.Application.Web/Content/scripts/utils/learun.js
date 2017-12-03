@@ -33,7 +33,7 @@ function(n, t) {
         loading: function(n) {
             var t = top.$("#loading_background,#loading_manage");
             n.isShow ? t.show() : top.$("#loading_manage").attr("istableloading") == undefined && (t.hide(), top.$(".ajax-loader").remove());
-            n.text ? top.$("#loading_manage").html(n.text) : top.$("#loading_manage").html("正在拼了命为您加载…");
+            n.text ? top.$("#loading_manage").html(n.text) : top.$("#loading_manage").html("正在努力为您加载…");
             top.$("#loading_manage").css("left", (top.$("body").width() - top.$("#loading_manage").width()) / 2 - 54);
             top.$("#loading_manage").css("top", (top.$("body").height() - top.$("#loading_manage").height()) / 2)
         },

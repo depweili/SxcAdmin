@@ -3,6 +3,11 @@ using YaChH.Application.Busines.SxcManage;
 using YaChH.Util;
 using YaChH.Util.WebControl;
 using System.Web.Mvc;
+using YaChH.Application.Cache;
+using System.Collections.Generic;
+using YaChH.Application.Entity.SxcManage.ViewModel;
+using System.Linq;
+using YaChH.Application.Code;
 
 namespace YaChH.Application.Web.Areas.SxcManage.Controllers
 {
@@ -16,6 +21,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
     public class Sxc_CooperationController : MvcControllerBase
     {
         private Sxc_CooperationBLL sxc_cooperationbll = new Sxc_CooperationBLL();
+        private DataItemCache dataItemCache = new DataItemCache();
 
         #region 视图功能
         /// <summary>
@@ -49,10 +55,40 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         public ActionResult GetPageListJson(Pagination pagination, string queryJson)
         {
             var watch = CommonHelper.TimerStart();
-            var data = sxc_cooperationbll.GetPageList(pagination, queryJson);
+            var keyValues = dataItemCache.GetDataItemList();
+            IEnumerable<Sxc_CooperationEntity> data = sxc_cooperationbll.GetPageList(pagination, queryJson);
+            List<Sxc_CooperationModel> viewData = new List<Sxc_CooperationModel>();
+            foreach(var d in data)
+            {
+                var type = d.Type.ToString();
+                var level = d.Level.ToString();
+                var tkey = "AgentType";
+                var lkey = string.Format("AgentLevel{0}", type);
+                var ln = keyValues.FirstOrDefault(r => r.EnCode == lkey&&r.ItemValue==level);
+                var tn = keyValues.FirstOrDefault(r => r.EnCode == tkey&&r.ItemValue==type);
+                Sxc_CooperationModel item = new Sxc_CooperationModel
+                {
+                    ID=d.ID,
+                    Address=d.Address,
+                    AreaID=d.AreaID,
+                    CreateTime=d.CreateTime,
+                    AgentAreaInfo=d.AgentAreaInfo,
+                    AreaInfo=d.AreaInfo,
+                    Level=d.Level,
+                    LevelName=(ln==null?"":ln.ItemName),
+                    Memo=d.Memo,
+                    MobilePhone=d.MobilePhone,
+                    Name=d.Name,
+                    ProcessDetail=d.ProcessDetail,
+                    Type=d.Type,
+                    UserID=d.UserID,
+                    TypeName = (tn == null ? "" : tn.ItemName),
+                };
+                viewData.Add(item);
+            }
             var jsonData = new
             {
-                rows = data,
+                rows = viewData,
                 total = pagination.total,
                 page = pagination.page,
                 records = pagination.records,
@@ -111,6 +147,19 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         {
             sxc_cooperationbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AjaxOnly]
+        [HandlerAuthorize(PermissionMode.Ignore)]
+        public ActionResult ApproveApplication(string keyValue)
+        {
+            sxc_cooperationbll.AuditingApplication(keyValue,1);
+            return Success("申请成功通过！");
         }
         #endregion
     }

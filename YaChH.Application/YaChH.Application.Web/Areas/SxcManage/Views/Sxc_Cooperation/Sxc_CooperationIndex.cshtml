@@ -29,15 +29,15 @@
             datatype: "json",
             colModel: [
                 { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true ,hidden: true },
-                { label: 'MobilePhone', name: 'MobilePhone', index: 'MobilePhone', width: 100, align: 'left',sortable: true  },
-                { label: 'Name', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
-                { label: 'AreaInfo', name: 'AreaInfo', index: 'AreaInfo', width: 100, align: 'left',sortable: true  },
-                { label: 'Address', name: 'Address', index: 'Address', width: 100, align: 'left',sortable: true  },
-                { label: 'Type', name: 'Type', index: 'Type', width: 100, align: 'left',sortable: true  },
-                { label: 'Level', name: 'Level', index: 'Level', width: 100, align: 'left',sortable: true  },
-                { label: 'Memo', name: 'Memo', index: 'Memo', width: 100, align: 'left',sortable: true  },
-                { label: 'ProcessDetail', name: 'ProcessDetail', index: 'ProcessDetail', width: 100, align: 'left',sortable: true  },
-                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
+                { label: '手机号', name: 'MobilePhone', index: 'MobilePhone', width: 100, align: 'left',sortable: true  },
+                { label: '代理人', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
+                { label: '代理区域', name: 'AreaInfo', index: 'AreaInfo', width: 200, align: 'left',sortable: true  },
+                { label: '代理地址', name: 'Address', index: 'Address', width: 200, align: 'left',sortable: true  },
+                { label: '代理类型', name: 'TypeName', index: 'Type', width: 100, align: 'left',sortable: true  },
+                { label: '代理级别', name: 'LevelName', index: 'Level', width: 100, align: 'left',sortable: true  },
+                { label: '备注信息', name: 'Memo', index: 'Memo', width: 200, align: 'left',sortable: true  },
+                { label: '审核结果', name: 'ProcessDetail', index: 'ProcessDetail', width: 300, align: 'left',sortable: true  },
+                { label: '申请时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
             ],
             viewrecords: true,
             rowNum: 30,
@@ -55,30 +55,43 @@
                 $('#' + this.id).setSelection(selectedRowIndex, false);
             }
         });
-    }
-    //新增
-    function btn_add() {
-        dialogOpen({
-            id: 'Form',
-            title: '添加Sxc_Cooperation',
-            url: '/SxcManage/Sxc_Cooperation/Sxc_CooperationForm',
-            width: 'px',
-            height: 'px',
-            callBack: function (iframeId) {
-                top.frames[iframeId].AcceptClick();
+
+       // $gridTable.authorizeColModel();
+        //查询条件设置
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车事件
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
             }
         });
     }
+ 
     //编辑
     function btn_edit() {
         var keyValue = $('#gridTable').jqGridRowValue('ID');
         if (checkedRow(keyValue)) {
             dialogOpen({
                 id: 'Form',
-                title: '编辑Sxc_Cooperation',
+                title: '编辑',
                 url: '/SxcManage/Sxc_Cooperation/Sxc_CooperationForm?keyValue=' + keyValue,
-                width: 'px',
-                height: 'px',
+                width: "700px",
+                height: "400px",
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
@@ -97,17 +110,59 @@
                 }
             })
         } else {
-            dialogMsg('请选择需要删除的Sxc_Cooperation！', 0);
+            dialogMsg('请选择需要删除的数据！', 0);
         }
     }
+
+    //审核通过
+    function btn_approve() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.ConfirmAjax({
+                msg: "注：您确定要【通过】申请？",
+                url: '../../SxcManage/Sxc_Cooperation/ApproveApplication',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要审核通过的数据！', 0);
+        }
+    }
+
+
 </script>
 <div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="MobilePhone">手机号</a></li>
+                            <li><a data-value="Name">代理人</a></li>                          
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
     <div class="toolbar">
         <div class="btn-group">
-            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
-            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
-            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+           
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>           
+            @*<a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>*@
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-approve" class="btn btn-default" onclick="btn_approve()"><i class="fa fa-check"></i>&nbsp;审核通过</a>   
         </div>
     </div>
 </div>

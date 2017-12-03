@@ -110,6 +110,7 @@
     <Compile Include="PublicInfoManage\ScheduleService.cs" />
     <Compile Include="ReportManage\RptTempService.cs" />
     <Compile Include="SxcManage\Sxc_AgentService.cs" />
+    <Compile Include="SxcManage\Sxc_Base_AreaService.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordService.cs" />
     <Compile Include="SxcManage\Sxc_CommodityService.cs" />
     <Compile Include="SxcManage\Sxc_CooperationService.cs" />

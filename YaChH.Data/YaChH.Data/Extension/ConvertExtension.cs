@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace YaChH.Data
 {
@@ -141,8 +141,6 @@ namespace YaChH.Data
             if (CacheEntity == null)
             {
                 Hashtable ht = new Hashtable();
-
-                //过滤导航属性 GetAccessors()[0].IsVirtual (i.PropertyType.IsValueType || i.PropertyType == typeof(string))
                 PropertyInfo[] props = type.GetProperties().Where(p=>p.GetMethod.IsVirtual==false).ToArray();
                 foreach (PropertyInfo prop in props)
                 {

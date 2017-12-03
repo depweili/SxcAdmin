@@ -112,6 +112,7 @@
     <Compile Include="PublicInfoManage\ScheduleEntity.cs" />
     <Compile Include="ReportManage\RptTempEntity.cs" />
     <Compile Include="SxcManage\Sxc_AgentEntity.cs" />
+    <Compile Include="SxcManage\Sxc_Base_AreaEntity.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordEntity.cs" />
     <Compile Include="SxcManage\Sxc_CommodityEntity.cs" />
     <Compile Include="SxcManage\Sxc_CooperationEntity.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileEntity.cs" />
     <Compile Include="SxcManage\ViewModel\AgentMemberTreeModel.cs" />
+    <Compile Include="SxcManage\ViewModel\Sxc_CooperationModel.cs" />
     <Compile Include="SystemManage\AreaEntity.cs" />
     <Compile Include="SystemManage\CodeRuleEntity.cs" />
     <Compile Include="SystemManage\CodeRuleFormatEntity.cs" />

@@ -9,16 +9,49 @@
     });
     //初始化控件
     function initControl() {
+       
+        $("#Type").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson",
+            param: { EnCode: "AgentType" },
+            id: "ItemValue",
+            text: "ItemName",
+            description: "==请选择==",
+            height: "200px"
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            var encode = "AgentLevel" + value;
+           
+            $("#Level").ComboBox({
+                url: "../../SystemManage/DataItemDetail/GetDataItemListJson",
+                param: { EnCode: encode },
+                id: "ItemValue",
+                text: "ItemName",
+                description: "==请选择==",
+                height: "200px"
+            });
+        });
+
+        $("#Level").ComboBox({
+            description: "==请选择==",          
+            height: "200px",
+            allowSearch: true
+        });
         //获取表单
         if (!!keyValue) {
             $.SetForm({
                 url: "../../SxcManage/Sxc_Cooperation/GetFormJson",
                 param: { keyValue: keyValue },
                 success: function (data) {
-                    $("#form1").SetWebControls(data);
+                    $("#form1").SetWebControls(data);      
+                    $("#Type").ComboBoxTreeSetValue(data.Type).trigger("change");
+                    $("#Level").ComboBoxSetValue(data.Level)
                 }
             })
         }
+        
+     
+      
+      
     }
     //保存表单;
     function AcceptClick() {
@@ -60,12 +93,17 @@
         </tr>
         <tr>
             <td class="formTitle">Type</td>
-            <td class="formValue">
-                <input id="Type" type="text" class="form-control"  />
+            <td class="formValue">           
+
+                <div id="Type" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">
+                    
+                </div>
             </td>
             <td class="formTitle">Level</td>
-            <td class="formValue">
-                <input id="Level" type="text" class="form-control"  />
+            <td class="formValue">               
+                <div id="Level" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">
+                   
+                </div>
             </td>
         </tr>
         <tr>

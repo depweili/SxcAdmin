@@ -100,6 +100,7 @@
     <Compile Include="PublicInfoManage\IScheduleService.cs" />
     <Compile Include="ReportManage\IRptTempService.cs" />
     <Compile Include="SxcManage\Sxc_AgentIService.cs" />
+    <Compile Include="SxcManage\Sxc_Base_AreaIService.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordIService.cs" />
     <Compile Include="SxcManage\Sxc_CommodityIService.cs" />
     <Compile Include="SxcManage\Sxc_CooperationIService.cs" />
