@@ -118,6 +118,7 @@
     <Compile Include="SxcManage\Sxc_CooperationEntity.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoEntity.cs" />
     <Compile Include="SxcManage\Sxc_TeacherEntity.cs" />
+    <Compile Include="SxcManage\Sxc_UserEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileEntity.cs" />
     <Compile Include="SxcManage\ViewModel\AgentMemberTreeModel.cs" />

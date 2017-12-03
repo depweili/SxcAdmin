@@ -111,6 +111,7 @@
     <Compile Include="SxcManage\Sxc_TeacherService.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentService.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileService.cs" />
+    <Compile Include="SxcManage\Sxc_UserService.cs" />
     <Compile Include="SystemManage\AreaService.cs" />
     <Compile Include="SystemManage\CodeRuleService.cs" />
     <Compile Include="SystemManage\DataBaseBackupService.cs" />
