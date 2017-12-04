@@ -258,6 +258,7 @@
     <Content Include="Areas\SxcManage\Views\Sxc_UserProfile\Sxc_UserProfileIndex.cshtml" />
     <Content Include="Content\adminDefault\css\index.css" />
     <Content Include="Content\adminDefault\img\arrow1.png" />
+    <Content Include="Content\adminDefault\img\frontpage.jpg" />
     <Content Include="Content\adminDefault\img\tab_close.png" />
     <Content Include="Content\adminDefault\index.js" />
     <Content Include="Content\adminLTE\css\index.css" />
