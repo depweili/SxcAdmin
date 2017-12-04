@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Data.Entity;
 using YaChH.Util.Extension;
 using System;
+using YaChH.Application.Code;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -56,6 +57,13 @@ namespace YaChH.Application.Service.SxcManage
             {
                 string CustomerName = queryParam["UserName"].ToString();
                 expression = expression.And(t => t.UserPayment.User.UserProfile.NickName.Contains(CustomerName)|| t.UserPayment.User.UserProfile.RealName.Contains(CustomerName));
+            }
+
+
+            if (!OperatorProvider.Provider.Current().IsSystem)
+            {
+                var account = OperatorProvider.Provider.Current().Account;
+                expression = expression.And(t => t.UserPayment.User.SystemAccount == account);
             }
 
             PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Descending) };
