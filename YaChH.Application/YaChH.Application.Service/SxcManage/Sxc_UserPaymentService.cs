@@ -256,6 +256,7 @@ namespace YaChH.Application.Service.SxcManage
                     };
 
                     db.Insert(record1);
+                    db.Update(agent1);
 
                     if (agent1.PID.HasValue)
                     {
@@ -287,6 +288,7 @@ namespace YaChH.Application.Service.SxcManage
                         };
 
                         db.Insert(record2);
+                        db.Update(agent2);
                     }
                 }
             }
@@ -312,6 +314,7 @@ namespace YaChH.Application.Service.SxcManage
                     };
 
                     db.Insert(record1);
+                    db.Update(agent1);
 
                     if (agent1.PID.HasValue)
                     {
@@ -332,6 +335,7 @@ namespace YaChH.Application.Service.SxcManage
                         };
 
                         db.Insert(record2);
+                        db.Update(agent2);
 
                         List<Sxc_AgentEntity> SupAgents = new List<Sxc_AgentEntity>();
 
@@ -354,6 +358,7 @@ namespace YaChH.Application.Service.SxcManage
                             };
 
                             db.Insert(recordsup);
+                            db.Update(sup);
                         }
                     }
                 }
