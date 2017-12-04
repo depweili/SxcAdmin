@@ -30,23 +30,46 @@
             datatype: "json",
             colModel: [
                 { label: 'ID', name: 'ID', index: 'ID', width: 80, align: '', sortable: false, hidden: true, key: true },
-                { label: '用户名', name: 'UserID', index: 'UserID', width: 80, align: '', sortable: true },
-                { label: '项目', name: 'PayItemID', index: 'PayItemID', width: 80, align: '', sortable: true },
+                { label: 'UserID', name: 'UserID', index: 'UserID', width: 80, align: '', sortable: true ,hidden: true},
+                { label: '用户昵称', name: 'NickName', index: 'NickName', width: 80, align: '', sortable: true },
+                { label: '用户姓名', name: 'RealName', index: 'NickName', width: 80, align: '', sortable: true },
+                {
+                    label: '项目', name: 'PayItemID', index: 'PayItemID', width: 80, align: '', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clientdataItem["PayItem"][cellvalue];
+                    }
+                },
                 { label: 'PayUID', name: 'PayUID', index: 'PayUID', width: 80, align: '', sortable: false, hidden: true },
-                { label: '编号', name: 'PaySN', index: 'PaySN', width: 80, align: '', sortable: false },
-                { label: '是否分配', name: 'IsDistr', index: 'IsDistr', width: 80, align: '', sortable: false },
+                { label: '流水号', name: 'PaySN', index: 'PaySN', width: 150, align: '', sortable: false },
+                {
+                    label: '允许分配', name: 'IsDistr', index: 'IsDistr', width: 80, align: '', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (!$.isNullOrEmpty(cellvalue)) {
+                            return cellvalue == true ? "是" : "否";
+                        }
+                        else {
+                            return "否";
+                        }
+                    }
+                },
                 { label: '分配类型', name: 'DistrType', index: 'DistrType', width: 80, align: '', sortable: false, hidden: true },
-                { label: '状态', name: 'State', index: 'State', width: 80, align: '', sortable: false },
+                {
+                    label: '状态', name: 'State', index: 'State', width: 80, align: '', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") { return "已分配"; }
+                        if (cellvalue == "0") { return "未分配"; }
+                    }
+                },
                 { label: '缴纳金额', name: 'Amount', index: 'Amount', width: 80, align: '', sortable: false },
                 { label: '分配金额', name: 'DistrAmount', index: 'DistrAmount', width: 80, align: '', sortable: false },
                 { label: '佣金', name: 'Commission', index: 'Commission', width: 80, align: '', sortable: false },
                 { label: '最终金额', name: 'FinalAmount', index: 'FinalAmount', width: 80, align: '', sortable: false },
-                { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 80, align: '', sortable: true },
+                { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 80, align: '', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
                 { label: '分配时间', name: 'DistrTime', index: 'DistrTime', width: 80, align: '', sortable: true },
                 { label: '结算时间', name: 'AccountTime', index: 'AccountTime', width: 80, align: '', sortable: true },
                 { label: '备注', name: 'Memo', index: 'Memo', width: 80, align: '', sortable: false },
-                { label: '操作人ID', name: 'OperatorID', index: 'OperatorID', width: 80, align: '', sortable: false },
-                { label: '操作人', name: 'OperatorName', index: 'OperatorName', width: 80, align: '', sortable: false },
+                { label: '操作人ID', name: 'OperatorID', index: 'OperatorID', width: 80, align: '', sortable: false, hidden: true },
+                { label: '操作人', name: 'OperatorName', index: 'OperatorName', width: 80, align: '', sortable: false, hidden: true },
             ],
             viewrecords: true,
             rowNum: 30,
@@ -75,13 +98,14 @@
                     datatype: "json",
                     height: "100%",
                     colModel: [
-                        { label: 'ID', name: 'ID', index: 'ID', width: 80, align: '', sortable: true },
-                        { label: '佣金', name: 'Commission', index: 'Commission', width: 80, align: '', sortable: true },
+                        { label: 'ID', name: 'ID', index: 'ID', width: 80, align: '', sortable: true, hidden: true },
                         { label: 'UserPaymentID', name: 'UserPaymentID', index: 'UserPaymentID', width: 80, align: '', sortable: true, hidden: true },
-                        { label: '用户', name: 'AgentID', index: 'AgentID', width: 80, align: '', sortable: true },
-                        { label: '状态', name: 'State', index: 'State', width: 80, align: '', sortable: true },
+                        { label: '用户昵称', name: 'NickName', index: 'NickName', width: 80, align: '', sortable: true },
+                        { label: '用户姓名', name: 'RealName', index: 'NickName', width: 80, align: '', sortable: true },
+                        { label: '佣金', name: 'Commission', index: 'Commission', width: 80, align: '', sortable: true },
+                        { label: '状态', name: 'State', index: 'State', width: 80, align: '', sortable: true, hidden: true },
                         { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 80, align: '', sortable: true },
-                        { label: '确认时间', name: 'CheckTime', index: 'CheckTime', width: 80, align: '', sortable: true },
+                        { label: '确认时间', name: 'CheckTime', index: 'CheckTime', width: 80, align: '', sortable: true, hidden: true  },
                         { label: '备注', name: 'Memo', index: 'Memo', width: 80, align: '', sortable: true },
                     ],
                     caption: "明细",
@@ -93,29 +117,72 @@
                 });
             }
         });
-        //查询条件
-        $("#queryCondition .dropdown-menu li").click(function () {
-            var text = $(this).find('a').html();
-            var value = $(this).find('a').attr('data-value');
-            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
-        });
-        //查询事件
-        $("#btn_Search").click(function () {
-            var queryJson = {
-                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
-                keyword: $("#txt_Keyword").val()
+
+        //点击时间范围（今天、近7天、近一个月、近三个月）
+        $("#time_horizon a.btn-default").click(function () {
+            $("#time_horizon a.btn-default").removeClass("active");
+            $(this).addClass("active");
+            switch ($(this).attr('data-value')) {
+                case "1"://今天
+                    $("#StartTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "2"://近7天
+                    $("#StartTime").val("@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "3"://近一个月
+                    $("#StartTime").val("@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "4"://近三个月
+                    $("#StartTime").val("@DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                default:
+                    break;
             }
+            $("#SelectedStartTime").html($("#StartTime").val());
+            $("#SelectedEndTime").html($("#EndTime").val());
+            $('#btn_Search').trigger("click");
+        });
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            if (!$(".ui-filter-text").next('.ui-filter-list').is(":hidden")) {
+                $(".ui-filter-text").trigger("click");
+            }
+            $("#SelectedStartTime").html($("#StartTime").val());
+            $("#SelectedEndTime").html($("#EndTime").val());
+            var queryJson = $("#filter-form").GetWebControls();
             $gridTable.jqGrid('setGridParam', {
                 postData: { queryJson: JSON.stringify(queryJson) },
                 page: 1
             }).trigger('reloadGrid');
         });
-        //查询回车
-        $('#txt_Keyword').bind('keypress', function (event) {
-            if (event.keyCode == "13") {
-                $('#btn_Search').trigger("click");
-            }
-        });
+
+        ////查询条件
+        //$("#queryCondition .dropdown-menu li").click(function () {
+        //    var text = $(this).find('a').html();
+        //    var value = $(this).find('a').attr('data-value');
+        //    $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        //});
+        ////查询事件
+        //$("#btn_Search").click(function () {
+        //    var queryJson = {
+        //        condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+        //        keyword: $("#txt_Keyword").val()
+        //    }
+        //    $gridTable.jqGrid('setGridParam', {
+        //        postData: { queryJson: JSON.stringify(queryJson) },
+        //        page: 1
+        //    }).trigger('reloadGrid');
+        //});
+        ////查询回车
+        //$('#txt_Keyword').bind('keypress', function (event) {
+        //    if (event.keyCode == "13") {
+        //        $('#btn_Search').trigger("click");
+        //    }
+        //});
     }
     //新增
     function btn_add() {
@@ -200,22 +267,48 @@
     <div class="title-search">
         <table>
             <tr>
-                <td>
-                    <div id="queryCondition" class="btn-group">
-                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="UserID">用户名</a></li>
-                            <li><a data-value="PayItemID">项目</a></li>
-                            <li><a data-value="CreateTime">创建时间</a></li>
-                        </ul>
+                <td>查询条件</td>
+                <td style="padding-left: 10px;">
+                    <div class="ui-filter" style="width: 200px;">
+                        <div class="ui-filter-text">
+                            <strong id="SelectedStartTime">@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")</strong> 至 <strong id="SelectedEndTime">@DateTime.Now.ToString("yyyy-MM-dd")</strong>
+                        </div>
+                        <div class="ui-filter-list" style="width: 350px;">
+                            <table class="form" id="filter-form">
+                                <tr>
+                                    <th class="formTitle">日期：</th>
+                                    <td class="formValue">
+                                        <input id="Category" type="hidden" value="1" />
+                                        <div style="float: left; width: 45%;">
+                                            <input id="StartTime" readonly type="text" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" class="form-control input-wdatepicker" onfocus="WdatePicker({maxDate:'%y-%M-%d'})">
+                                        </div>
+                                        <div style="float: left; width: 10%; text-align: center;">至</div>
+                                        <div style="float: left; width: 45%;">
+                                            <input id="EndTime" readonly type="text" value="@YaChH.Util.Time.GetToday()" class="form-control input-wdatepicker" onfocus="WdatePicker({maxDate:'%y-%M-%d'})">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="formTitle">客户名称：</td>
+                                    <td class="formValue">
+                                        <input id="UserName" type="text" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="ui-filter-list-bottom">
+                                <a id="btn_Reset" class="btn btn-default">&nbsp;重&nbsp;&nbsp;置</a>
+                                <a id="btn_Search" class="btn btn-primary">&nbsp;查&nbsp;&nbsp;询</a>
+                            </div>
+                        </div>
                     </div>
                 </td>
-                <td>
-                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
-                </td>
-                <td style="padding-left: 5px;">
-                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                <td style="padding-left: 10px;">
+                    <div id="time_horizon" class="btn-group">
+                        <a class="btn btn-default" data-value="1">今天</a>
+                        <a class="btn btn-default" data-value="2">近7天</a>
+                        <a class="btn btn-default active" data-value="3">近1个月</a>
+                        <a class="btn btn-default" data-value="4">近3个月</a>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -223,10 +316,10 @@
     <div class="toolbar">
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
-            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>*@
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
-            <a id="lr-details" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+            @*<a id="lr-details" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>*@
         </div>
 
         <div class="btn-group">

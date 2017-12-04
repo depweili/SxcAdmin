@@ -37,6 +37,13 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         {
             return View();
         }
+
+
+        [HttpGet]
+        public ActionResult Sxc_UserPayForm()
+        {
+            return View();
+        }
         #endregion
 
         #region 获取数据
@@ -120,6 +127,15 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             var entity = strEntity.ToObject<Sxc_UserPaymentEntity>();
             List<Sxc_CommissionRecordEntity> childEntitys = strChildEntitys.ToList<Sxc_CommissionRecordEntity>();
             sxc_userpaymentbll.SaveForm(keyValue, entity, childEntitys);
+            return Success("操作成功。");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AjaxOnly]
+        public ActionResult SavePayForm(string keyValue, Sxc_UserPaymentEntity entity)
+        {
+            sxc_userpaymentbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
         }
         #endregion

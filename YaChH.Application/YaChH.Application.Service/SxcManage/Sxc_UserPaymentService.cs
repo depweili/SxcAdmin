@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using YaChH.Util;
 using YaChH.Util.Extension;
+using YaChH.Data.EF.Tool;
+using System.ComponentModel;
+using System.Data.Entity;
+using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -27,7 +31,7 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_UserPaymentEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_UserPaymentEntity> GetPageList1(Pagination pagination, string queryJson)
         {
             var expression = LinqExtensions.True<Sxc_UserPaymentEntity>();
             var queryParam = queryJson.ToJObject();
@@ -56,6 +60,36 @@ namespace YaChH.Application.Service.SxcManage
 
             return this.BaseRepository(DbName).FindList(expression, pagination);
         }
+
+        public IEnumerable<Sxc_UserPaymentEntity> GetPageList(Pagination pagination, string queryJson)
+        {
+            int total;
+
+            var expression = LinqExtensions.True<Sxc_UserPaymentEntity>();
+            var queryParam = queryJson.ToJObject();
+            //单据日期
+            if (!queryParam["StartTime"].IsEmpty() && !queryParam["EndTime"].IsEmpty())
+            {
+                DateTime startTime = queryParam["StartTime"].ToDate();
+                DateTime endTime = queryParam["EndTime"].ToDate().AddDays(1);
+                expression = expression.And(t => t.CreateTime >= startTime && t.CreateTime <= endTime);
+            }
+            //客户名称
+            if (!queryParam["UserName"].IsEmpty())
+            {
+                string CustomerName = queryParam["UserName"].ToString();
+                expression = expression.And(t => t.User.UserProfile.NickName.Contains(CustomerName) || t.User.UserProfile.RealName.Contains(CustomerName));
+            }
+
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Descending) };
+            //Include("Agent").Include("UserPayment").  Where(x=>true  
+            //Include(t=>t.UserPayment.User.UserProfile).
+            var query = this.BaseRepository(DbName).IQueryable<Sxc_UserPaymentEntity>().Include(t => t.User.UserProfile).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
+        }
+
+
         /// <summary>
         /// 获取实体
         /// </summary>
@@ -72,7 +106,12 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public IEnumerable<Sxc_CommissionRecordEntity> GetDetails(string keyValue)
         {
-            return this.BaseRepository(DbName).FindList<Sxc_CommissionRecordEntity>("select * from Sxc_CommissionRecord where UserPaymentID=" + keyValue + "");
+            //return this.BaseRepository(DbName).FindList<Sxc_CommissionRecordEntity>("select * from Sxc_CommissionRecord where UserPaymentID=" + keyValue + "");
+
+            var payid = int.Parse(keyValue);
+            var query = this.BaseRepository(DbName).IQueryable<Sxc_CommissionRecordEntity>().Include(t => t.Agent.User.UserProfile).Where(t => t.UserPaymentID == payid).OrderBy(t => t.ID).AsEnumerable();
+
+            return query;
         }
         #endregion
 
@@ -140,6 +179,23 @@ namespace YaChH.Application.Service.SxcManage
             {
                 db.Rollback();
                 throw;
+            }
+        }
+
+
+        public void SaveForm(string keyValue, Sxc_UserPaymentEntity entity)
+        {
+            if (!string.IsNullOrEmpty(keyValue))
+            {
+                entity.Modify(keyValue);
+                this.BaseRepository(DbName).Update(entity);
+            }
+            else
+            {
+                entity.Create();
+                entity.PaySN = CommonHelper.CreateTimeRandomNo();
+                entity.DistrAmount = entity.Amount;
+                this.BaseRepository(DbName).Insert(entity);
             }
         }
 
@@ -279,7 +335,7 @@ namespace YaChH.Application.Service.SxcManage
 
                         List<Sxc_AgentEntity> SupAgents = new List<Sxc_AgentEntity>();
 
-                        GetSupAgents(agent2, SupAgents);
+                        GetSupAgents(db,agent2, SupAgents);
 
                         foreach (var sup in SupAgents)
                         {
@@ -306,16 +362,19 @@ namespace YaChH.Application.Service.SxcManage
             entity.FinalAmount = entity.Amount - entity.Commission;
         }
 
-        private void GetSupAgents(Sxc_AgentEntity agent2, List<Sxc_AgentEntity> supAgents)
+        private void GetSupAgents(IRepository db,Sxc_AgentEntity agent2, List<Sxc_AgentEntity> supAgents)
         {
             if (agent2.PID.HasValue)
             {
-                if (agent2.ParentAgent.Level > agent2.Level)
+                var parentAgent= db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent2.PID.Value);
+
+                //if (agent2.ParentAgent.Level > agent2.Level)
+                if (parentAgent.Level > agent2.Level)
                 {
-                    supAgents.Add(agent2.ParentAgent);
+                    supAgents.Add(parentAgent);
                 }
 
-                GetSupAgents(agent2.ParentAgent, supAgents);
+                GetSupAgents(db, parentAgent, supAgents);
             }
         }
 

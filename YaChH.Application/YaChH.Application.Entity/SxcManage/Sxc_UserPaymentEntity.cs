@@ -29,14 +29,14 @@ namespace YaChH.Application.Entity.SxcManage
 
         public virtual Sxc_UserEntity User { get; set; }
 
-        [NotMapped]
-        public string UserName { get; set; }
+        //[NotMapped]
+        //public string UserName { get; set; }
         /// <summary>
         /// 项目
         /// </summary>
         /// <returns></returns>
         [Column("PAYITEMID")]
-        public int? PayItemID { get; set; }
+        public int PayItemID { get; set; }
         /// <summary>
         /// PayUID
         /// </summary>
@@ -60,13 +60,13 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         [Column("DISTRTYPE")]
-        public int? DistrType { get; set; }
+        public int DistrType { get; set; }
         /// <summary>
         /// 状态
         /// </summary>
         /// <returns></returns>
         [Column("STATE")]
-        public int? State { get; set; }
+        public int State { get; set; }
         /// <summary>
         /// 缴纳金额
         /// </summary>
@@ -96,7 +96,7 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         [Column("CREATETIME")]
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// 分配时间
         /// </summary>
@@ -136,6 +136,10 @@ namespace YaChH.Application.Entity.SxcManage
         public override void Create()
         {
             //this.ID = Guid.NewGuid().ToString();
+            this.IsDistr = true;
+            this.CreateTime = DateTime.Now;
+            this.PayUID = Guid.NewGuid();
+            this.DistrType = 1;
         }
         /// <summary>
         /// 编辑调用

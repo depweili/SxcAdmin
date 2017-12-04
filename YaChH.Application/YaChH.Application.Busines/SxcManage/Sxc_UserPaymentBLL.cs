@@ -4,6 +4,7 @@ using YaChH.Application.Service.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace YaChH.Application.Busines.SxcManage
 {
@@ -25,10 +26,39 @@ namespace YaChH.Application.Busines.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_UserPaymentEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_UserPaymentEntity> GetPageList1(Pagination pagination, string queryJson)
         {
             return service.GetPageList(pagination, queryJson);
         }
+
+        public IEnumerable<dynamic> GetPageList(Pagination pagination, string queryJson)
+        {
+            var data = service.GetPageList(pagination, queryJson);
+
+            var res = data.Select(t => new
+            {
+                t.ID,
+                t.IsDistr,
+                t.PayItemID,
+                t.Commission,
+                NickName = t.User.UserProfile.NickName,
+                RealName = t.User.UserProfile.RealName,
+                CreateTime = t.CreateTime.ToString("yyyy-MM-dd"),
+                t.Memo,
+                t.AccountTime,
+                t.State,
+                t.Amount,
+                t.DistrTime,
+                t.DistrAmount,
+                t.FinalAmount,
+                t.PayUID,
+                t.PaySN,
+                t.UserID
+            });
+
+            return res;
+        }
+
         /// <summary>
         /// 获取实体
         /// </summary>
@@ -43,9 +73,30 @@ namespace YaChH.Application.Busines.SxcManage
         /// </summary>
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
-        public IEnumerable<Sxc_CommissionRecordEntity> GetDetails(string keyValue)
+        public IEnumerable<Sxc_CommissionRecordEntity> GetDetails1(string keyValue)
         {
             return service.GetDetails(keyValue);
+        }
+
+        public IEnumerable<dynamic> GetDetails(string keyValue)
+        {
+            var data = service.GetDetails(keyValue);
+
+            var res = data.Select(t => new
+            {
+                t.ID,
+                t.UserPaymentID,
+                t.AgentID,
+                t.Commission,
+                NickName = t.Agent.User.UserProfile.NickName,
+                RealName = t.Agent.User.UserProfile.RealName,
+                CreateTime = t.CreateTime.Value.ToShortDateString(),
+                t.Memo,
+                t.CheckTime,
+                t.State
+            });
+
+            return res;
         }
         #endregion
 
@@ -76,6 +127,18 @@ namespace YaChH.Application.Busines.SxcManage
             try
             {
                 service.SaveForm(keyValue, entity, entryList);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void SaveForm(string keyValue, Sxc_UserPaymentEntity entity)
+        {
+            try
+            {
+                service.SaveForm(keyValue, entity);
             }
             catch (Exception)
             {

@@ -17,7 +17,7 @@ namespace YaChH.Application.Entity.SxcManage
         /// ID
         /// </summary>
         /// <returns></returns>
-        public int? ID { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// PID
         /// </summary>

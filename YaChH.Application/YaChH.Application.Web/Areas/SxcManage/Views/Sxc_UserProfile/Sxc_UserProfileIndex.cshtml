@@ -156,6 +156,25 @@
             dialogMsg('请选择需要删除的Sxc_UserProfile！', 0);
         }
     }
+
+    //缴费
+    function btn_pay() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        var realName = $('#gridTable').jqGridRowValue('RealName');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '缴费',
+                url: '/SxcManage/Sxc_UserPayment/Sxc_UserPayForm?userId=' + keyValue + '&userName=' +escape(realName),
+                width: '400px',
+                height: '300px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+
 </script>
 <div class="titlePanel">
     <div class="title-search">

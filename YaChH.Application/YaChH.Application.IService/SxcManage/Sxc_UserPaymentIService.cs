@@ -49,11 +49,14 @@ namespace YaChH.Application.IService.SxcManage
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_UserPaymentEntity entity,List<Sxc_CommissionRecordEntity> entryList);
 
+        void SaveForm(string keyValue, Sxc_UserPaymentEntity entity);
+
         /// <summary>
         /// 分配佣金
         /// </summary>
         /// <param name="ids"></param>
         void DistrCommission(string ids);
+        
         #endregion
     }
 }

@@ -11,6 +11,10 @@ using YaChH.Util.Extension;
 using System;
 using YaChH.Application.Entity.SxcManage.ViewModel;
 using System.Text;
+using YaChH.Data.EF.Tool;
+using System.ComponentModel;
+using System.Data.Entity;
+using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -32,9 +36,50 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_AgentEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_AgentEntity> GetPageList1(Pagination pagination, string queryJson)
         {
             return this.BaseRepository(DbName).FindList(pagination);
+        }
+
+        public IEnumerable<Sxc_AgentEntity> GetPageList(Pagination pagination, string queryJson)
+        {
+            int total;
+
+            var expression = LinqExtensions.True<Sxc_AgentEntity>();
+            var queryParam = queryJson.ToJObject();
+
+            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            {
+                string condition = queryParam["condition"].ToString();
+                string keyord = queryParam["keyword"].ToString();
+                switch (condition)
+                {
+                    case "Name":
+                        expression = expression.And(t => t.User.UserProfile.NickName.Contains(keyord) || t.User.UserProfile.RealName.Contains(keyord));
+                        break;
+                    case "IDCard":          
+                        expression = expression.And(t => t.User.UserProfile.IDCard.Contains(keyord));
+                        break;
+                    case "Mobile":          
+                        expression = expression.And(t => t.User.UserProfile.MobilePhone.Contains(keyord));
+                        break;
+                    case "Area":
+                        expression = expression.And(t => t.Area.Area.Contains(keyord));
+                        break;
+                    case "SupAgent":
+                        expression = expression.And(t => t.ParentAgent.User.UserProfile.RealName.Contains(keyord));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            //Include("Agent").Include("UserPayment").  Where(x=>true  
+            //Include(t=>t.UserPayment.User.UserProfile).
+            var query = this.BaseRepository(DbName).IQueryable().Include(t => t.User.UserProfile).Include(t=>t.Area).Include(t=>t.ParentAgent.User.UserProfile).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
         }
         /// <summary>
         /// 获取列表

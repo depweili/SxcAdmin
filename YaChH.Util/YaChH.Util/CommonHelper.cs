@@ -68,6 +68,24 @@ namespace YaChH.Util
             string code = DateTime.Now.ToString("yyyyMMddHHmmss") + strRandom;//形如
             return code;
         }
+
+
+        private static object _lock = new object();
+        private static int count = 1;
+        //yyyyMMddHHmmss+0000
+        public static string CreateTimeRandomNo()
+        {
+            lock (_lock)
+            {
+                if (count >= 9999)
+                {
+                    count = 1;
+                }
+                var number = DateTime.Now.ToString("yyyyMMddHHmmss") + count.ToString("0000");
+                count++;
+                return number;
+            }
+        }
         #endregion
 
         #region 生成0-9随机数

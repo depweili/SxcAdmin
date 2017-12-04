@@ -10,7 +10,8 @@
         initControl();
     });
     //初始化页面
-    function InitialPage() {;
+    function InitialPage() {
+        ;
         //resize重设(表格、树形)宽高
         $(window).resize(function (e) {
             window.setTimeout(function () {
@@ -29,14 +30,14 @@
             height: $(window).height() - 240.5,
             autowidth: true,
             colModel: [
-{ label: 'ID', name: 'ID', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
-{ label: 'Commission', name: 'Commission', width: 80, align: '', sortable: false, resizable: false  },
-{ label: 'UserPaymentID', name: 'UserPaymentID', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
-{ label: 'AgentID', name: 'AgentID', width: 80, align: '', sortable: false, resizable: false  },
-{ label: 'State', name: 'State', width: 80, align: '', sortable: false, resizable: false  },
-{ label: 'CreateTime', name: 'CreateTime', width: 80, align: '', sortable: false, resizable: false  },
-{ label: 'CheckTime', name: 'CheckTime', width: 80, align: '', sortable: false, resizable: false  },
-{ label: 'Memo', name: 'Memo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: 'ID', name: 'ID', width: 80, align: '', sortable: false, resizable: false, hidden: true },
+                { label: 'Commission', name: 'Commission', width: 80, align: '', sortable: false, resizable: false },
+                { label: 'UserPaymentID', name: 'UserPaymentID', width: 80, align: '', sortable: false, resizable: false, hidden: true },
+                { label: 'AgentID', name: 'AgentID', width: 80, align: '', sortable: false, resizable: false },
+                { label: 'State', name: 'State', width: 80, align: '', sortable: false, resizable: false },
+                { label: 'CreateTime', name: 'CreateTime', width: 80, align: '', sortable: false, resizable: false },
+                { label: 'CheckTime', name: 'CheckTime', width: 80, align: '', sortable: false, resizable: false },
+                { label: 'Memo', name: 'Memo', width: 80, align: '', sortable: false, resizable: false },
             ],
             pager: false,
             rownumbers: true,
@@ -49,14 +50,14 @@
         //默认添加13行 空行
         for (var i = 1; i < 13; i++) {
             var rowdata = {
-ID: '<input name="ID" type="text" class="editable center" />',
-Commission: '<input name="Commission" type="text" class="editable center" />',
-UserPaymentID: '<input name="UserPaymentID" type="text" class="editable center" />',
-AgentID: '<input name="AgentID" type="text" class="editable center" />',
-State: '<input name="State" type="text" class="editable center" />',
-CreateTime: '<input name="CreateTime" type="text" class="editable center" />',
-CheckTime: '<input name="CheckTime" type="text" class="editable center" />',
-Memo: '<input name="Memo" type="text" class="editable center" />',
+                ID: '<input name="ID" type="text" class="editable center" />',
+                Commission: '<input name="Commission" type="text" class="editable center" />',
+                UserPaymentID: '<input name="UserPaymentID" type="text" class="editable center" />',
+                AgentID: '<input name="AgentID" type="text" class="editable center" />',
+                State: '<input name="State" type="text" class="editable center" />',
+                CreateTime: '<input name="CreateTime" type="text" class="editable center" />',
+                CheckTime: '<input name="CheckTime" type="text" class="editable center" />',
+                Memo: '<input name="Memo" type="text" class="editable center" />',
             }
             $grid.jqGrid('addRowData', i, rowdata);
         };
@@ -75,14 +76,14 @@ Memo: '<input name="Memo" type="text" class="editable center" />',
                     $('#gridTable').find('[role=row]').each(function (i) {
                         var row = childEntity[i - 1];
                         if (row != undefined) {
-$(this).find('input[name="ID"]').val(row.ID);
-$(this).find('input[name="Commission"]').val(row.Commission);
-$(this).find('input[name="UserPaymentID"]').val(row.UserPaymentID);
-$(this).find('input[name="AgentID"]').val(row.AgentID);
-$(this).find('input[name="State"]').val(row.State);
-$(this).find('input[name="CreateTime"]').val(row.CreateTime);
-$(this).find('input[name="CheckTime"]').val(row.CheckTime);
-$(this).find('input[name="Memo"]').val(row.Memo);
+                            $(this).find('input[name="ID"]').val(row.ID);
+                            $(this).find('input[name="Commission"]').val(row.Commission);
+                            $(this).find('input[name="UserPaymentID"]').val(row.UserPaymentID);
+                            $(this).find('input[name="AgentID"]').val(row.AgentID);
+                            $(this).find('input[name="State"]').val(row.State);
+                            $(this).find('input[name="CreateTime"]').val(row.CreateTime);
+                            $(this).find('input[name="CheckTime"]').val(row.CheckTime);
+                            $(this).find('input[name="Memo"]').val(row.Memo);
                         }
                     });
                 }
@@ -97,17 +98,17 @@ $(this).find('input[name="Memo"]').val(row.Memo);
         var postData = $("#form1").GetWebControls(keyValue);
         var childEntryJson = [];
         $('#gridTable').find('[role=row]').each(function (i) {
-        if (!!$(this).find('input[name="Commission"]').val()) {
-            childEntryJson.push({
-ID: $(this).find('input[name="ID"]').val(),
-Commission: $(this).find('input[name="Commission"]').val(),
-UserPaymentID: $(this).find('input[name="UserPaymentID"]').val(),
-AgentID: $(this).find('input[name="AgentID"]').val(),
-State: $(this).find('input[name="State"]').val(),
-CreateTime: $(this).find('input[name="CreateTime"]').val(),
-CheckTime: $(this).find('input[name="CheckTime"]').val(),
-Memo: $(this).find('input[name="Memo"]').val(),
-                 });
+            if (!!$(this).find('input[name="Commission"]').val()) {
+                childEntryJson.push({
+                    ID: $(this).find('input[name="ID"]').val(),
+                    Commission: $(this).find('input[name="Commission"]').val(),
+                    UserPaymentID: $(this).find('input[name="UserPaymentID"]').val(),
+                    AgentID: $(this).find('input[name="AgentID"]').val(),
+                    State: $(this).find('input[name="State"]').val(),
+                    CreateTime: $(this).find('input[name="CreateTime"]').val(),
+                    CheckTime: $(this).find('input[name="CheckTime"]').val(),
+                    Memo: $(this).find('input[name="Memo"]').val(),
+                });
             }
         });
         $.SaveForm({
@@ -120,68 +121,70 @@ Memo: $(this).find('input[name="Memo"]').val(),
         })
     }
 </script>
-<div class="bills" >
- <div style="height:190px;overflow-y:auto;margin:10px 10px;">
-    <table class="form" style="width: 100%;">
-        <tr>
-<th class="formTitle" style="width: 60px;">用户名<font face="宋体">*</font></th>
-<td class="formValue"><input id="UserID" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">项目<font face="宋体">*</font></th>
-<td class="formValue"><input id="PayItemID" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">PayUID<font face="宋体">*</font></th>
-<td class="formValue"><input id="PayUID" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">PaySN</th>
-<td class="formValue"><input id="PaySN" type="text"  class="form-control" ></td>
-</tr>
-<tr>
-<th class="formTitle" style="width: 60px;">是否分配<font face="宋体">*</font></th>
-<td class="formValue"><input id="IsDistr" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">DistrType<font face="宋体">*</font></th>
-<td class="formValue"><input id="DistrType" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">状态<font face="宋体">*</font></th>
-<td class="formValue"><input id="State" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">OperatorID</th>
-<td class="formValue"><input id="OperatorID" type="text"  class="form-control" ></td>
-</tr>
-<tr>
-<th class="formTitle" style="width: 60px;">缴纳金额<font face="宋体">*</font></th>
-<td class="formValue"><input id="Amount" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">佣金<font face="宋体">*</font></th>
-<td class="formValue"><input id="Commission" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">最终金额<font face="宋体">*</font></th>
-<td class="formValue"><input id="FinalAmount" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-<th class="formTitle" style="width: 60px;">创建时间<font face="宋体">*</font></th>
-<td class="formValue"><input id="CreateTime" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
-</tr>
-<tr>
-<th class="formTitle" style="width: 60px;">分配时间</th>
-<td class="formValue"><input id="DistrTime" type="text"  class="form-control" ></td>
-<th class="formTitle" style="width: 60px;">确认时间</th>
-<td class="formValue"><input id="AccountTime" type="text"  class="form-control" ></td>
-<th class="formTitle" style="width: 60px;">备注</th>
-<td class="formValue"><input id="Memo" type="text"  class="form-control" ></td>
-<th class="formTitle" style="width: 60px;">操作人</th>
-<td class="formValue"><input id="OperatorName" type="text"  class="form-control" ></td>
-     </tr>
-    </table>
- </div>
- <div class="gridPanel" >
-     <table id="gridTable" ></table>
- </div>
+<div class="bills">
+    <div style="height:190px;overflow-y:auto;margin:10px 10px;">
+        <table class="form" style="width: 100%;">
+            <tr>
+                <th class="formTitle" style="width: 60px;">用户名<font face="宋体">*</font></th>
+                <td class="formValue"><input id="UserID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">项目<font face="宋体">*</font></th>
+                <td class="formValue"><input id="PayItemID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">PayUID<font face="宋体">*</font></th>
+                <td class="formValue"><input id="PayUID" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">PaySN</th>
+                <td class="formValue"><input id="PaySN" type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">是否分配<font face="宋体">*</font></th>
+                <td class="formValue"><input id="IsDistr" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">DistrType<font face="宋体">*</font></th>
+                <td class="formValue"><input id="DistrType" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">状态<font face="宋体">*</font></th>
+                <td class="formValue"><input id="State" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">OperatorID</th>
+                <td class="formValue"><input id="OperatorID" type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">缴纳金额<font face="宋体">*</font></th>
+                <td class="formValue"><input id="Amount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">佣金<font face="宋体">*</font></th>
+                <td class="formValue"><input id="Commission" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">最终金额<font face="宋体">*</font></th>
+                <td class="formValue"><input id="FinalAmount" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                <th class="formTitle" style="width: 60px;">创建时间<font face="宋体">*</font></th>
+                <td class="formValue"><input id="CreateTime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">分配时间</th>
+                <td class="formValue"><input id="DistrTime" type="text" class="form-control"></td>
+                <th class="formTitle" style="width: 60px;">确认时间</th>
+                <td class="formValue"><input id="AccountTime" type="text" class="form-control"></td>
+                <th class="formTitle" style="width: 60px;">备注</th>
+                <td class="formValue"><input id="Memo" type="text" class="form-control"></td>
+                <th class="formTitle" style="width: 60px;">操作人</th>
+                <td class="formValue"><input id="OperatorName" type="text" class="form-control"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="gridPanel">
+        <table id="gridTable"></table>
+    </div>
 </div>
 <style>
     body {
-        margin:0px;
+        margin: 0px;
     }
+
     .bills {
         overflow: hidden;
         border-radius: 0px;
         position: relative;
         background: #FFFFFF;
         border: 0px solid rgb(204, 204, 204);
-        box-shadow:none;
+        box-shadow: none;
         padding: 0px;
     }
+
     .ui-widget-content {
         border-left: 0px;
         border-right: 0px;

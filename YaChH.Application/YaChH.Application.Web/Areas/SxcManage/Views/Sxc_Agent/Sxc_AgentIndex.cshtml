@@ -28,25 +28,65 @@
             url: "../../SxcManage/Sxc_Agent/GetPageListJson",
             datatype: "json",
             colModel: [
-                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true  },
-                { label: 'PID', name: 'PID', index: 'PID', width: 100, align: 'left',sortable: true  },
-                { label: 'AgentID', name: 'AgentID', index: 'AgentID', width: 100, align: 'left',sortable: true  },
-                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left',sortable: true  },
-                { label: 'Type', name: 'Type', index: 'Type', width: 100, align: 'left',sortable: true  },
-                { label: 'Level', name: 'Level', index: 'Level', width: 100, align: 'left',sortable: true  },
-                { label: 'State', name: 'State', index: 'State', width: 100, align: 'left',sortable: true  },
-                { label: 'Commission', name: 'Commission', index: 'Commission', width: 100, align: 'left',sortable: true  },
-                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
-                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
-                { label: 'Area_ID', name: 'Area_ID', index: 'Area_ID', width: 100, align: 'left',sortable: true  },
-                { label: 'SupAgentBindTime', name: 'SupAgentBindTime', index: 'SupAgentBindTime', width: 100, align: 'left',sortable: true  },
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true  },
+                { label: 'PID', name: 'PID', index: 'PID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'AgentID', name: 'AgentID', index: 'AgentID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '用户昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: '用户名称', name: 'RealName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '代理类型', name: 'Type', index: 'Type', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != "0") {
+                            return top.clientdataItem["AgentType"][cellvalue];
+                        }
+                        else
+                        {
+                            return "";
+                        }
+                        
+                    }
+                },
+                {
+                    label: '代理级别', name: 'Level', index: 'Level', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.Type == "1") { return top.clientdataItem["AgentLevel1"][cellvalue];}
+                        if (rowObject.Type == "2") { return top.clientdataItem["AgentLevel2"][cellvalue]; }
+
+                        return "";
+                    }
+                },
+                {
+                    label: '地区', name: 'Area_ID', index: 'Area_ID', width: 180, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            return rowObject.Area.Area;
+                        }
+                        else
+                        {
+                            return "";
+                        }
+                    }
+                },
+                { label: '状态', name: 'State', index: 'State', width: 100, align: 'left', sortable: true,hidden: true  },
+                { label: '佣金', name: 'Commission', index: 'Commission', width: 100, align: 'left',sortable: true  },
+                {
+                    label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clientdataItem["trueorfalse"][cellvalue];
+                    }
+                },
+                { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
+                
+                { label: '加入时间', name: 'SupAgentBindTime', index: 'SupAgentBindTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
+                { label: '上级代理', name: 'ParentName', index: 'ParentName', width: 100, align: 'left', sortable: true },
             ],
             viewrecords: true,
             rowNum: 30,
             rowList: [30, 50, 100],
             pager: "#gridPager",
-           // sortname: 'ID',
-            sortname: 'SupAgentBindTime desc',
+            sortname: 'ID',
+            //sortname: 'CreateTime desc', //SupAgentBindTime
             rownumbers: true,
             shrinkToFit: false,
             gridview: true,
@@ -55,6 +95,30 @@
             },
             gridComplete: function () {
                 $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
             }
         });
     }
@@ -104,6 +168,31 @@
     }
 </script>
 <div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="Name">名称</a></li>
+                            @*<li><a data-value="IDCard">身份证</a></li>
+                            <li><a data-value="Mobile">手机</a></li>*@
+                            <li><a data-value="Area">地区</a></li>
+                            <li><a data-value="SupAgent">上级代理</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i> 查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
     <div class="toolbar">
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>

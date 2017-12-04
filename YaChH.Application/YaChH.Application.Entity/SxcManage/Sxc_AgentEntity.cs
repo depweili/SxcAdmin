@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -65,11 +66,8 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public DateTime? CreateTime { get; set; }
-        /// <summary>
-        /// Area_ID
-        /// </summary>
-        /// <returns></returns>
-        public int? Area_ID { get; set; }
+
+        
         /// <summary>
         /// SupAgentBindTime
         /// </summary>
@@ -82,7 +80,12 @@ namespace YaChH.Application.Entity.SxcManage
         [JsonIgnore]
         public virtual ICollection<Sxc_AgentEntity> ChildAgents { get; set; }
 
+
         public virtual Sxc_UserEntity User { get; set; }
+
+        [ForeignKey("Area")]
+        public int? Area_ID { get; set; }
+        public virtual Sxc_Base_AreaEntity Area { get; set; }
 
         #endregion
 
