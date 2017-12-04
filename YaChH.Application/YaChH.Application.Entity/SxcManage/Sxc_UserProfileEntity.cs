@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -12,6 +14,7 @@ namespace YaChH.Application.Entity.SxcManage
     /// </summary>
     public class Sxc_UserProfileEntity : BaseEntity
     {
+        private string _SystemAccount;
         #region 实体成员
         /// <summary>
         /// ID
@@ -74,7 +77,12 @@ namespace YaChH.Application.Entity.SxcManage
         /// <returns></returns>
         public string AvatarUrl { get; set; }
         
+        [JsonIgnore]
         public virtual Sxc_UserEntity User { get; set; }
+
+        [NotMapped]
+        public virtual string SystemAccount { get; set; }
+
         #endregion
 
         #region 扩展操作

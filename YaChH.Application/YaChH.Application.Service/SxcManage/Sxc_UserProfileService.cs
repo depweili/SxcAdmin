@@ -88,7 +88,12 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public Sxc_UserProfileEntity GetEntity(string keyValue)
         {
-            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+            //return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+
+            var id = int.Parse(keyValue);
+            var obj = this.BaseRepository(DbName).IQueryable().Include(t => t.User).First(t => t.ID == id);
+            obj.SystemAccount = obj.User.SystemAccount;
+            return obj;
         }
         #endregion
 
@@ -113,6 +118,15 @@ namespace YaChH.Application.Service.SxcManage
             {
                 entity.Modify(keyValue);
                 this.BaseRepository(DbName).Update(entity);
+
+                RepositoryFactory<Sxc_UserEntity> rf = new RepositoryFactory<Sxc_UserEntity>();
+
+                var db = rf.BaseRepository(DbName);
+
+                var user = db.FindEntity(entity.ID);
+                user.SystemAccount = entity.SystemAccount;
+                db.Update(user);
+
             }
             else
             {
