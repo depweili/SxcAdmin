@@ -1361,6 +1361,7 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPayForm.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
