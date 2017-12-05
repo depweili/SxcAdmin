@@ -1091,7 +1091,6 @@
     <Content Include="Areas\SystemManage\Views\DataItem\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataItem\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataItemDetail\Detail.cshtml" />
-    <Content Include="Areas\SystemManage\Views\Log\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataBaseTable\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataBaseLink\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataBaseLink\Index.cshtml" />
@@ -1305,7 +1304,6 @@
     <Content Include="Areas\FlowManage\Views\FlowLaunch\Index.cshtml" />
     <Content Include="Areas\FlowManage\Views\FormDesign\FormPreview.cshtml" />
     <Content Include="Areas\FlowManage\Views\FlowDesign\FlowNodeForm.cshtml" />
-    <Content Include="Areas\SystemManage\Views\Log\RemoveLog.cshtml" />
     <Content Include="Areas\AuthorizeManage\Views\PermissionPost\AllotAuthorize.cshtml" />
     <Content Include="Areas\AuthorizeManage\Views\PermissionPost\AllotMember.cshtml" />
     <Content Include="Areas\AuthorizeManage\Views\PermissionJob\AllotAuthorize.cshtml" />
@@ -1361,6 +1359,8 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPayForm.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Log\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Log\RemoveLog.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />
     <None Include="Web.Debug.config">
