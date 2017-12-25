@@ -69,6 +69,10 @@ namespace YaChH.Application.Service.SxcManage
                     case "SupAgent":
                         expression = expression.And(t => t.ParentAgent.User.UserProfile.RealName.Contains(keyord));
                         break;
+                    case "SupAgentID":
+                        var supid = int.Parse(keyord);
+                        expression = expression.And(t => t.ParentAgent.ID == supid);
+                        break;
                     default:
                         break;
                 }
@@ -120,6 +124,41 @@ namespace YaChH.Application.Service.SxcManage
 
             return agentList;
            
+        }
+
+        public IEnumerable<AgentMemberTreeModel> GetMemberList(string agentID)
+        {
+            var strSql = new StringBuilder();
+            strSql.Append(string.Format(@"with Agent as
+                                             (select {0} as ID
+                                              union all
+                                              select d.Id
+                                                from Agent
+                                               inner join Sxc_Agent d
+                                                  on Agent.Id = d.PID)
+      
+                                            SELECT Sxc_Agent.ID Id,
+                                                   Sxc_Agent.PID PId,
+                                                   (case isnull(RealName, '')
+                                                     when '' then
+                                                      NickName
+                                                     else
+                                                      RealName
+                                                   end) Name,
+                                                   '加入日期：' + CONVERT(varchar(100), Sxc_Agent.SupAgentBindTime, 23) Value,
+                                                   'image://' + Sxc_UserProfile.AvatarUrl Symbol
+                                              FROM Sxc_UserProfile
+                                             inner join Sxc_Agent
+                                                on Sxc_UserProfile.ID = Sxc_Agent.ID
+                                             where Sxc_Agent.ID in (select id from Agent)
+                                             order by pid ", agentID));
+            //            return this.BaseRepository().FindList(strSql.ToString());
+
+            RepositoryFactory<AgentMemberTreeModel> rf = new RepositoryFactory<AgentMemberTreeModel>();
+            var agentList = rf.BaseRepository(DbName).FindList(strSql.ToString());
+
+            return agentList;
+
         }
         #endregion
 

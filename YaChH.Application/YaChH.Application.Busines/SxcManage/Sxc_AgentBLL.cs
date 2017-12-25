@@ -79,6 +79,11 @@ namespace YaChH.Application.Busines.SxcManage
             return service.GetMyMemberList(userId);
         }
 
+        public IEnumerable<AgentMemberTreeModel> GetMemberList(string userId)
+        {
+            return service.GetMemberList(userId);
+        }
+
         /// <summary>
         /// 获取实体
         /// </summary>

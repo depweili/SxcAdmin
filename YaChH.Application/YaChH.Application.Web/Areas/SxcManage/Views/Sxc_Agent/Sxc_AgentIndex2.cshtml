@@ -1,0 +1,606 @@
+﻿@{;
+    ViewBag.Title = "代理总览页面";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+<script src="~/Content/scripts/plugins/echarts3/echarts.min.js"></script>
+<script src="~/Content/scripts/utils/learun.js"></script>
+<script>
+    var currentchartdata = {};
+
+    $(function () {
+        InitialPage();
+        GetGrid();
+        InitSubGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            west__paneSelector: ".ui-layout-west",
+            west__size: .30,
+            center__paneSelector: ".ui-layout-center",
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+
+        $('div.ui-layout-center').layout({
+            name: "main"
+            , center__paneSelector: ".ui-layout-center"
+            , south__paneSelector: ".ui-layout-south"
+            , south__size: 300
+            , minSize: 50
+            , spacing_open: 8	// ALL panes
+            , spacing_closed: 12 // ALL panes
+            , onresize: function () {
+                $(window).resize()
+            }
+        });
+
+        //$('.center-Panel').layout({
+        //    north__paneSelector: ".ui-layout-north",
+        //    north__size: .30,
+        //    center__paneSelector: ".ui-layout-center",
+        //    applyDemoStyles: true,
+        //    onresize: function () {
+        //        $(window).resize()
+        //    }
+        //});
+
+
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($('#left').height() - 136.5);
+                $("#subgridTable").setGridWidth(($('.subgridPanel').width()));
+                $("#subgridTable").setGridHeight($('#subdiv').height() - 80);
+                $("#relationchart").height($("#chartdiv").height());
+                DrawChart();
+            }, 200);
+            e.stopPropagation();
+        });
+
+    }
+
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            //autoheight:true,
+            url: "../../SxcManage/Sxc_Agent/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'PID', name: 'PID', index: 'PID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'AgentID', name: 'AgentID', index: 'AgentID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '用户昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: '用户名称', name: 'RealName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '代理类型', name: 'Type', index: 'Type', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != "0") {
+                            return top.clientdataItem["AgentType"][cellvalue];
+                        }
+                        else {
+                            return "";
+                        }
+
+                    }
+                },
+                {
+                    label: '代理级别', name: 'Level', index: 'Level', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.Type == "1") { return top.clientdataItem["AgentLevel1"][cellvalue]; }
+                        if (rowObject.Type == "2") { return top.clientdataItem["AgentLevel2"][cellvalue]; }
+
+                        return "";
+                    }
+                },
+                {
+                    label: '地区', name: 'Area_ID', index: 'Area_ID', width: 180, align: 'left', sortable: true, hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            return rowObject.Area.Area;
+                        }
+                        else {
+                            return "";
+                        }
+                    }
+                },
+                { label: '状态', name: 'State', index: 'State', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '佣金', name: 'Commission', index: 'Commission', width: 100, align: 'left', sortable: true, hidden: true},
+                {
+                    label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true, hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clientdataItem["trueorfalse"][cellvalue];
+                    }
+                },
+                { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' }, hidden: true },
+
+                { label: '加入时间', name: 'SupAgentBindTime', index: 'SupAgentBindTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' }, hidden: true },
+                { label: '上级代理', name: 'ParentName', index: 'ParentName', width: 100, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'ID',
+            //sortname: 'CreateTime desc', //SupAgentBindTime
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            ondblClickRow: function (id, row, col, e) {
+                //alert("id: " + id);
+                GetSubGrid();
+                BuildChart();
+            },
+        });
+
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+
+    function InitSubGrid() {
+
+        var selectedRowIndex = 0;
+        var $gridTable = $('#subgridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            //height: ($(window).height() - 136.5) * 0.5,
+            height: $('#subdiv').height() - 80,
+            url: "../../SxcManage/Sxc_Agent/GetPageListJson",
+            datatype: 'local',
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'PID', name: 'PID', index: 'PID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'AgentID', name: 'AgentID', index: 'AgentID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '用户昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: '用户名称', name: 'RealName', index: 'Name', width: 100, align: 'left', sortable: false },
+                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '代理类型', name: 'Type', index: 'Type', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != "0") {
+                            return top.clientdataItem["AgentType"][cellvalue];
+                        }
+                        else {
+                            return "";
+                        }
+
+                    }
+                },
+                {
+                    label: '代理级别', name: 'Level', index: 'Level', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.Type == "1") { return top.clientdataItem["AgentLevel1"][cellvalue]; }
+                        if (rowObject.Type == "2") { return top.clientdataItem["AgentLevel2"][cellvalue]; }
+
+                        return "";
+                    }
+                },
+                {
+                    label: '地区', name: 'Area_ID', index: 'Area_ID', width: 180, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            return rowObject.Area.Area;
+                        }
+                        else {
+                            return "";
+                        }
+                    }
+                },
+                { label: '状态', name: 'State', index: 'State', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '佣金', name: 'Commission', index: 'Commission', width: 100, align: 'left', sortable: true },
+                {
+                    label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clientdataItem["trueorfalse"][cellvalue];
+                    }
+                },
+                { label: '创建时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
+
+                { label: '加入时间', name: 'SupAgentBindTime', index: 'SupAgentBindTime', width: 100, align: 'left', sortable: true, formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
+                { label: '上级代理', name: 'ParentName', index: 'ParentName', width: 100, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#subgridPager",
+            sortname: 'ID',
+            //sortname: 'CreateTime desc', //SupAgentBindTime
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    function GetSubGrid() {
+        var $gridTable = $('#subgridTable');
+
+        var queryJson = {
+            condition: "SupAgentID",
+            keyword: $('#gridTable').jqGridRowValue('ID')
+        }
+        $gridTable.jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: { queryJson: JSON.stringify(queryJson) },
+            page: 1
+        }).trigger('reloadGrid');
+    }
+
+    ///////////////////////////////////
+
+    function BuildChart() {
+        $.ajax({
+            url: "GetMemeberJson",
+            data: { agentID: $('#gridTable').jqGridRowValue('ID')},
+            dataType: "json",
+            success: function (res) {
+                var zNodes = [
+                    { id: 1, pId: 0, name: "董事长", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 11, pId: 1, name: "经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 12, pId: 1, name: "副总", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 13, pId: 1, name: "秘书", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 16, pId: 11, name: "财务经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 27, pId: 11, name: "人事经理", symbol: 'image://https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqjpH2Hh8EMCJ0ObwqjYNDXic7WXXP4OVkmsL55z1hdZjjZ9N0UV52ibicSuJlubPAt2QmUtPOBBBLaA/0', },
+                    { id: 18, pId: 12, name: "HR" },
+                ]
+                // data = getData(res)
+                currentchartdata = res;
+
+                DrawChart();
+            }
+
+        })
+    }
+
+    function DrawChart()
+    {
+        $("#relationchart").height($("#chartdiv").height());
+
+        var old = echarts.getInstanceByDom(document.getElementById('relationchart'));
+        if (old != null) { old.dispose(); }
+
+        if (currentchartdata != null)
+        {
+            var myChart = echarts.init(document.getElementById('relationchart'), 'macarons');
+            createTreeV(myChart, "关系图", currentchartdata);
+        }
+        
+    }
+
+    function rescusive(number) {
+        //根节点
+        var node = {}
+        //存放子树
+        var data = []
+        childrenList = groups[number]
+        //如果不存在子节点,这里其实就是结束条件
+        if (!childenList || childrenList.length == 0) {
+            node['name'] = number;
+            node['children'] = []
+            return node;
+        }
+        for (var i = 0; i < childrenList.length; i++) {
+            //递归该节点下的子树来建构该子树
+            var children = rescusive(childrenList[i]["id"])
+            //将该子树加入根节点中
+            data.push(children)
+        }
+        node['name'] = number
+        //根节点中的子树集合
+        node['children'] = data
+        return node
+    }
+
+    function treeMenu(a) {
+        //列表map形式
+        this.tree = a || [];
+        this.groups = {};
+        //存放id与对应的name映射
+        this.nameMap = {}
+        //存放id与对应的img映射
+        this.imgMap = {}
+        //存放id与对应的value映射
+        this.valueMap = {}
+        //得到每个点对应的层次,为了后期进行布局
+        this.levelMap = {}
+        //样式设计
+        this.style = { "symbolSize": [60, 60], "value": [8, 6, 4, 2, 1] }
+    };
+    treeMenu.prototype = {
+        init: function (pid) {
+            this.group();
+            this.MapNamebyId();
+            this.MapImgbyId();
+            this.ValueImgbyId();
+            this.setIdLevel(pid);
+            return this.rescusive(pid);
+        },
+        group: function () {
+            for (var i = 0; i < this.tree.length; i++) {
+                //存在该grops则直接添加
+                if (this.groups[this.tree[i].pId]) {
+                    this.groups[this.tree[i].pId].push(this.tree[i]);
+                } else {
+                    this.groups[this.tree[i].pId] = [];
+                    this.groups[this.tree[i].pId].push(this.tree[i]);
+                }
+            }
+        },
+        //得到每个点的层次
+        setIdLevel: function (pid) {
+            var level = 1;
+            this.levelMap[pid] = level;
+            var gs = this.groups[pid];
+            //str=JSON.stringify(gs)
+            //alert("json:"+str)
+            var temp = []
+            while (gs) {
+                level++;
+                if (gs == null || gs == undefined || gs.length == 0)
+                    break;
+                temp = []
+                for (var i = 0; i < gs.length; i++) {
+                    var myid = gs[i]["id"];
+                    this.levelMap[myid] = level;
+                    subgs = this.groups[myid];
+                    if (subgs instanceof Array && subgs != null) {
+                        for (var j = 0; j < subgs.length; j++) {
+                            temp.push(subgs[j]);
+                        }
+                    }
+                }
+                gs = temp;
+            }
+
+        },
+        //根据所在层次设计不同大小的样式
+        getStyleById: function (id) {
+            var level = this.levelMap[id]
+            if (level >= 5)
+                level = 5;
+            var symbolize = 0
+            var value = 0
+            symbolize = this.style['symbolSize']
+            value = this.style['value'][level - 1]
+            var styleValue = {}
+            styleValue['symbolSize'] = symbolize
+            styleValue['value'] = value
+            return styleValue
+        },
+        MapNamebyId: function () {
+            for (var i = 0; i < this.tree.length; i++) {
+                map = this.tree[i]
+                this.nameMap[map["id"]] = map["name"]
+            }
+        },
+        MapImgbyId: function () {
+            for (var i = 0; i < this.tree.length; i++) {
+                map = this.tree[i]
+                this.imgMap[map["id"]] = map["symbol"]
+            }
+        },
+        ValueImgbyId: function () {
+            for (var i = 0; i < this.tree.length; i++) {
+                map = this.tree[i]
+                this.valueMap[map["id"]] = map["value"]
+            }
+        },
+        //设置节点属性
+        setNode: function (node, name, symbolize, value, children, symbol) {
+            node['name'] = name;
+            node['symbolSize'] = symbolize;
+            node['value'] = value
+            node['children'] = children
+            node['symbol'] = symbol
+            return node;
+        },
+        rescusive: function (number) {
+            //这里是构建数据源的重点
+            var data = []
+            var node = {}
+            var styleValue = {}
+            //某个节点下的子节点
+            var a = this.groups[number];
+            var nodeName = this.nameMap[number];
+            var nodeImg = this.imgMap[number];
+            var nodeValue = this.valueMap[number];
+            if (a == null || a == undefined) {
+                styleValue = this.getStyleById(number)
+                //设置节点
+                this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, [], nodeImg)
+                return node;
+            }
+            for (var i = 0; i < a.length; i++) {
+                children = this.rescusive(a[i].id);
+                data.push(children);
+            }
+            styleValue = this.getStyleById(number)
+            this.setNode(node, nodeName, styleValue['symbolSize'], nodeValue, data, nodeImg)
+            return node;
+        },
+        //创建组织结构图
+        createTreeVisual: function (myChart, title, data) {
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params, ticket, callback) {
+                        //$.get('detail?name=' + params.name, function (content) {
+                        //    callback(ticket, toHTML(content));
+                        //});
+                        return params.value;
+                    },
+                    triggerOn: 'mousemove'
+                },
+                series: [
+                    {
+                        type: 'tree',
+                        data: data,
+
+                        top: '1%',
+                        left: '7%',
+                        bottom: '1%',
+                        right: '20%',
+                        nodePadding: 20,
+                        symbolSize: 7,
+                        initialTreeDepth: -1,
+                        label: {
+                            normal: {
+                                position: 'left',
+                                verticalAlign: 'middle',
+                                align: 'right',
+                                fontSize: 9
+                            }
+                        },
+
+                        leaves: {
+                            label: {
+                                normal: {
+                                    position: 'right',
+                                    verticalAlign: 'middle',
+                                    align: 'left'
+                                }
+                            }
+                        },
+
+                        expandAndCollapse: true,
+                        animationDuration: 550,
+                        animationDurationUpdate: 750
+                    }
+                ]
+
+            }
+            myChart.setOption(option);
+        }
+    }
+    //得到数据
+    function getData(zNodes) {
+        var mytree = new treeMenu(zNodes)
+        treeData = mytree.init(0)
+        data = []
+        data.push(treeData)
+        return data;
+        //str=JSON.stringify(menu);
+        //alert("responsing json:"+str)
+    }
+    function createTreeV(myChart, title, znodes) {
+        if (znodes.length > 0)
+        {
+            var mytree = new treeMenu(znodes);
+            //treeData = mytree.init(znodes[0].id)
+            treeData = mytree.init($('#gridTable').jqGridRowValue('ID'));
+            data = [];
+            data.push(treeData);
+            mytree.createTreeVisual(myChart, title, data);
+        }
+        
+    }
+
+</script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" id="left">
+        <div class="west-Panel">
+            <div class="panel-Title">代理列表</div>
+            <div class="title-search">
+                <table>
+                    <tr>
+                        <td>
+                            <div id="queryCondition" class="btn-group">
+                                <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a data-value="Name">名称</a></li>
+                                    @*<li><a data-value="IDCard">身份证</a></li>
+                                        <li><a data-value="Mobile">手机</a></li>*@
+                                    <li><a data-value="Area">地区</a></li>
+                                    <li><a data-value="SupAgent">上级代理</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                        </td>
+                        <td style="padding-left: 5px;">
+                            <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i> 查询</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+    @*<div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="ui-layout-north">
+                <div class="panel-Title">下级成员</div>
+                <div class="gridPanel">
+                    <table id="subgridTable"></table>
+                    <div id="subgridPager"></div>
+                </div>
+            </div>
+            <div class="ui-layout-center">
+                <div class="panel-Title">成员关系图</div>
+            </div>
+        </div>
+    </div>*@
+    <div class="ui-layout-center" id="main">
+        <div class="ui-layout-center" id="subdiv">
+            <div class="center-Panel">
+                <div class="panel-Title">下级成员</div>
+                <div class="gridPanel">
+                    <table id="subgridTable"></table>
+                    <div id="subgridPager"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-layout-south" id="chartdiv">
+            <div class="center-Panel">
+                <div class="panel-Title">成员关系图</div>
+                <div id="relationchart" style="width: 100%;height:100%;overflow:auto">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

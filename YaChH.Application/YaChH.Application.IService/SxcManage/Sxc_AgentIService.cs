@@ -51,6 +51,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_AgentEntity entity);
+        IEnumerable<AgentMemberTreeModel> GetMemberList(string userId);
         #endregion
     }
 }

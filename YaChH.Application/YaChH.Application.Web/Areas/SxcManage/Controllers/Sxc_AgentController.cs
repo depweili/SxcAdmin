@@ -28,6 +28,12 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Sxc_AgentIndex2()
+        {
+            return View();
+        }
         /// <summary>
         /// 表单页面
         /// </summary>
@@ -161,6 +167,13 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             //var data = sxc_agentbll.GetMyMemberList(userId);
             return ToCamelCaseJson(data);
         }
-        #endregion
+
+        [HttpGet]
+        public ActionResult GetMemeberJson(string agentID)
+        {
+            var data = sxc_agentbll.GetMemberList(agentID);
+            return ToCamelCaseJson(data);
+        }
+            #endregion
     }
 }
