@@ -117,6 +117,7 @@
     <Compile Include="SxcManage\Sxc_CommodityEntity.cs" />
     <Compile Include="SxcManage\Sxc_CooperationEntity.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoEntity.cs" />
+    <Compile Include="SxcManage\Sxc_ReservationEntity.cs" />
     <Compile Include="SxcManage\Sxc_TeacherEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />
