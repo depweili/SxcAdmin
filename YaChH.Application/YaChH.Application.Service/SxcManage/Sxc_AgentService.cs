@@ -111,12 +111,17 @@ namespace YaChH.Application.Service.SxcManage
 			  on Sxc_Agent.ID=Sxc_User.ID where Sxc_User.SystemAccount='{0}' 
 
     union all   select d.Id from   Agent
-    inner join Sxc_Agent d on Agent.Id = d.PID ) SELECT Sxc_Agent.ID Id,Sxc_Agent.PID PId,
+    inner join Sxc_Agent d on Agent.Id = d.PID ) 
+	
+	SELECT Sxc_Agent.ID Id,(case  Sxc_Agent.ID when Sxc_User.ID then 0 else Sxc_Agent.PID end )PId ,
+
             	  (case isnull(RealName,'') when '' then NickName  else RealName end)Name,
             	  '加入日期：'+CONVERT(varchar(100), Sxc_Agent.SupAgentBindTime, 23) Value, 'image://'+Sxc_UserProfile.AvatarUrl Symbol
               FROM Sxc_UserProfile  inner join Sxc_Agent 
               on Sxc_UserProfile.ID=Sxc_Agent.ID 
-			   where   Sxc_Agent.ID in (select id from Agent ) order by pid ", userId));
+			  left join  (select ID from Sxc_User where Sxc_User.SystemAccount='{0}')Sxc_User
+			  on Sxc_Agent.ID=Sxc_User.ID  
+			     where Sxc_Agent.ID in (select id from Agent ) order by pid", userId));
             //            return this.BaseRepository().FindList(strSql.ToString());
 
             RepositoryFactory<AgentMemberTreeModel> rf = new RepositoryFactory<AgentMemberTreeModel>();
