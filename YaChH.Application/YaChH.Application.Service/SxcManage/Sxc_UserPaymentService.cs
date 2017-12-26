@@ -299,7 +299,8 @@ namespace YaChH.Application.Service.SxcManage
                 {
                     var agent1 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent.PID);
 
-                    var amount1 = GetFzxsCommission(agent1.Level);
+                    //var amount1 = GetFzxsCommission(agent1.Level);
+                    var amount1 = entity.DistrAmount * GetFzxsCommission(agent1.Level);
 
                     entity.Commission += amount1;
                     agent1.Commission+= amount1;
@@ -320,7 +321,8 @@ namespace YaChH.Application.Service.SxcManage
                     {
                         var agent2 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent1.PID);
 
-                        var amount2 = 1000;
+                        //var amount2 = 1000;
+                        var amount2 = entity.DistrAmount * 0.05m;
 
                         entity.Commission += amount2;
                         agent2.Commission += amount2;
@@ -343,7 +345,8 @@ namespace YaChH.Application.Service.SxcManage
 
                         foreach (var sup in SupAgents)
                         {
-                            var amountsup = 1000;
+                            //var amountsup = 1000;
+                            var amountsup = entity.DistrAmount * 0.05m;
 
                             entity.Commission += amountsup;
                             sup.Commission += amountsup;
@@ -415,16 +418,20 @@ namespace YaChH.Application.Service.SxcManage
             switch (level)
             {
                 case 1:
-                    per = 8000;
+                    //per = 8000;
+                    per = 0.4m;
                     break;
                 case 2:
-                    per = 7000;
+                    //per = 7000;
+                    per = 0.35m;
                     break;
                 case 3:
-                    per = 6000;
+                    //per = 6000;
+                    per = 0.3m;
                     break;
                 case 4:
-                    per = 5000;
+                    //per = 5000;
+                    per = 0.25m;
                     break;
                 default:
                     break;

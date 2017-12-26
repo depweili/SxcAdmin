@@ -49,7 +49,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_CooperationEntity entity);
 
-        void AuditingApplication(string keyValue, int result);
+        string AuditingApplication(string keyValue, int result);
         #endregion
     }
 }

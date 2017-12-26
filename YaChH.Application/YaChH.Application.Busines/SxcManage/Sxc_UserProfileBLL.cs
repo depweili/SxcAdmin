@@ -47,6 +47,7 @@ namespace YaChH.Application.Busines.SxcManage
                 t.Email,
                 t.Address,
                 t.MobilePhone,
+                t.IsVerified,
                 t.User.SystemAccount
             });
 

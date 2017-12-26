@@ -69,6 +69,22 @@ namespace YaChH.Application.Busines.SxcManage
             return service.GetList(queryJson);
         }
 
+        public IEnumerable<dynamic> GetAgentSearchList(string queryJson)
+        {
+            var data = service.GetList(queryJson);
+
+            var res = data.Where(t=>t.IsValid==true&&!string.IsNullOrEmpty(t.User.UserProfile.RealName)).Select(t => new
+            {
+                t.ID,
+                NickName = t.User.UserProfile.NickName,
+                RealName = t.User.UserProfile.RealName,
+                t.User.UserProfile.MobilePhone,
+                t.User.UserProfile.IDCard
+            });
+
+            return res;
+        }
+
         /// <summary>
         /// 获取列表
         /// </summary>
@@ -89,10 +105,36 @@ namespace YaChH.Application.Busines.SxcManage
         /// </summary>
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
-        public Sxc_AgentEntity GetEntity(string keyValue)
+        public dynamic GetEntity(string keyValue)
         {
-            return service.GetEntity(keyValue);
+            //return service.GetEntity(keyValue);
+
+            var t= service.GetEntity(keyValue);
+
+            var res =  new
+            {
+                t.ID,
+                t.Code,
+                t.AgentID,
+                t.Commission,
+                NickName = t.User.UserProfile.NickName,
+                RealName = t.User.UserProfile.RealName,
+                t.User.UserProfile.MobilePhone,
+                t.User.UserProfile.IDCard,
+                t.CreateTime,
+                t.Area,
+                t.Type,
+                t.Level,
+                t.IsValid,
+                t.State,
+                t.SupAgentBindTime,
+                t.Area_ID,
+                ParentName = t.ParentAgent == null ? "" : t.ParentAgent.User.UserProfile.RealName
+            };
+
+            return res;
         }
+        
         #endregion
 
         #region 提交数据
@@ -129,5 +171,20 @@ namespace YaChH.Application.Busines.SxcManage
             }
         }
         #endregion
+
+
+        public string ChangeSupAgent(string keyValue, int newAgentID)
+        {
+            try
+            {
+                string msg = service.ChangeSupAgent(keyValue, newAgentID);
+
+                return msg;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

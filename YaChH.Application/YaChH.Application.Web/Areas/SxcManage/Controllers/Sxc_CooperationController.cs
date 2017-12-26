@@ -161,6 +161,15 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             sxc_cooperationbll.AuditingApplication(keyValue,1);
             return Success("申请成功通过！");
         }
+
+        [HttpPost]
+        [AjaxOnly]
+        [HandlerAuthorize(PermissionMode.Ignore)]
+        public ActionResult RefuseApplication(string keyValue)
+        {
+            sxc_cooperationbll.AuditingApplication(keyValue, -1);
+            return Success("已经拒绝！");
+        }
         #endregion
     }
 }

@@ -108,8 +108,9 @@ namespace YaChH.Application.Service.SxcManage
             }
         }
 
-        public void AuditingApplication(string keyValue, int result)
+        public string AuditingApplication(string keyValue, int result)
         {
+            string msg = string.Empty;
             var cooper = GetEntity(keyValue);
             if (result == 1)
             {
@@ -124,10 +125,8 @@ namespace YaChH.Application.Service.SxcManage
                     areaName = areas[cooper.Level.Value - 1];
                 }
                 var queryJson = "{" + string.Format(@"'condition': 'AreaName','keyword': '{0}'", areaName) + "}";        
-               var area= areaService.GetEntity(queryJson);
-                cooper.State = result;
+                var area= areaService.GetEntity(queryJson);
                 
-                cooper.ProcessDetail = string.Format("审核通过【{0}】", DateTime.Now.ToChineseDateTimeString());
                 if (cooper.UserID != null)
                 {
                    
@@ -136,8 +135,20 @@ namespace YaChH.Application.Service.SxcManage
                     entity.Level = cooper.Level.ToInt();
                     entity.Type = cooper.Type.ToInt();
                     entity.Area_ID = area.ID;
-                    agentService.SaveForm(kv, entity);
 
+                    msg = agentService.CheckNew(entity);
+
+                    if (msg.IsEmpty())
+                    {
+                        cooper.State = result;
+                        cooper.ProcessDetail = string.Format("审核通过【{0}】", DateTime.Now.ToChineseDateTimeString());
+                        agentService.SaveForm(kv, entity);
+                    }
+                    else
+                    {
+                        cooper.State = 2;
+                        cooper.ProcessDetail = string.Format("审核失败【{0}】", msg);
+                    }
                 }
             }
             else
@@ -147,7 +158,8 @@ namespace YaChH.Application.Service.SxcManage
 
             }
             SaveForm(keyValue, cooper);
-            
+
+            return msg;
         }
         #endregion
     }

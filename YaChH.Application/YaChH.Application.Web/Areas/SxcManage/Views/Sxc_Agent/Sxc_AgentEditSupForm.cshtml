@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "修改上级";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var newagent=null;
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../SxcManage/Sxc_Agent/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+
+        $("#NewSupAgent").autocomplete({
+            minLength: 1,
+            scroll: true,
+            scrollHeight: 100, 
+            source: function (request, response) {
+                var queryJson = {
+                    condition: "Name",
+                    keyword: request.term//$("#NewSupAgent").val()
+                }
+                newagent = null;
+                $.ajax({
+                    url: "../../SxcManage/Sxc_Agent/SearchAgent",
+                    type: "get",
+                    dataType: "json",
+                    data: { queryJson: JSON.stringify(queryJson) },
+
+                    success: function (data) {
+                        console.log(data);
+
+                        response($.map(data, function (item) {
+                            return {
+                                data: item,
+                                label: item.RealName,
+                                value: item.RealName
+                            }
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                newagent = ui.item.data;
+            }
+        });
+
+        $("#RealName").attr('disabled', 'disabled');
+        $("#ParentName").attr('disabled', 'disabled');
+    }
+
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var newagentid = newagent == null ? 0 : newagent.ID;
+
+        var confirminfo = "确认修改上级为" + (newagent == null ? "空" : newagent.RealName);
+
+        dialogConfirm(confirminfo, function (r) {
+            if (r) {
+                var postData = { keyValue: keyValue, NewAgentID: newagentid };
+                //postData.UserID = userId;
+                $.SaveForm({
+                    url: "../../SxcManage/Sxc_Agent/ChangeSupAgent",
+                    param: postData,
+                    loading: "正在保存数据...",
+                    success: function () {
+                        $.currentIframe().$("#gridTable").trigger("reloadGrid");
+                    }
+                })
+            }
+        });
+
+        
+    }
+
+    //宽度bug
+    jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+        var ul = this.menu.element;
+        ul.outerWidth(this.element.outerWidth());
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">用户名称</td>
+            <td class="formValue">
+                <input id="RealName" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">当前上级</td>
+            <td class="formValue">
+                <input id="ParentName" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改上级</td>
+            <td class="formValue">
+                <input id="NewSupAgent" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">备注</td>
+            <td class="formValue">
+                <input id="Memo" type="text" class="form-control" />
+            </td>
+        </tr>
+    </table>
+</div>

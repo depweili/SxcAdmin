@@ -83,17 +83,19 @@ namespace YaChH.Application.Busines.SxcManage
             }
         }
 
-        public void AuditingApplication(string keyValue, int result)
+        public string AuditingApplication(string keyValue, int result)
         {
+            string msg = string.Empty;
             try
             {
-               
-                service.AuditingApplication(keyValue, result);
+                msg = service.AuditingApplication(keyValue, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                msg = ex.Message;
             }
+
+            return msg;
         }
         
         #endregion

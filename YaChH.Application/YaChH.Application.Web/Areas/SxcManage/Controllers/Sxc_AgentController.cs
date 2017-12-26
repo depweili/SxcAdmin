@@ -29,6 +29,10 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 总览页面
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Sxc_AgentIndex2()
         {
@@ -40,6 +44,12 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         /// <returns></returns>
         [HttpGet]
         public ActionResult Sxc_AgentForm()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Sxc_AgentEditSupForm()
         {
             return View();
         }
@@ -119,6 +129,20 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             sxc_agentbll.SaveForm(keyValue, entity);
             return Success("操作成功。");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AjaxOnly]
+        public ActionResult ChangeSupAgent(string keyValue, int NewAgentID)
+        {
+            string msg = sxc_agentbll.ChangeSupAgent(keyValue, NewAgentID);
+            if(!string.IsNullOrEmpty(msg))
+            {
+                return Error("失败：" + msg);
+            }
+            return Success("操作成功。");
+        }
         #endregion
 
 
@@ -163,7 +187,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             //}
             //return Content(treeList.TreeToJson());
 
-        
+
             //var data = sxc_agentbll.GetMyMemberList(userId);
             return ToCamelCaseJson(data);
         }
@@ -174,6 +198,19 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             var data = sxc_agentbll.GetMemberList(agentID);
             return ToCamelCaseJson(data);
         }
-            #endregion
+        #endregion
+
+        /// <summary>
+        /// 查询代理
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult SearchAgent(string queryJson)
+        {
+            var data = sxc_agentbll.GetAgentSearchList(queryJson);
+
+            return ToJsonResult(data);
+        }
     }
 }

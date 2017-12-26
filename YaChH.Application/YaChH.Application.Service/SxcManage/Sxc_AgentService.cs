@@ -92,7 +92,43 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns>返回列表</returns>
         public IEnumerable<Sxc_AgentEntity> GetList(string queryJson)
         {
-            return this.BaseRepository(DbName).IQueryable().ToList();
+            //return this.BaseRepository(DbName).IQueryable().ToList();
+
+            var expression = LinqExtensions.True<Sxc_AgentEntity>();
+            var queryParam = queryJson.ToJObject();
+
+            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            {
+                string condition = queryParam["condition"].ToString();
+                string keyord = queryParam["keyword"].ToString();
+                switch (condition)
+                {
+                    case "Name":
+                        expression = expression.And(t => t.User.UserProfile.NickName.Contains(keyord) || t.User.UserProfile.RealName.Contains(keyord));
+                        break;
+                    case "IDCard":
+                        expression = expression.And(t => t.User.UserProfile.IDCard.Contains(keyord));
+                        break;
+                    case "Mobile":
+                        expression = expression.And(t => t.User.UserProfile.MobilePhone.Contains(keyord));
+                        break;
+                    case "Area":
+                        expression = expression.And(t => t.Area.Area.Contains(keyord));
+                        break;
+                    case "SupAgent":
+                        expression = expression.And(t => t.ParentAgent.User.UserProfile.RealName.Contains(keyord));
+                        break;
+                    case "SupAgentID":
+                        var supid = int.Parse(keyord);
+                        expression = expression.And(t => t.ParentAgent.ID == supid);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            var query = this.BaseRepository(DbName).IQueryable().Include(t => t.User.UserProfile).Where(expression).AsEnumerable();
+
+            return query;
         }
         /// <summary>
         /// 获取实体
@@ -101,7 +137,11 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public Sxc_AgentEntity GetEntity(string keyValue)
         {
-            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+            //return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+
+            var id = int.Parse(keyValue);
+            var entity = this.BaseRepository(DbName).IQueryable().Include(t => t.User.UserProfile).Include(t => t.Area).Include(t => t.ParentAgent.User.UserProfile).Single(t => t.ID == id);
+            return entity;
         }
 
         public IEnumerable<AgentMemberTreeModel> GetMyMemberList(string userId)
@@ -198,5 +238,141 @@ namespace YaChH.Application.Service.SxcManage
 
 
         #endregion
+
+
+        public string CheckNew(Sxc_AgentEntity entity)
+        {
+            string msg = string.Empty;
+
+            try
+            {
+                var rep = this.BaseRepository(DbName);
+
+                if (entity.Type == 2 && entity.Level < 4)
+                {
+                    if (entity.Level == 3)
+                    {
+                        var query = rep.IQueryable().Where(t => t.Type == 2 && t.Level == entity.Level);
+                    }
+                    
+                }
+
+                //rep.IQueryable().Where()
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+
+            return msg;
+        }
+
+
+        public string ChangeSupAgent(string keyValue, int newAgentID)
+        {
+            string msg = string.Empty;
+
+            try
+            {
+                var entity = this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+
+                if(newAgentID!=0)
+                {
+                    var newagent = this.BaseRepository(DbName).FindEntity(newAgentID);
+
+                    //!entity.IsValid.Value || 
+                    if (!newagent.IsValid.Value)
+                    {
+                        msg = "上级代理信息无效";
+                    }
+                    else
+                    {
+                        msg = CheckAgentRule(entity, newagent);
+                    }
+                }
+
+                
+
+                if (string.IsNullOrEmpty(msg))
+                {
+                    entity.PID = newAgentID;
+                    this.BaseRepository(DbName).Update(entity);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+
+            return msg;
+        }
+
+
+        public string CheckAgentRule(Sxc_AgentEntity current, Sxc_AgentEntity parent)
+        {
+            string msg = string.Empty;
+            if (current.Type == parent.Type)
+            {
+                if (current.Type == 2)
+                {
+                    if (current.Level != 4)
+                    {
+                        msg = "非初级代理不可修改";
+                    }
+                    else
+                    {
+                        if (!CheckArea(current, parent))
+                        {
+                            msg = "地区不相符";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                msg = "代理类型不匹配";
+            }
+
+            return msg;
+        }
+
+        public bool CheckArea(Sxc_AgentEntity current, Sxc_AgentEntity parent)
+        {
+            //没有地理信息
+            if (current.Area_ID == null)
+            {
+                return true;
+            }
+
+            RepositoryFactory<Sxc_Base_AreaEntity> arearf = new RepositoryFactory<Sxc_Base_AreaEntity>();
+            var arearep = arearf.BaseRepository(DbName);
+
+            var carea3 = arearep.FindEntity(current.Area_ID);
+            var carea2 = arearep.FindEntity(carea3.PID);
+            var carea1 = arearep.FindEntity(carea2.PID);
+
+            var parea3 = arearep.FindEntity(parent.Area_ID);
+            var parea2 = arearep.FindEntity(parea3.PID);
+            var parea1 = arearep.FindEntity(parea2.PID);
+
+            if (parent.Level >= 3&&carea3.ID!=parea3.ID)
+            {
+                return false;
+            }
+
+            if (parent.Level == 2 && carea2.ID != parea2.ID)
+            {
+                return false;
+            }
+
+            if (parent.Level == 1 && carea1.ID != parea1.ID)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
     }
 }

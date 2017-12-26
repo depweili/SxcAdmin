@@ -52,6 +52,9 @@ namespace YaChH.Application.IService.SxcManage
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_AgentEntity entity);
         IEnumerable<AgentMemberTreeModel> GetMemberList(string userId);
+        string ChangeSupAgent(string keyValue, int newAgentID);
+
+        string CheckNew(Sxc_AgentEntity entity);
         #endregion
     }
 }
