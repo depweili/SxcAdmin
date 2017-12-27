@@ -28,23 +28,23 @@
             url: "../../SxcManage/Sxc_Commodity/GetPageListJson",
             datatype: "json",
             colModel: [
-                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left',sortable: true  },
-                { label: 'Name', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
-                { label: 'CommodityUID', name: 'CommodityUID', index: 'CommodityUID', width: 100, align: 'left',sortable: true  },
-                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true  },
-                { label: 'Description', name: 'Description', index: 'Description', width: 100, align: 'left',sortable: true  },
-                { label: 'Details', name: 'Details', index: 'Details', width: 100, align: 'left',sortable: true  },
-                { label: 'Price', name: 'Price', index: 'Price', width: 100, align: 'left',sortable: true  },
-                { label: 'Stock', name: 'Stock', index: 'Stock', width: 100, align: 'left',sortable: true  },
-                { label: 'Points', name: 'Points', index: 'Points', width: 100, align: 'left',sortable: true  },
-                { label: 'Pic', name: 'Pic', index: 'Pic', width: 100, align: 'left',sortable: true  },
-                { label: 'Memo', name: 'Memo', index: 'Memo', width: 100, align: 'left',sortable: true  },
-                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
-                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
-                { label: 'CategoryID', name: 'CategoryID', index: 'CategoryID', width: 100, align: 'left',sortable: true  },
-                { label: 'IsReal', name: 'IsReal', index: 'IsReal', width: 100, align: 'left',sortable: true  },
-                { label: 'HasVideo', name: 'HasVideo', index: 'HasVideo', width: 100, align: 'left',sortable: true  },
-                { label: 'ArticleID', name: 'ArticleID', index: 'ArticleID', width: 100, align: 'left',sortable: true  },
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'Code', name: 'Code', index: 'Code', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '名称', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
+                { label: 'CommodityUID', name: 'CommodityUID', index: 'CommodityUID', width: 100, align: 'left', sortable: true, hidden: true  },                
+                { label: '描述', name: 'Description', index: 'Description', width: 200, align: 'left',sortable: true  },
+                { label: '详情', name: 'Details', index: 'Details', width: 500, align: 'left',sortable: true  },
+                { label: '价格', name: 'Price', index: 'Price', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '库存', name: 'Stock', index: 'Stock', width: 100, align: 'left',sortable: true  },
+                { label: '所需积分', name: 'Points', index: 'Points', width: 100, align: 'left',sortable: true  },
+                { label: '图片', name: 'Pic', index: 'Pic', width: 100, align: 'left',sortable: true  },
+                { label: '备注', name: 'Memo', index: 'Memo', width: 100, align: 'left',sortable: true  },
+                { label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
+                { label: '添加时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
+                { label: 'CategoryID', name: 'CategoryID', index: 'CategoryID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'IsReal', name: 'IsReal', index: 'IsReal', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'HasVideo', name: 'HasVideo', index: 'HasVideo', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'ArticleID', name: 'ArticleID', index: 'ArticleID', width: 100, align: 'left', sortable: true, hidden: true },
             ],
             viewrecords: true,
             rowNum: 30,
@@ -82,10 +82,10 @@
         if (checkedRow(keyValue)) {
             dialogOpen({
                 id: 'Form',
-                title: '编辑Sxc_Commodity',
+                title: '编辑',
                 url: '/SxcManage/Sxc_Commodity/Sxc_CommodityForm?keyValue=' + keyValue,
-                width: 'px',
-                height: 'px',
+                width: '600px',
+                height: '400px',
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
@@ -104,7 +104,7 @@
                 }
             })
         } else {
-            dialogMsg('请选择需要删除的Sxc_Commodity！', 0);
+            dialogMsg('请选择需要删除的数据！', 0);
         }
     }
 </script>
@@ -112,7 +112,7 @@
     <div class="toolbar">
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
-            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>*@
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
