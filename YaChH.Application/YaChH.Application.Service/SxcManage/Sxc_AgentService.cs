@@ -15,6 +15,7 @@ using YaChH.Data.EF.Tool;
 using System.ComponentModel;
 using System.Data.Entity;
 using YaChH.Data.EF.Extension;
+using YaChH.Application.Code;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -30,6 +31,11 @@ namespace YaChH.Application.Service.SxcManage
         
         private string DbName = "SXC";
         #region 获取数据
+
+        public IRepository<Sxc_AgentEntity> Repository()
+        {
+            return this.BaseRepository(DbName);
+        }
         /// <summary>
         /// 获取列表
         /// </summary>
@@ -76,6 +82,12 @@ namespace YaChH.Application.Service.SxcManage
                     default:
                         break;
                 }
+            }
+
+            if (!OperatorProvider.Provider.Current().IsSystem)
+            {
+                var account = OperatorProvider.Provider.Current().Account;
+                expression = expression.And(t => t.ParentAgent.User.SystemAccount == account||t.User.SystemAccount== account);
             }
 
             PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
@@ -240,7 +252,7 @@ namespace YaChH.Application.Service.SxcManage
         #endregion
 
 
-        public string CheckNew(Sxc_AgentEntity entity)
+        public string CheckNewAgent(Sxc_AgentEntity entity)
         {
             string msg = string.Empty;
 
@@ -252,9 +264,31 @@ namespace YaChH.Application.Service.SxcManage
                 {
                     if (entity.Level == 3)
                     {
-                        var query = rep.IQueryable().Where(t => t.Type == 2 && t.Level == entity.Level);
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID))
+                        {
+                            msg = "代理资格已占用";
+                        }
+                        
                     }
-                    
+
+                    if (entity.Level == 2)
+                    {
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.PID == entity.Area.PID))
+                        {
+                            msg = "代理资格已占用";
+                        }
+
+                    }
+
+                    if (entity.Level == 1)
+                    {
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.SupArea.ID == entity.Area.SupArea.ID))
+                        {
+                            msg = "代理资格已占用";
+                        }
+
+                    }
+
                 }
 
                 //rep.IQueryable().Where()
@@ -312,7 +346,9 @@ namespace YaChH.Application.Service.SxcManage
         public string CheckAgentRule(Sxc_AgentEntity current, Sxc_AgentEntity parent)
         {
             string msg = string.Empty;
-            if (current.Type == parent.Type)
+
+            //初始的代理暂时均可修改
+            if (current.Type == parent.Type|| current.Type == 0)
             {
                 if (current.Type == 2)
                 {
@@ -332,6 +368,15 @@ namespace YaChH.Application.Service.SxcManage
             else
             {
                 msg = "代理类型不匹配";
+            }
+
+
+            if (msg.IsEmpty())
+            {
+                if (IsInTreeBySql(current.ID, parent.ID, "Sxc_Agent"))
+                {
+                    msg = "循环上下级";
+                }
             }
 
             return msg;
@@ -373,6 +418,22 @@ namespace YaChH.Application.Service.SxcManage
 
             return true;
 
+        }
+
+        public bool IsInTreeBySql(int cid, int tid, string table, string key = "ID", string pkey = "PID")
+        {
+            var supsql = string.Format(@"WITH temp AS
+                                        (
+                                        SELECT {0} FROM {1}  WHERE {0} = {3}
+                                        UNION ALL
+                                        SELECT d.{0} FROM {1} AS d
+                                        INNER JOIN temp ON d.{2} = temp.{0}
+                                        )
+                                        SELECT * FROM temp where {0}={4}", key, table, pkey, cid, tid);
+
+            var data = this.BaseRepository(DbName).FindObject(supsql);
+
+            return data != null;
         }
     }
 }

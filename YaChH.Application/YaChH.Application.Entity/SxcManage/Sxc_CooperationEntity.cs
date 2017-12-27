@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -75,11 +76,15 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public int? UserID { get; set; }
+        [JsonIgnore]
+        public virtual Sxc_UserEntity User { get; set; }
+
         /// <summary>
         /// AreaID
         /// </summary>
         /// <returns></returns>
         public int? AreaID { get; set; }
+        
 
         public int State { get; set; }
         #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -22,7 +23,9 @@ namespace YaChH.Application.Entity.SxcManage
         /// PID
         /// </summary>
         /// <returns></returns>
+        [ForeignKey("SupArea")]
         public int? PID { get; set; }
+        public virtual Sxc_Base_AreaEntity SupArea { get; set; }
         /// <summary>
         /// Name
         /// </summary>

@@ -2,6 +2,7 @@
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using YaChH.Application.Entity.SxcManage.ViewModel;
+using YaChH.Data.Repository;
 
 namespace YaChH.Application.IService.SxcManage
 {
@@ -54,7 +55,9 @@ namespace YaChH.Application.IService.SxcManage
         IEnumerable<AgentMemberTreeModel> GetMemberList(string userId);
         string ChangeSupAgent(string keyValue, int newAgentID);
 
-        string CheckNew(Sxc_AgentEntity entity);
+        string CheckNewAgent(Sxc_AgentEntity entity);
+
+        IRepository<Sxc_AgentEntity> Repository();
         #endregion
     }
 }

@@ -9,6 +9,7 @@ using YaChH.Util;
 
 using YaChH.Util.Extension;
 using System;
+using System.Data.Entity;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -131,12 +132,14 @@ namespace YaChH.Application.Service.SxcManage
                 {
                    
                     var kv = cooper.UserID.Value.ToString();
-                    var entity = agentService.GetEntity(kv);
+                    var id = int.Parse(kv);
+                    //var entity = agentService.GetEntity(kv);
+                    var entity = agentService.Repository().IQueryable().Include(t => t.Area.SupArea).Single(t => t.ID == id);
                     entity.Level = cooper.Level.ToInt();
                     entity.Type = cooper.Type.ToInt();
                     entity.Area_ID = area.ID;
 
-                    msg = agentService.CheckNew(entity);
+                    msg = agentService.CheckNewAgent(entity);
 
                     if (msg.IsEmpty())
                     {
