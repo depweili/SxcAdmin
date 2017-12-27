@@ -214,6 +214,7 @@
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CommodityController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CooperationController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_OrderInfoController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_ReservationController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_TeacherController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserPaymentController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserProfileController.cs" />
@@ -1362,6 +1363,8 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Base_Area\Sxc_Base_AreaIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_UserPayment\Sxc_UserPayForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Agent\Sxc_AgentIndex2.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Reservation\Sxc_ReservationForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_Reservation\Sxc_ReservationIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Agent\Sxc_AgentEditSupForm.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LiFolderProfile.pubxml" />

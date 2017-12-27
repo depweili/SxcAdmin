@@ -230,6 +230,24 @@ $.fn.ComboBoxSetValue = function (value) {
     }
     return $select;
 }
+
+
+$.fn.toJSON = function () {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function () {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+}
+
 $.fn.ComboBoxTree = function (options) {
     //options参数：description,height,allowSearch,appendTo,click,url,param,method,icon
     var $select = $(this);

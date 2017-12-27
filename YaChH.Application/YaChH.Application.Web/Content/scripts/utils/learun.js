@@ -1605,6 +1605,8 @@ function(n) {
     n.getDataForm = function(n) {
         learun.getDataForm(n)
     }
+
+
 } (window.jQuery);
 Loading = function(n, t) {
     learun.loading({

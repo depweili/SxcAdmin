@@ -100,6 +100,7 @@
     <Compile Include="SxcManage\Sxc_CommodityBLL.cs" />
     <Compile Include="SxcManage\Sxc_CooperationBLL.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoBLL.cs" />
+    <Compile Include="SxcManage\Sxc_ReservationBLL.cs" />
     <Compile Include="SxcManage\Sxc_TeacherBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentBLL.cs" />
