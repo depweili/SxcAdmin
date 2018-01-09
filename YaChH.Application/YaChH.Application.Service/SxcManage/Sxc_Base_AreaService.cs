@@ -50,9 +50,12 @@ namespace YaChH.Application.Service.SxcManage
                 switch (condition)
                 {
                     case "AreaName":
-                        expression = expression.And(t => t.Name==(keyword));
+                        expression = expression.And(t => t.Name == (keyword));
                         break;
-                   
+                    case "Area":
+                        expression = expression.And(t => t.Area == (keyword));
+                        break;
+
                     default:
                         break;
                 }

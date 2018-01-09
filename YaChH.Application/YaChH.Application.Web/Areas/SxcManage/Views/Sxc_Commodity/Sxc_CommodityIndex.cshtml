@@ -39,7 +39,17 @@
                 { label: '所需积分', name: 'Points', index: 'Points', width: 100, align: 'left',sortable: true  },
                 { label: '图片', name: 'Pic', index: 'Pic', width: 100, align: 'left',sortable: true  },
                 { label: '备注', name: 'Memo', index: 'Memo', width: 100, align: 'left',sortable: true  },
-                { label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left',sortable: true  },
+                {
+                    label: '是否有效', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (!$.isNullOrEmpty(cellvalue)) {
+                            return cellvalue == true ? "是" : "否";
+                        }
+                        else {
+                            return "否";
+                        }
+                    }
+                },
                 { label: '添加时间', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left',sortable: true  },
                 { label: 'CategoryID', name: 'CategoryID', index: 'CategoryID', width: 100, align: 'left', sortable: true, hidden: true },
                 { label: 'IsReal', name: 'IsReal', index: 'IsReal', width: 100, align: 'left', sortable: true, hidden: true },
@@ -60,6 +70,21 @@
             },
             gridComplete: function () {
                 $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = $("form").toJSON();
+            console.log(queryJson);
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
             }
         });
     }
@@ -109,6 +134,21 @@
     }
 </script>
 <div class="titlePanel">
+    <div class="title-search">
+        <form id="searchForm">
+            <table>
+                <tr>
+                    <td>名称:</td>
+                    <td style="padding-left: 2px;">
+                        <input id="Name" name="Name" type="text" class="form-control"  style="width: 200px;" />
+                    </td>
+                    <td style="padding-left: 5px;">
+                        <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
     <div class="toolbar">
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>

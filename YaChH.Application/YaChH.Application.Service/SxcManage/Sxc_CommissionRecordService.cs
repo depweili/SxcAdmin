@@ -60,7 +60,7 @@ namespace YaChH.Application.Service.SxcManage
             }
 
 
-            if (!OperatorProvider.Provider.Current().IsSystem)
+            if (!OperatorProvider.Provider.Current().IsAdmin)
             {
                 var account = OperatorProvider.Provider.Current().Account;
                 expression = expression.And(t => t.UserPayment.User.SystemAccount == account);

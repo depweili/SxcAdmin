@@ -8,6 +8,9 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
+using YaChH.Data.EF.Tool;
+using System.ComponentModel;
+using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -30,7 +33,25 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns>返回分页列表</returns>
         public IEnumerable<Sxc_TeacherEntity> GetPageList(Pagination pagination, string queryJson)
         {
-            return this.BaseRepository(DbName).FindList(pagination);
+            //return this.BaseRepository(DbName).FindList(pagination);
+            int total;
+
+            var expression = LinqExtensions.True<Sxc_TeacherEntity>();
+            var queryParam = queryJson.ToJObject();
+
+            if (!queryParam["Name"].IsEmpty())
+            {
+                string keyord = queryParam["Name"].ToString();
+                expression = expression.And(t => t.Name.Contains(keyord));
+            }
+            
+
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            //Include("Agent").Include("UserPayment").  Where(x=>true  
+            //Include(t=>t.UserPayment.User.UserProfile).
+            var query = this.BaseRepository(DbName).IQueryable().Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
         }
         /// <summary>
         /// 获取列表

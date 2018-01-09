@@ -149,7 +149,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             return Success("操作成功。");
         }
         /// <summary>
-        /// 
+        /// 执行申请
         /// </summary>
         /// <param name="keyValue"></param>
         /// <returns></returns>
@@ -162,6 +162,11 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             return Success("申请成功通过！");
         }
 
+        /// <summary>
+        /// 拒绝申请
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
         [HttpPost]
         [AjaxOnly]
         [HandlerAuthorize(PermissionMode.Ignore)]

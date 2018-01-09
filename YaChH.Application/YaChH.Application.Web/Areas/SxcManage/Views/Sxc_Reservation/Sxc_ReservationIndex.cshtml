@@ -36,12 +36,13 @@
 
                
                 { label: "姓名", name: "Name", width: 100, align: "left", sortable: false },
-                { label: "电话", name: "MobilePhone", width: 200, align: "left", sortable: false },
-                { label: "地区", name: "AreaInfo", width: 200, align: "left", sortable: false },
-                { label: "住址", name: "Address", width: 300, align: "left", sortable: false },
+                { label: "电话", name: "MobilePhone", width: 150, align: "left", sortable: false },
+                { label: "地区", name: "AreaInfo", width: 150, align: "left", sortable: false },
+                { label: "住址", name: "Address", width: 200, align: "left", sortable: false },
                 { label: "学习目的", name: "Purpose", width: 100, align: "left", sortable: false },
-                { label: "预约备注", name: "Memo", width: 400, align: "center", sortable: false },
+                { label: "预约备注", name: "Memo", width: 200, align: "center", sortable: false },
                 { label: "提交时间", name: "CreateTime", width: 200, align: "left", sortable: false },
+                { label: "处理详情", name: "ProcessDetail", width: 200, align: "left", sortable: false },
                 
             ],
             viewrecords: true,
@@ -101,8 +102,8 @@
                 id: 'Form',
                 title: '编辑',
                 url: '/SxcManage/Sxc_Reservation/Sxc_ReservationForm?keyValue=' + keyValue,
-                width: 'px',
-                height: 'px',
+                width: '500px',
+                height: '300px',
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
@@ -148,8 +149,9 @@
     </div>
     <div class="toolbar">
         <div class="btn-group">
-            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>           
-            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;处理</a>
+            @*<a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>*@
         </div>
     </div>
 </div>

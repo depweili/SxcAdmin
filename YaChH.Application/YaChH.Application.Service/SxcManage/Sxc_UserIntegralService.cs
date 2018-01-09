@@ -8,9 +8,6 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
-using YaChH.Data.EF.Tool;
-using System.ComponentModel;
-using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -18,10 +15,10 @@ namespace YaChH.Application.Service.SxcManage
     /// 版 本 6.1
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
-    /// 日 期：2017-11-16 21:11
-    /// 描 述：Sxc_Commodity
+    /// 日 期：2017-05-04 13:25
+    /// 描 述：Sxc_UserIntegral
     /// </summary>
-    public class Sxc_CommodityService : RepositoryFactory<Sxc_CommodityEntity>, Sxc_CommodityIService
+    public class Sxc_UserIntegralService : RepositoryFactory<Sxc_UserIntegralEntity>, Sxc_UserIntegralIService
     {
         public string DbName = "SXC";
         #region 获取数据
@@ -31,34 +28,16 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="pagination">分页</param>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回分页列表</returns>
-        public IEnumerable<Sxc_CommodityEntity> GetPageList(Pagination pagination, string queryJson)
+        public IEnumerable<Sxc_UserIntegralEntity> GetPageList(Pagination pagination, string queryJson)
         {
-            //return this.BaseRepository(DbName).FindList(pagination);
-            int total;
-
-            var expression = LinqExtensions.True<Sxc_CommodityEntity>();
-            var queryParam = queryJson.ToJObject();
-
-            if (!queryParam["Name"].IsEmpty())
-            {
-                string keyord = queryParam["Name"].ToString();
-                expression = expression.And(t => t.Name.Contains(keyord));
-            }
-
-
-            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
-            //Include("Agent").Include("UserPayment").  Where(x=>true  
-            //Include(t=>t.UserPayment.User.UserProfile).
-            var query = this.BaseRepository(DbName).IQueryable().Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
-            pagination.records = total;
-            return query;
+            return this.BaseRepository(DbName).FindList(pagination);
         }
         /// <summary>
         /// 获取列表
         /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表</returns>
-        public IEnumerable<Sxc_CommodityEntity> GetList(string queryJson)
+        public IEnumerable<Sxc_UserIntegralEntity> GetList(string queryJson)
         {
             return this.BaseRepository(DbName).IQueryable().ToList();
         }
@@ -67,7 +46,7 @@ namespace YaChH.Application.Service.SxcManage
         /// </summary>
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
-        public Sxc_CommodityEntity GetEntity(string keyValue)
+        public Sxc_UserIntegralEntity GetEntity(string keyValue)
         {
             return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
         }
@@ -88,7 +67,7 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="keyValue">主键值</param>
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
-        public void SaveForm(string keyValue, Sxc_CommodityEntity entity)
+        public void SaveForm(string keyValue, Sxc_UserIntegralEntity entity)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {

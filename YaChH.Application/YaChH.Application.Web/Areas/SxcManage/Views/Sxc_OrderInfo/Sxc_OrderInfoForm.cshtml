@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_Form.cshtml";
 }
 <script>
+    var postData = null;
     var keyValue = request('keyValue');
     $(function () {
         initControl();
@@ -15,17 +16,25 @@
                 url: "../../SxcManage/Sxc_OrderInfo/GetFormJson",
                 param: { keyValue: keyValue },
                 success: function (data) {
+                    postData = data;
                     $("#form1").SetWebControls(data);
                 }
             })
         }
+
+        $("#Consignee").attr('disabled', 'disabled');
+        $("#AddressRegion").attr('disabled', 'disabled');
+        $("#AddressDetail").attr('disabled', 'disabled');
+        $("#Telephone").attr('disabled', 'disabled');
+        $("#UserNote").attr('disabled', 'disabled');
     }
     //保存表单;
     function AcceptClick() {
         if (!$('#form1').Validform()) {
             return false;
         }
-        var postData = $("#form1").GetWebControls(keyValue);
+        //var postData = $("#form1").GetWebControls(keyValue);
+        postData.ToUserNote = $('#ToUserNote').val();
         $.SaveForm({
             url: "../../SxcManage/Sxc_OrderInfo/SaveForm?keyValue=" + keyValue,
             param: postData,
@@ -39,103 +48,39 @@
 <div style="margin-top: 20px; margin-right: 30px;">
     <table class="form">
         <tr>
-            <td class="formTitle">ID</td>
+            <td class="formTitle">收件人</td>
             <td class="formValue">
-                <input id="ID" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">ShortContent</td>
-            <td class="formValue">
-                <input id="ShortContent" type="text" class="form-control"  />
+                <input id="Consignee" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">OrderStatus</td>
+            <td class="formTitle">地区</td>
             <td class="formValue">
-                <input id="OrderStatus" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">StoreStatus</td>
-            <td class="formValue">
-                <input id="StoreStatus" type="text" class="form-control"  />
+                <input id="AddressRegion" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">PayStatus</td>
+            <td class="formTitle">地址</td>
             <td class="formValue">
-                <input id="PayStatus" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">Consignee</td>
-            <td class="formValue">
-                <input id="Consignee" type="text" class="form-control"  />
+                <input id="AddressDetail" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">AddressRegion</td>
+            <td class="formTitle">电话</td>
             <td class="formValue">
-                <input id="AddressRegion" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">AddressDetail</td>
-            <td class="formValue">
-                <input id="AddressDetail" type="text" class="form-control"  />
+                <input id="Telephone" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">Zipcode</td>
+            <td class="formTitle">用户备注</td>
             <td class="formValue">
-                <input id="Zipcode" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">Telephone</td>
-            <td class="formValue">
-                <input id="Telephone" type="text" class="form-control"  />
+                <input id="UserNote" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
-            <td class="formTitle">UserNote</td>
+            <td class="formTitle">处理记录</td>
             <td class="formValue">
-                <input id="UserNote" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">TotalAmount</td>
-            <td class="formValue">
-                <input id="TotalAmount" type="text" class="form-control"  />
-            </td>
-        </tr>
-        <tr>
-            <td class="formTitle">TotalPoints</td>
-            <td class="formValue">
-                <input id="TotalPoints" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">PayFee</td>
-            <td class="formValue">
-                <input id="PayFee" type="text" class="form-control"  />
-            </td>
-        </tr>
-        <tr>
-            <td class="formTitle">DeliverFee</td>
-            <td class="formValue">
-                <input id="DeliverFee" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">Tax</td>
-            <td class="formValue">
-                <input id="Tax" type="text" class="form-control"  />
-            </td>
-        </tr>
-        <tr>
-            <td class="formTitle">ToUserNote</td>
-            <td class="formValue">
-                <input id="ToUserNote" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">IsValid</td>
-            <td class="formValue">
-                <input id="IsValid" type="text" class="form-control"  />
-            </td>
-        </tr>
-        <tr>
-            <td class="formTitle">CreateTime</td>
-            <td class="formValue">
-                <input id="CreateTime" type="text" class="form-control"  />
-            </td>
-            <td class="formTitle">UserIntegralID</td>
-            <td class="formValue">
-                <input id="UserIntegralID" type="text" class="form-control"  />
+                <input id="ToUserNote" type="text" class="form-control" />
             </td>
         </tr>
        

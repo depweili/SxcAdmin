@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using YaChH.Application.Code;
 
 namespace YaChH.Application.Entity.SxcManage
@@ -123,6 +125,12 @@ namespace YaChH.Application.Entity.SxcManage
         /// </summary>
         /// <returns></returns>
         public int UserIntegralID { get; set; }
+
+        [JsonIgnore]
+        public virtual Sxc_UserIntegralEntity UserIntegral { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Sxc_OrderCommodityEntity> OrderCommoditys { get; set; }
         #endregion
 
         #region 扩展操作

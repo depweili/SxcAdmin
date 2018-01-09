@@ -110,9 +110,11 @@
     <Compile Include="SxcManage\Sxc_CommissionRecordMap.cs" />
     <Compile Include="SxcManage\Sxc_CommodityMap.cs" />
     <Compile Include="SxcManage\Sxc_CooperationMap.cs" />
+    <Compile Include="SxcManage\Sxc_OrderCommodityMap.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoMap.cs" />
     <Compile Include="SxcManage\Sxc_ReservationMap.cs" />
     <Compile Include="SxcManage\Sxc_TeacherMap.cs" />
+    <Compile Include="SxcManage\Sxc_UserIntegralMap.cs" />
     <Compile Include="SxcManage\Sxc_UserMap.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentMap.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileMap.cs" />

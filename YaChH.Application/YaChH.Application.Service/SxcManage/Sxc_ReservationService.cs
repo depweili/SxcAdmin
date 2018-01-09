@@ -69,7 +69,7 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public Sxc_ReservationEntity GetEntity(string keyValue)
         {
-            return this.BaseRepository(DbName).FindEntity(keyValue);
+            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
         }
         #endregion
 

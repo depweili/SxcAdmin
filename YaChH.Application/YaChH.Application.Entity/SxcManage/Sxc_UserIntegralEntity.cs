@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using YaChH.Application.Code;
 
@@ -9,9 +10,9 @@ namespace YaChH.Application.Entity.SxcManage
     /// Copyright (c) 2013-2016 北京亚春华信息科技有限公司
     /// 创 建：超级管理员
     /// 日 期：2017-05-04 13:25
-    /// 描 述：Sxc_User
+    /// 描 述：Sxc_UserIntegral
     /// </summary>
-    public class Sxc_UserEntity : BaseEntity
+    public class Sxc_UserIntegralEntity : BaseEntity
     {
         #region 实体成员
         /// <summary>
@@ -21,23 +22,29 @@ namespace YaChH.Application.Entity.SxcManage
         [Column("ID")]
         public int ID { get; set; }
         /// <summary>
-        /// UserName
+        /// IntegralID
         /// </summary>
         /// <returns></returns>
-        [Column("USERNAME")]
-        public string UserName { get; set; }
+        [Column("INTEGRALID")]
+        public Guid IntegralID { get; set; }
         /// <summary>
-        /// Password
+        /// TotalPoints
         /// </summary>
         /// <returns></returns>
-        [Column("PASSWORD")]
-        public string Password { get; set; }
+        [Column("TOTALPOINTS")]
+        public int TotalPoints { get; set; }
         /// <summary>
-        /// AuthID
+        /// CurrentPoints
         /// </summary>
         /// <returns></returns>
-        [Column("AUTHID")]
-        public Guid AuthID { get; set; }
+        [Column("CURRENTPOINTS")]
+        public int CurrentPoints { get; set; }
+        /// <summary>
+        /// TotalExpense
+        /// </summary>
+        /// <returns></returns>
+        [Column("TOTALEXPENSE")]
+        public int TotalExpense { get; set; }
         /// <summary>
         /// IsValid
         /// </summary>
@@ -51,24 +58,15 @@ namespace YaChH.Application.Entity.SxcManage
         [Column("CREATETIME")]
         public DateTime? CreateTime { get; set; }
         /// <summary>
-        /// LastActiveTime
+        /// IntegralGradeID
         /// </summary>
         /// <returns></returns>
-        [Column("LASTACTIVETIME")]
-        public DateTime? LastActiveTime { get; set; }
-        /// <summary>
-        /// SystemAccount
-        /// </summary>
-        /// <returns></returns>
-        [Column("SYSTEMACCOUNT")]
-        public string SystemAccount { get; set; }
+        [Column("INTEGRALGRADEID")]
+        public int? IntegralGradeID { get; set; }
 
 
-        public virtual Sxc_UserProfileEntity UserProfile { get; set; }
-
-        public virtual Sxc_AgentEntity Agent { get; set; }
-
-        public virtual Sxc_UserIntegralEntity UserIntegral { get; set; }
+        [JsonIgnore]
+        public virtual Sxc_UserEntity User { get; set; }
 
         #endregion
 
@@ -79,6 +77,7 @@ namespace YaChH.Application.Entity.SxcManage
         public override void Create()
         {
             //this.ID = Guid.NewGuid().ToString();
+            
         }
         /// <summary>
         /// 编辑调用

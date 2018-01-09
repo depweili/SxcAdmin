@@ -24,7 +24,7 @@ namespace YaChH.Application.Service.SxcManage
     {
         public string DbName = "SXC";
         Sxc_AgentIService agentService = new Sxc_AgentService();
-        private Sxc_Base_AreaIService areaService = new Sxc_Base_AreaService();
+        Sxc_Base_AreaIService areaService = new Sxc_Base_AreaService();
         #region 获取数据
         /// <summary>
         /// 获取列表
@@ -115,19 +115,50 @@ namespace YaChH.Application.Service.SxcManage
             var cooper = GetEntity(keyValue);
             if (result == 1)
             {
-                var areaName="";
-                var areas = cooper.AreaInfo.Split(new char[] { ',' });
+                var queryJson = "{" + string.Format(@"'condition': 'Area','keyword': '{0}'", cooper.AreaInfo) + "}";
+                var area3 = areaService.GetEntity(queryJson);
+                var area2 = areaService.GetEntity(area3.PID.Value.ToString());
+                var area1 = areaService.GetEntity(area2.PID.Value.ToString());
+
+                Sxc_Base_AreaEntity area = null;
+
                 if (cooper.Type == 1)
                 {
-                    areaName = areas[0];
+                    area = area1;
                 }
                 else if (cooper.Level != null)
                 {
-                    areaName = areas[cooper.Level.Value - 1];
+                    switch (cooper.Level)
+                    {
+                        case 1:
+                            area = area1;
+                            break;
+                        case 2:
+                            area = area2;
+                            break;
+                        case 3:
+                            area = area3;
+                            break;
+                    }
                 }
-                var queryJson = "{" + string.Format(@"'condition': 'AreaName','keyword': '{0}'", areaName) + "}";        
-                var area= areaService.GetEntity(queryJson);
-                
+
+
+                //重复
+                //var areaName = "";
+                //var areas = cooper.AreaInfo.Split(new char[] { ',' });
+                //if (cooper.Type == 1)
+                //{
+                //    areaName = areas[0];
+                //}
+                //else if (cooper.Level != null)
+                //{
+                //    areaName = areas[cooper.Level.Value - 1];
+                //}
+                //var queryJson = "{" + string.Format(@"'condition': 'AreaName','keyword': '{0}'", areaName) + "}";
+                //var area = areaService.GetEntity(queryJson);
+
+
+
                 if (cooper.UserID != null)
                 {
                    
@@ -160,10 +191,12 @@ namespace YaChH.Application.Service.SxcManage
                 cooper.State = result;
 
             }
+            //保存加盟信息
             SaveForm(keyValue, cooper);
 
             return msg;
         }
+
         #endregion
     }
 }

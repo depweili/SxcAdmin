@@ -8,6 +8,11 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
+using System;
+using YaChH.Data.EF.Tool;
+using System.ComponentModel;
+using System.Data.Entity;
+using YaChH.Data.EF.Extension;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -40,45 +45,37 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public IEnumerable<Sxc_OrderInfoEntity> GetPageList(Pagination pagination, string queryJson)
         {
+            int total;
 
             var expression = LinqExtensions.True<Sxc_OrderInfoEntity>();
             var queryParam = queryJson.ToJObject();
 
-            //公司主键
-            if (!queryParam["organizeId"].IsEmpty())
+            //单据日期
+            if (!queryParam["StartTime"].IsEmpty() && !queryParam["EndTime"].IsEmpty())
             {
-                string organizeId = queryParam["organizeId"].ToString();
-               // expression = expression.And(t => t.OrganizeId.Equals(organizeId));
+                DateTime startTime = queryParam["StartTime"].ToDate();
+                DateTime endTime = queryParam["EndTime"].ToDate().AddDays(1);
+                expression = expression.And(t => t.CreateTime >= startTime && t.CreateTime <= endTime);
             }
-            //部门主键
-            if (!queryParam["departmentId"].IsEmpty())
+            //客户名称
+            if (!queryParam["UserName"].IsEmpty())
             {
-                string departmentId = queryParam["departmentId"].ToString();
-                //expression = expression.And(t => t.DepartmentId.Equals(departmentId));
+                string CustomerName = queryParam["UserName"].ToString();
+                expression = expression.And(t => t.UserIntegral.User.UserProfile.NickName.Contains(CustomerName) || t.UserIntegral.User.UserProfile.RealName.Contains(CustomerName));
             }
-            //查询条件
-            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            //电话
+            if (!queryParam["Telephone"].IsEmpty())
             {
-                //string condition = queryParam["condition"].ToString();
-                //string keyord = queryParam["keyword"].ToString();
-                //switch (condition)
-                //{
-                //    case "Account":            //账户
-                //        expression = expression.And(t => t.Account.Contains(keyord));
-                //        break;
-                //    case "RealName":          //姓名
-                //        expression = expression.And(t => t.RealName.Contains(keyord));
-                //        break;
-                //    case "Mobile":          //手机
-                //        expression = expression.And(t => t.Mobile.Contains(keyord));
-                //        break;
-                //    default:
-                //        break;
-                //}
+                string Telephone = queryParam["Telephone"].ToString();
+                expression = expression.And(t => t.Telephone.Contains(Telephone));
             }
-            //expression = expression.And(t => t.UserId != "System");
 
-            return this.BaseRepository(DbName).FindList(expression, pagination);
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Descending) };
+
+            //return this.BaseRepository(DbName).FindList(expression, pagination);
+            var query = this.BaseRepository(DbName).IQueryable().Include(t => t.UserIntegral.User.UserProfile).Include(t=>t.OrderCommoditys).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
         }
 
         /// <summary>
@@ -88,7 +85,7 @@ namespace YaChH.Application.Service.SxcManage
         /// <returns></returns>
         public Sxc_OrderInfoEntity GetEntity(string keyValue)
         {
-            return this.BaseRepository().FindEntity(int.Parse(keyValue));
+            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
         }
         #endregion
 
@@ -99,7 +96,7 @@ namespace YaChH.Application.Service.SxcManage
         /// <param name="keyValue">主键</param>
         public void RemoveForm(string keyValue)
         {
-            this.BaseRepository().Delete(keyValue);
+            this.BaseRepository(DbName).Delete(keyValue);
         }
         /// <summary>
         /// 保存表单（新增、修改）
@@ -112,12 +109,12 @@ namespace YaChH.Application.Service.SxcManage
             if (!string.IsNullOrEmpty(keyValue))
             {
                 entity.Modify(keyValue);
-                this.BaseRepository().Update(entity);
+                this.BaseRepository(DbName).Update(entity);
             }
             else
             {
                 entity.Create();
-                this.BaseRepository().Insert(entity);
+                this.BaseRepository(DbName).Insert(entity);
             }
         }
         #endregion

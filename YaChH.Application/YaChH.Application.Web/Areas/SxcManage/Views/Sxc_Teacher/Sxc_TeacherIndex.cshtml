@@ -28,9 +28,9 @@
             url: "../../SxcManage/Sxc_Teacher/GetPageListJson",
             datatype: "json",
             colModel: [
-                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true  },
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
                 { label: '姓名', name: 'Name', index: 'Name', width: 100, align: 'left',sortable: true  },
-                { label: '编号', name: 'IdentifyCode', index: 'IdentifyCode', width: 100, align: 'left',sortable: true  },
+                { label: '编号', name: 'IdentifyCode', index: 'IdentifyCode', width: 100, align: 'left', sortable: true, hidden: true  },
                 { label: 'Type', name: 'Type', index: 'Type', width: 100, align: 'left', sortable: true,hidden: true  },
                 { label: '称号', name: 'Title', index: 'Title', width: 100, align: 'left',sortable: true  },
                 { label: '简介', name: 'Introduction', index: 'Introduction', width: 500, align: 'left',sortable: true  },
@@ -56,15 +56,31 @@
                 $('#' + this.id).setSelection(selectedRowIndex, false);
             }
         });
+
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = $("form").toJSON();
+            console.log(queryJson);
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
     }
     //新增
     function btn_add() {
         dialogOpen({
             id: 'Form',
-            title: '添加Sxc_Teacher',
+            title: '添加',
             url: '/SxcManage/Sxc_Teacher/Sxc_TeacherForm',
-            width: 'px',
-            height: 'px',
+            width: '800px',
+            height: '600px',
             callBack: function (iframeId) {
                 top.frames[iframeId].AcceptClick();
             }
@@ -76,10 +92,10 @@
         if (checkedRow(keyValue)) {
             dialogOpen({
                 id: 'Form',
-                title: '编辑Sxc_Teacher',
+                title: '编辑',
                 url: '/SxcManage/Sxc_Teacher/Sxc_TeacherForm?keyValue=' + keyValue,
-                width: 'px',
-                height: 'px',
+                width: '800px',
+                height: '600px',
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
@@ -103,12 +119,27 @@
     }
 </script>
 <div class="titlePanel">
+    <div class="title-search">
+        <form id="searchForm">
+            <table>
+                <tr>
+                    <td>姓名:</td>
+                    <td style="padding-left: 2px;">
+                        <input id="Name" name="Name" type="text" class="form-control" placeholder="请输入姓名" style="width: 200px;" />
+                    </td>
+                    <td style="padding-left: 5px;">
+                        <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
     <div class="toolbar">
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
             <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
-            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            @*<a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>*@
         </div>
     </div>
 </div>

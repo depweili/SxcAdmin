@@ -114,9 +114,11 @@
     <Compile Include="SxcManage\Sxc_CommissionRecordService.cs" />
     <Compile Include="SxcManage\Sxc_CommodityService.cs" />
     <Compile Include="SxcManage\Sxc_CooperationService.cs" />
+    <Compile Include="SxcManage\Sxc_OrderCommodityService.cs" />
     <Compile Include="SxcManage\Sxc_OrderInfoService.cs" />
     <Compile Include="SxcManage\Sxc_ReservationService.cs" />
     <Compile Include="SxcManage\Sxc_TeacherService.cs" />
+    <Compile Include="SxcManage\Sxc_UserIntegralService.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentService.cs" />
     <Compile Include="SxcManage\Sxc_UserProfileService.cs" />
     <Compile Include="SxcManage\Sxc_UserService.cs" />

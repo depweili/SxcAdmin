@@ -65,9 +65,11 @@ namespace YaChH.Application.Code
         /// </summary>
         public string IPAddressName { get; set; }
         /// <summary>
-        /// 是否系统账户；拥有所以权限
+        /// 是否系统账户；拥有所有权限
         /// </summary>
         public bool IsSystem { get; set; }
+
+        public bool IsAdmin { get; set; }
         /// <summary>
         /// 登录Token
         /// </summary>

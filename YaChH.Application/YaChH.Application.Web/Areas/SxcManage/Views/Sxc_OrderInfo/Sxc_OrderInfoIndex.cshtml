@@ -2,7 +2,7 @@
     ViewBag.Title = "列表页面";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<script>;
+<script>    ;
     $(function () {
         InitialPage();
         GetGrid();
@@ -26,20 +26,21 @@
             autowidth: true,
             height: $(window).height() - 136.5,
             url: "../../SxcManage/Sxc_OrderInfo/GetPageListJson",
-            datatype: "json",           
+            datatype: "json",
             colModel: [
                 { label: '主键', name: 'ID', hidden: true },
-                { label: '公司Id', name: 'OrganizeId', hidden: true },
-                { label: 'Sort', name: 'Sort', hidden: true },
-                { label: "订单时间", name: "CreateTime", width: 200, align: "left", sortable: false },
+                { label: "客户名称", name: "RealName", width: 80, align: "left", sortable: false },
+                { label: "订单时间", name: "CreateTime", width: 160, align: "left", sortable: false },
+                { label: "商品名称", name: "CommodityName", width: 120, align: "left", sortable: false }, 
                 { label: "收件人", name: "Consignee", width: 100, align: "left", sortable: false },
-                { label: "收货地区", name: "AddressRegion", width: 200, align: "left", sortable: false },
-                { label: "收货地址", name: "AddressDetail", width: 400, align: "left", sortable: false },
+                { label: "收货地区", name: "AddressRegion", width: 120, align: "left", sortable: false },
+                { label: "收货地址", name: "AddressDetail", width: 160, align: "left", sortable: false },
                 { label: "邮政编码", name: "Zipcode", width: 100, align: "left", sortable: false },
                 { label: "联系电话", name: "Telephone", width: 100, align: "left", sortable: false },
-                { label: "商品数量", name: "TotalAmount", width: 60, align: "center", sortable: false },
+                { label: "商品总价", name: "TotalAmount", width: 60, align: "center", sortable: false, hidden: true },
                 { label: "支付积分", name: "TotalPoints", width: 60, align: "center", sortable: false },
-                { label: "购买备注", name: "UserNote", width: 400, align: "left", sortable: false }
+                { label: "购买备注", name: "UserNote", width: 100, align: "left", sortable: false },
+                { label: "处理备注", name: "ToUserNote", width: 100, align: "left", sortable: false }
             ],
             viewrecords: true,
             rowNum: 30,
@@ -55,6 +56,47 @@
             gridComplete: function () {
                 $('#' + this.id).setSelection(selectedRowIndex, false);
             }
+        });
+
+        $("#time_horizon a.btn-default").click(function () {
+            $("#time_horizon a.btn-default").removeClass("active");
+            $(this).addClass("active");
+            switch ($(this).attr('data-value')) {
+                case "1"://今天
+                    $("#StartTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "2"://近7天
+                    $("#StartTime").val("@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "3"://近一个月
+                    $("#StartTime").val("@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                case "4"://近三个月
+                    $("#StartTime").val("@DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd")");
+                    $("#EndTime").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    break;
+                default:
+                    break;
+            }
+            $("#SelectedStartTime").html($("#StartTime").val());
+            $("#SelectedEndTime").html($("#EndTime").val());
+            $('#btn_Search').trigger("click");
+        });
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            if (!$(".ui-filter-text").next('.ui-filter-list').is(":hidden")) {
+                $(".ui-filter-text").trigger("click");
+            }
+            $("#SelectedStartTime").html($("#StartTime").val());
+            $("#SelectedEndTime").html($("#EndTime").val());
+            var queryJson = $("#filter-form").GetWebControls();
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
         });
     }
     //新增
@@ -76,16 +118,17 @@
         if (checkedRow(keyValue)) {
             dialogOpen({
                 id: 'Form',
-                title: '编辑Sxc_OrderInfo',
+                title: '处理订单',
                 url: '/SxcManage/Sxc_OrderInfo/Sxc_OrderInfoForm?keyValue=' + keyValue,
-                width: 'px',
-                height: 'px',
+                width: '600px',
+                height: '400px',
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
             })
         }
     }
+
     //删除
     function btn_delete() {
         var keyValue = $('#gridTable').jqGridRowValue('ID');
@@ -106,29 +149,61 @@
     <div class="title-search">
         <table>
             <tr>
-                <td>
-                    <div id="queryCondition" class="btn-group">
-                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="Account">账户</a></li>
-                            <li><a data-value="RealName">姓名</a></li>
-                            <li><a data-value="Mobile">手机</a></li>
-                        </ul>
+                <td>查询条件</td>
+                <td style="padding-left: 10px;">
+                    <div class="ui-filter" style="width: 200px;">
+                        <div class="ui-filter-text">
+                            <strong id="SelectedStartTime">@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")</strong> 至 <strong id="SelectedEndTime">@DateTime.Now.ToString("yyyy-MM-dd")</strong>
+                        </div>
+                        <div class="ui-filter-list" style="width: 350px;">
+                            <table class="form" id="filter-form">
+                                <tr>
+                                    <th class="formTitle">日期：</th>
+                                    <td class="formValue">
+                                        <div style="float: left; width: 45%;">
+                                            <input id="StartTime" readonly type="text" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" class="form-control input-wdatepicker" onfocus="WdatePicker({maxDate:'%y-%M-%d'})">
+                                        </div>
+                                        <div style="float: left; width: 10%; text-align: center;">至</div>
+                                        <div style="float: left; width: 45%;">
+                                            <input id="EndTime" readonly type="text" value="@YaChH.Util.Time.GetToday()" class="form-control input-wdatepicker" onfocus="WdatePicker({maxDate:'%y-%M-%d'})">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="formTitle">客户名称：</td>
+                                    <td class="formValue">
+                                        <input id="UserName" type="text" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="formTitle">手机号：</td>
+                                    <td class="formValue">
+                                        <input id="Telephone" type="text" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="ui-filter-list-bottom">
+                                <a id="btn_Reset" class="btn btn-default">&nbsp;重&nbsp;&nbsp;置</a>
+                                <a id="btn_Search" class="btn btn-primary">&nbsp;查&nbsp;&nbsp;询</a>
+                            </div>
+                        </div>
                     </div>
                 </td>
-                <td style="padding-left: 2px;">
-                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
-                </td>
-                <td style="padding-left: 5px;">
-                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                <td style="padding-left: 10px;">
+                    <div id="time_horizon" class="btn-group">
+                        <a class="btn btn-default" data-value="1">今天</a>
+                        <a class="btn btn-default" data-value="2">近7天</a>
+                        <a class="btn btn-default active" data-value="3">近1个月</a>
+                        <a class="btn btn-default" data-value="4">近3个月</a>
+                    </div>
                 </td>
             </tr>
         </table>
     </div>
     <div class="toolbar">
         <div class="btn-group">
-            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>            
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a> 
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;处理</a>
         </div>
         @*<script>$('.toolbar').authorizeButton()</script>*@
     </div>

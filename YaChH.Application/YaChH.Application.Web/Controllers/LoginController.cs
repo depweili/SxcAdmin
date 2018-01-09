@@ -176,19 +176,35 @@ namespace YaChH.Application.Web.Controllers
                     dataAuthorize.WriteAutorize = authorizeBLL.GetDataAuthor(operators, true);
                     dataAuthorize.WriteAutorizeUserId = authorizeBLL.GetDataAuthorUserId(operators, true);
                     operators.DataAuthorize = dataAuthorize;
-
-
-                    var roleEntity = new RoleBLL().GetEntity(userEntity.RoleId);
+                    
 
                     //判断是否系统管理员
-                    if (userEntity.Account == "System"|| roleEntity.FullName== "系统管理员"|| roleEntity.FullName == "超级管理员")
+                    if (userEntity.Account == "System")
                     {
                         operators.IsSystem = true;
+                        operators.IsAdmin = true;
                     }
                     else
                     {
                         operators.IsSystem = false;
+                        operators.IsAdmin = false;
                     }
+
+                    var roleEntity = new RoleBLL().GetEntity(userEntity.RoleId);
+
+                    if(roleEntity != null)
+                    {
+                        if (roleEntity.FullName == "系统管理员")
+                        {
+                            operators.IsAdmin = true;
+                        }
+                        else
+                        {
+                            operators.IsAdmin = false;
+                        }
+                    }
+                    
+
                     OperatorProvider.Provider.AddCurrent(operators);
                     //登录限制
                     //LoginLimit(username, operators.IPAddress, operators.IPAddressName);

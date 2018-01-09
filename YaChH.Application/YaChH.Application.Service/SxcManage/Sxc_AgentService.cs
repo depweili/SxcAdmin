@@ -30,6 +30,9 @@ namespace YaChH.Application.Service.SxcManage
     {
         
         private string DbName = "SXC";
+
+        Sxc_Base_AreaIService areaService = new Sxc_Base_AreaService();
+        Sxc_UserProfileIService userProfileService = new Sxc_UserProfileService();
         #region 获取数据
 
         public IRepository<Sxc_AgentEntity> Repository()
@@ -50,6 +53,8 @@ namespace YaChH.Application.Service.SxcManage
         public IEnumerable<Sxc_AgentEntity> GetPageList(Pagination pagination, string queryJson)
         {
             int total;
+
+            bool isQueryByParent = false;
 
             var expression = LinqExtensions.True<Sxc_AgentEntity>();
             var queryParam = queryJson.ToJObject();
@@ -74,20 +79,22 @@ namespace YaChH.Application.Service.SxcManage
                         break;
                     case "SupAgent":
                         expression = expression.And(t => t.ParentAgent.User.UserProfile.RealName.Contains(keyord));
+                        isQueryByParent = true;
                         break;
                     case "SupAgentID":
                         var supid = int.Parse(keyord);
                         expression = expression.And(t => t.ParentAgent.ID == supid);
+                        isQueryByParent = true;
                         break;
                     default:
                         break;
                 }
             }
 
-            if (!OperatorProvider.Provider.Current().IsSystem)
+            if (!OperatorProvider.Provider.Current().IsAdmin && !isQueryByParent)
             {
                 var account = OperatorProvider.Provider.Current().Account;
-                expression = expression.And(t => t.ParentAgent.User.SystemAccount == account||t.User.SystemAccount== account);
+                expression = expression.And(t => t.ParentAgent.User.SystemAccount == account || t.User.SystemAccount == account);
             }
 
             PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
@@ -245,6 +252,8 @@ namespace YaChH.Application.Service.SxcManage
             {
                 entity.Create();
                 this.BaseRepository(DbName).Insert(entity);
+
+                AfterCreateNewAgent(entity);
             }
         }
 
@@ -258,6 +267,15 @@ namespace YaChH.Application.Service.SxcManage
 
             try
             {
+                var up = userProfileService.GetEntity(entity.ID.ToString());
+
+                if (!up.IsVerified ?? false)
+                {
+                    msg = "用户真实信息尚未验证";
+
+                    return msg;
+                }
+
                 var rep = this.BaseRepository(DbName);
 
                 if (entity.Type == 2 && entity.Level < 4)
@@ -286,9 +304,7 @@ namespace YaChH.Application.Service.SxcManage
                         {
                             msg = "代理资格已占用";
                         }
-
                     }
-
                 }
 
                 //rep.IQueryable().Where()
@@ -434,6 +450,40 @@ namespace YaChH.Application.Service.SxcManage
             var data = this.BaseRepository(DbName).FindObject(supsql);
 
             return data != null;
+        }
+
+
+        public void AfterCreateNewAgent(Sxc_AgentEntity entity)
+        {
+            if (entity.Type == 2)
+            {
+                //归并下级
+                if (entity.Level < 3)
+                {
+                    this.BaseRepository(DbName).ExecuteBySql(string.Format(@"UPDATE Sxc_Agent t SET PID={0} WHERE Area_ID IN (SELECT ID FROM Sxc_Base_Area WHERE PID={1})", entity.ID, entity.Area_ID));
+                }
+
+                //归属上级
+                if (entity.Level < 4 && entity.Level > 1)
+                {
+                    var area = areaService.GetEntity(entity.Area_ID.Value.ToString());
+                    var supagent = this.BaseRepository(DbName).FindEntity(t => t.Area_ID == area.PID&&t.IsValid.Value);
+
+                    if (supagent != null)
+                    {
+                        entity.PID = supagent.ID;
+                    }
+                    else
+                    {
+                        entity.PID = null;
+                    }
+
+
+                    this.BaseRepository(DbName).Update(entity);
+                }
+
+                
+            }
         }
     }
 }
