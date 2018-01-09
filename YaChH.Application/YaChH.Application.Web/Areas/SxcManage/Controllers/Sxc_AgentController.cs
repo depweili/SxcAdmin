@@ -130,7 +130,12 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             return Success("操作成功。");
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <param name="NewAgentID"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AjaxOnly]
@@ -160,7 +165,6 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         /// <summary>
         /// 获取列表
         /// </summary>
-        /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表Json</returns>
         [HttpGet]
         public ActionResult GetMyMemeberJson()
@@ -203,12 +207,21 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         /// <summary>
         /// 查询代理
         /// </summary>
-        /// <param name="search"></param>
+        /// <param name="queryJson"></param>
         /// <returns></returns>
         [HttpGet]
         public ActionResult SearchAgent(string queryJson)
         {
             var data = sxc_agentbll.GetAgentSearchList(queryJson);
+
+            return ToJsonResult(data);
+        }
+
+
+        [HttpPost]
+        public ActionResult AgentQuit(string keyValue)
+        {
+            var data = sxc_agentbll.AgentQuit(keyValue);
 
             return ToJsonResult(data);
         }

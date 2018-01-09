@@ -125,6 +125,11 @@ namespace YaChH.Application.Service.SxcManage
                 if (cooper.Type == 1)
                 {
                     area = area1;
+
+                    if (area.Type.Value != 1)
+                    {
+                        msg = "地区错误";
+                    }
                 }
                 else if (cooper.Level != null)
                 {
@@ -159,9 +164,10 @@ namespace YaChH.Application.Service.SxcManage
 
 
 
-                if (cooper.UserID != null)
+                //if (cooper.UserID != null)
+                if (msg.IsEmpty())
                 {
-                   
+
                     var kv = cooper.UserID.Value.ToString();
                     var id = int.Parse(kv);
                     //var entity = agentService.GetEntity(kv);
@@ -183,6 +189,11 @@ namespace YaChH.Application.Service.SxcManage
                         cooper.State = 2;
                         cooper.ProcessDetail = string.Format("审核失败【{0}】", msg);
                     }
+                }
+                else
+                {
+                    cooper.State = 2;
+                    cooper.ProcessDetail = string.Format("审核失败【{0}】", msg);
                 }
             }
             else

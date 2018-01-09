@@ -282,7 +282,7 @@ namespace YaChH.Application.Service.SxcManage
                 {
                     if (entity.Level == 3)
                     {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID))
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID && (t.IsValid ?? false)))
                         {
                             msg = "代理资格已占用";
                         }
@@ -291,7 +291,7 @@ namespace YaChH.Application.Service.SxcManage
 
                     if (entity.Level == 2)
                     {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.PID == entity.Area.PID))
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.PID == entity.Area.PID && (t.IsValid ?? false)))
                         {
                             msg = "代理资格已占用";
                         }
@@ -300,12 +300,14 @@ namespace YaChH.Application.Service.SxcManage
 
                     if (entity.Level == 1)
                     {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.SupArea.ID == entity.Area.SupArea.ID))
+                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.SupArea.ID == entity.Area.SupArea.ID && (t.IsValid ?? false)))
                         {
                             msg = "代理资格已占用";
                         }
                     }
                 }
+
+                
 
                 //rep.IQueryable().Where()
             }
@@ -455,12 +457,20 @@ namespace YaChH.Application.Service.SxcManage
 
         public void AfterCreateNewAgent(Sxc_AgentEntity entity)
         {
+            var supentity = this.BaseRepository(DbName).FindEntity(entity.PID);
+
+            if (supentity != null && supentity.Type != entity.Type)
+            {
+                entity.PID = null;
+            }
+
+
             if (entity.Type == 2)
             {
                 //归并下级
                 if (entity.Level < 3)
                 {
-                    this.BaseRepository(DbName).ExecuteBySql(string.Format(@"UPDATE Sxc_Agent t SET PID={0} WHERE Area_ID IN (SELECT ID FROM Sxc_Base_Area WHERE PID={1})", entity.ID, entity.Area_ID));
+                    this.BaseRepository(DbName).ExecuteBySql(string.Format(@"UPDATE Sxc_Agent SET PID={0} WHERE Area_ID IN (SELECT ID FROM Sxc_Base_Area WHERE PID={1}) and Type=2", entity.ID, entity.Area_ID));
                 }
 
                 //归属上级
@@ -484,6 +494,29 @@ namespace YaChH.Application.Service.SxcManage
 
                 
             }
+        }
+
+        public string AgentQuit(string keyValue)
+        {
+            string msg = string.Empty;
+
+            var entity = this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+
+            string pid = "null";
+
+            if (entity.PID != null)
+            {
+                pid = entity.PID.Value.ToString();
+            }
+
+            //归上
+            this.BaseRepository(DbName).ExecuteBySql(string.Format(@"UPDATE Sxc_Agent SET PID={0} WHERE PID={1}", pid, keyValue));
+
+            entity.IsValid = false;
+
+            this.BaseRepository(DbName).Update(entity);
+
+            return msg;
         }
     }
 }

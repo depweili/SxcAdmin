@@ -187,11 +187,20 @@
     function btn_quit() {
         var keyValue = $('#gridTable').jqGridRowValue('ID');
         if (keyValue) {
-            dialogConfirm("确定此代理退出?", function (r) {
-                if (r) {
-
+            $.ConfirmAjax({
+                msg: "确定此代理退出？",
+                url: '../../SxcManage/Sxc_Agent/AgentQuit',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
                 }
-            });
+            })
+
+            //dialogConfirm("确定此代理退出?", function (r) {
+            //    if (r) {
+
+            //    }
+            //});
         } else {
             dialogMsg('请选择需要退出的代理记录!', 0);
         }

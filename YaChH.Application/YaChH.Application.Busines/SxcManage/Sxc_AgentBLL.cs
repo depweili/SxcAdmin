@@ -186,5 +186,20 @@ namespace YaChH.Application.Busines.SxcManage
                 return ex.Message;
             }
         }
+
+        public string AgentQuit(string keyValue)
+        {
+            try
+            {
+                string msg = service.AgentQuit(keyValue);
+
+                return msg;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }
