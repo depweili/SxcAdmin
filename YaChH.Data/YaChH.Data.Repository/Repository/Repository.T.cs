@@ -110,6 +110,7 @@ namespace YaChH.Data.Repository
         {
             return db.Update<T>(condition);
         }
+        
         #endregion
 
         #region 对象实体 查询

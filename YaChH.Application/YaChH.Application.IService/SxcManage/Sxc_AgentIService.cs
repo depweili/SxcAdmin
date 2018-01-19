@@ -59,6 +59,7 @@ namespace YaChH.Application.IService.SxcManage
 
         IRepository<Sxc_AgentEntity> Repository();
         string AgentQuit(string keyValue);
+        Sxc_AgentEntity GetEntity1(string kv);
         #endregion
     }
 }

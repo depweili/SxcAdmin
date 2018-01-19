@@ -31,12 +31,17 @@ namespace YaChH.Application.Service.SxcManage
         {           
             return this.BaseRepository().IQueryable().ToList();
         }
+
+        public Sxc_Base_AreaEntity GetEntity(string keyValue)
+        {
+            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+        }
         /// <summary>
         /// 获取实体
         /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns></returns>
-        public Sxc_Base_AreaEntity GetEntity(string queryJson)
+        public Sxc_Base_AreaEntity QueryEntity(string queryJson)
         {
             var expression = LinqExtensions.True<Sxc_Base_AreaEntity>();
             var queryParam = queryJson.ToJObject();

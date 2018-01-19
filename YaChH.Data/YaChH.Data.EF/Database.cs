@@ -15,6 +15,7 @@ using System.Text;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Text.RegularExpressions;
 using Microsoft.Practices.Unity;
+using System.Data.Entity.Core.Objects;
 
 namespace YaChH.Data.EF
 {
@@ -261,7 +262,11 @@ namespace YaChH.Data.EF
         }
         public int Update<T>(T entity) where T : class
         {
-            dbcontext.Set<T>().Attach(entity);
+            if(!IsAttached(entity))
+            {
+                dbcontext.Set<T>().Attach(entity);
+            }
+            
             Hashtable props = ConvertExtension.GetPropertyInfo<T>(entity);
             foreach (string item in props.Keys)
             {
@@ -286,6 +291,28 @@ namespace YaChH.Data.EF
         public int Update<T>(Expression<Func<T, bool>> condition) where T : class,new()
         {
             return 0;
+        }
+
+        private bool IsAttached<T>(T entity)
+        {
+            var objectContext = ((IObjectContextAdapter)this.dbcontext).ObjectContext;
+            ObjectStateEntry entry = null;
+            if (objectContext.ObjectStateManager.TryGetObjectStateEntry(entity, out entry))
+            {
+                if (entry.State != EntityState.Detached)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int UpdateImmediate<T>(T entity) where T : class
+        {
+            //dbcontext.Set<T>().Attach(entity);
+            
+            dbcontext.Entry(entity).State = EntityState.Modified;
+            return dbTransaction == null ? this.Commit() : 0;
         }
         #endregion
 

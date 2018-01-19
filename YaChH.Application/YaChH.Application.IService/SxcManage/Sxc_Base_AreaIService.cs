@@ -26,6 +26,8 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
         Sxc_Base_AreaEntity GetEntity(string keyValue);
+
+        Sxc_Base_AreaEntity QueryEntity(string queryJson);
         #endregion
 
         #region 提交数据
@@ -41,6 +43,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_Base_AreaEntity entity);
+        
         #endregion
     }
 }

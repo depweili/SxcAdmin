@@ -116,7 +116,7 @@ namespace YaChH.Application.Service.SxcManage
             if (result == 1)
             {
                 var queryJson = "{" + string.Format(@"'condition': 'Area','keyword': '{0}'", cooper.AreaInfo) + "}";
-                var area3 = areaService.GetEntity(queryJson);
+                var area3 = areaService.QueryEntity(queryJson);
                 var area2 = areaService.GetEntity(area3.PID.Value.ToString());
                 var area1 = areaService.GetEntity(area2.PID.Value.ToString());
 
@@ -124,9 +124,9 @@ namespace YaChH.Application.Service.SxcManage
 
                 if (cooper.Type == 1)
                 {
-                    area = area1;
+                    area = area3;
 
-                    if (area.Type.Value != 1)
+                    if (area1.Type.Value != 1)
                     {
                         msg = "地区错误";
                     }
@@ -170,19 +170,31 @@ namespace YaChH.Application.Service.SxcManage
 
                     var kv = cooper.UserID.Value.ToString();
                     var id = int.Parse(kv);
-                    //var entity = agentService.GetEntity(kv);
-                    var entity = agentService.Repository().IQueryable().Include(t => t.Area.SupArea).Single(t => t.ID == id);
+                    var entity = agentService.GetEntity1(kv);
+                    //var entity = new Sxc_AgentEntity();
+                    //var entity = agentService.Repository().IQueryable().Include(t => t.Area.SupArea).Single(t => t.ID == id);
+
+                    //entity.ID = id;
                     entity.Level = cooper.Level.ToInt();
                     entity.Type = cooper.Type.ToInt();
+
+                    //entity.Area = area;
                     entity.Area_ID = area.ID;
+                    
+
+                    //int midid = area.ID;
+                    //entity.Area_ID = midid;
+
 
                     msg = agentService.CheckNewAgent(entity);
 
                     if (msg.IsEmpty())
                     {
+                        entity.IsValid = true;
+                        agentService.SaveForm(kv, entity);
+
                         cooper.State = result;
                         cooper.ProcessDetail = string.Format("审核通过【{0}】", DateTime.Now.ToChineseDateTimeString());
-                        agentService.SaveForm(kv, entity);
                     }
                     else
                     {

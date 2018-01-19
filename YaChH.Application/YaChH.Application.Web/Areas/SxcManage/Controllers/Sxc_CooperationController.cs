@@ -158,8 +158,17 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         [HandlerAuthorize(PermissionMode.Ignore)]
         public ActionResult ApproveApplication(string keyValue)
         {
-            sxc_cooperationbll.AuditingApplication(keyValue,1);
-            return Success("申请成功通过！");
+            var msg = sxc_cooperationbll.AuditingApplication(keyValue, 1);
+
+            if (string.IsNullOrEmpty(msg))
+            {
+                return Success("执行完成！");
+            }
+            else
+            {
+                return Success(msg);
+            }
+            
         }
 
         /// <summary>
@@ -172,8 +181,16 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         [HandlerAuthorize(PermissionMode.Ignore)]
         public ActionResult RefuseApplication(string keyValue)
         {
-            sxc_cooperationbll.AuditingApplication(keyValue, -1);
-            return Success("已经拒绝！");
+            var msg = sxc_cooperationbll.AuditingApplication(keyValue, -1);
+
+            if (string.IsNullOrEmpty(msg))
+            {
+                return Success("已经拒绝！");
+            }
+            else
+            {
+                return Success(msg);
+            }
         }
         #endregion
     }

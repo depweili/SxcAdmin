@@ -97,6 +97,7 @@
                     formatter: function (cellvalue, options, rowObject) {
                         if (rowObject.Type == "1") { return top.clientdataItem["AgentLevel1"][cellvalue]; }
                         if (rowObject.Type == "2") { return top.clientdataItem["AgentLevel2"][cellvalue]; }
+                        if (rowObject.Type == "3") { return top.clientdataItem["AgentLevel3"][cellvalue]; }
 
                         return "";
                     }
@@ -206,6 +207,7 @@
                     formatter: function (cellvalue, options, rowObject) {
                         if (rowObject.Type == "1") { return top.clientdataItem["AgentLevel1"][cellvalue]; }
                         if (rowObject.Type == "2") { return top.clientdataItem["AgentLevel2"][cellvalue]; }
+                        if (rowObject.Type == "3") { return top.clientdataItem["AgentLevel3"][cellvalue]; }
 
                         return "";
                     }

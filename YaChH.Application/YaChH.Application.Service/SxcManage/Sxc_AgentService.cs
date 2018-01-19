@@ -163,6 +163,11 @@ namespace YaChH.Application.Service.SxcManage
             return entity;
         }
 
+        public Sxc_AgentEntity GetEntity1(string keyValue)
+        {
+            return this.BaseRepository(DbName).FindEntity(int.Parse(keyValue));
+        }
+
         public IEnumerable<AgentMemberTreeModel> GetMyMemberList(string userId)
         {
             var strSql = new StringBuilder();
@@ -247,13 +252,16 @@ namespace YaChH.Application.Service.SxcManage
             {
                 entity.Modify(keyValue);
                 this.BaseRepository(DbName).Update(entity);
+
+                AfterCreateNewAgent(keyValue);
+                //AfterCreateNewAgent(entity);
             }
             else
             {
                 entity.Create();
                 this.BaseRepository(DbName).Insert(entity);
 
-                AfterCreateNewAgent(entity);
+                
             }
         }
 
@@ -261,7 +269,10 @@ namespace YaChH.Application.Service.SxcManage
         #endregion
 
 
-        public string CheckNewAgent(Sxc_AgentEntity entity)
+        
+
+
+         public string CheckNewAgent(Sxc_AgentEntity entity)
         {
             string msg = string.Empty;
 
@@ -280,34 +291,40 @@ namespace YaChH.Application.Service.SxcManage
 
                 if (entity.Type == 2 && entity.Level < 4)
                 {
-                    if (entity.Level == 3)
+                    //省市的时候
+                    if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID && (t.IsValid ?? false)&&t.ID!=entity.ID))
                     {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID && (t.IsValid ?? false)))
-                        {
-                            msg = "代理资格已占用";
-                        }
-                        
+                        msg = "代理资格已占用";
                     }
 
-                    if (entity.Level == 2)
-                    {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.PID == entity.Area.PID && (t.IsValid ?? false)))
-                        {
-                            msg = "代理资格已占用";
-                        }
+                    //if (entity.Level == 3)
+                    //{
+                    //    if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area_ID == entity.Area_ID && (t.IsValid ?? false)))
+                    //    {
+                    //        msg = "代理资格已占用";
+                    //    }
 
-                    }
+                    //}
 
-                    if (entity.Level == 1)
-                    {
-                        if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.SupArea.ID == entity.Area.SupArea.ID && (t.IsValid ?? false)))
-                        {
-                            msg = "代理资格已占用";
-                        }
-                    }
+                    //if (entity.Level == 2)
+                    //{
+                    //    if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.PID == entity.Area.PID && (t.IsValid ?? false)))
+                    //    {
+                    //        msg = "代理资格已占用";
+                    //    }
+
+                    //}
+
+                    //if (entity.Level == 1)
+                    //{
+                    //    if (rep.IQueryable().Any(t => t.Type == 2 && t.Level == entity.Level && t.Area.SupArea.ID == entity.Area.SupArea.ID && (t.IsValid ?? false)))
+                    //    {
+                    //        msg = "代理资格已占用";
+                    //    }
+                    //}
                 }
 
-                
+
 
                 //rep.IQueryable().Where()
             }
@@ -372,7 +389,7 @@ namespace YaChH.Application.Service.SxcManage
                 {
                     if (current.Level != 4)
                     {
-                        msg = "非初级代理不可修改";
+                        msg = "非初级代理不可修改上级";
                     }
                     else
                     {
@@ -416,26 +433,35 @@ namespace YaChH.Application.Service.SxcManage
             var carea1 = arearep.FindEntity(carea2.PID);
 
             var parea3 = arearep.FindEntity(parent.Area_ID);
-            var parea2 = arearep.FindEntity(parea3.PID);
-            var parea1 = arearep.FindEntity(parea2.PID);
+            //var parea2 = arearep.FindEntity(parea3.PID);
+            //var parea1 = arearep.FindEntity(parea2.PID);
+            Sxc_Base_AreaEntity parea2 = null;
+            Sxc_Base_AreaEntity parea1 = null;
 
             if (parent.Level >= 3&&carea3.ID!=parea3.ID)
             {
                 return false;
             }
 
-            if (parent.Level == 2 && carea2.ID != parea2.ID)
+            if (parent.Level == 2)
             {
-                return false;
+                parea2 = arearep.FindEntity(parea3.PID);
+                if (carea2.ID != parea2.ID)
+                {
+                    return false;
+                }
             }
 
-            if (parent.Level == 1 && carea1.ID != parea1.ID)
+            if (parent.Level == 1)
             {
-                return false;
+                parea2 = arearep.FindEntity(parea3.PID);
+                parea1 = arearep.FindEntity(parea2.PID);
+                if (carea1.ID != parea1.ID)
+                {
+                    return false;
+                }
             }
-
             return true;
-
         }
 
         public bool IsInTreeBySql(int cid, int tid, string table, string key = "ID", string pkey = "PID")
@@ -455,45 +481,88 @@ namespace YaChH.Application.Service.SxcManage
         }
 
 
-        public void AfterCreateNewAgent(Sxc_AgentEntity entity)
+        public void AfterCreateNewAgent(string keyValue)
+        //public void AfterCreateNewAgent(Sxc_AgentEntity entity)
         {
+
+            var db = this.BaseRepository(DbName).BeginTrans();
+            var entity= db.FindEntity(int.Parse(keyValue));
+            db.Update(entity);//先定义更改 值->null 的时候可以先捕捉修改状态
+
+            //测试 null更新问题
+            //关键需要先定义修改状态，避免null的时候不修改，并且不要重复Attach实体（会导致状态被重置，null再次被认为不修改），导致改为值->null的时候再次被定义不修改
+            //entity.PID = 195;
+            //db.Update(entity);
+            //db.Commit();
+            //return;
+
+            //var supentity = db.FindEntity(entity.PID);
             var supentity = this.BaseRepository(DbName).FindEntity(entity.PID);
 
             if (supentity != null && supentity.Type != entity.Type)
             {
-                entity.PID = null;
+                entity.ParentAgent = null;
+                //entity.PID = null;
             }
 
 
             if (entity.Type == 2)
             {
-                //归并下级
-                if (entity.Level < 3)
+                //省市县上级系统分配
+                if (entity.Level < 4)
                 {
-                    this.BaseRepository(DbName).ExecuteBySql(string.Format(@"UPDATE Sxc_Agent SET PID={0} WHERE Area_ID IN (SELECT ID FROM Sxc_Base_Area WHERE PID={1}) and Type=2", entity.ID, entity.Area_ID));
+                    entity.ParentAgent = null;
+                    entity.PID = null;
+
+                    //supentity.ChildAgents.Remove(entity);
                 }
 
-                //归属上级
+                //归并下级 省-市 市-县
+                if (entity.Level < 3)
+                {
+                    db.ExecuteBySql(string.Format(@"UPDATE Sxc_Agent SET PID={0} WHERE Area_ID IN (SELECT ID FROM Sxc_Base_Area WHERE PID={1}) and Type=2", entity.ID.ToString(), entity.Area_ID.ToString()));
+                }
+
+                //归属上级 县-市-省
+                //2,3
                 if (entity.Level < 4 && entity.Level > 1)
                 {
-                    var area = areaService.GetEntity(entity.Area_ID.Value.ToString());
-                    var supagent = this.BaseRepository(DbName).FindEntity(t => t.Area_ID == area.PID&&t.IsValid.Value);
+                    var area = areaService.GetEntity(entity.Area_ID.ToString());
+                    var supagent = db.FindEntity(t => t.Area_ID == area.PID && (t.IsValid ?? false));
 
+                    //县-市 市-省
                     if (supagent != null)
                     {
+                        entity.ParentAgent = supagent;
                         entity.PID = supagent.ID;
                     }
                     else
-                    {
+                    {//没有关联上级，检查 跨越一级
+                        entity.ParentAgent = null;
                         entity.PID = null;
+
+                        if (entity.Level == 3)//县-省
+                        {
+                            if(area.PID.HasValue)
+                            {
+                                var areasup = areaService.GetEntity(area.PID.Value.ToString());//市
+                                supagent = db.FindEntity(t => t.Area_ID == areasup.PID && (t.IsValid ?? false));
+
+
+                                if (supagent != null)
+                                {
+                                    entity.ParentAgent = supagent;
+                                    entity.PID = supagent.ID;
+                                }
+                            }
+                        }
                     }
-
-
-                    this.BaseRepository(DbName).Update(entity);
                 }
-
-                
             }
+            db.Update(entity);
+            db.Commit();
+            //this.BaseRepository(DbName).Update(entity);
+            //this.BaseRepository(DbName).UpdateImmediate(entity);
         }
 
         public string AgentQuit(string keyValue)
