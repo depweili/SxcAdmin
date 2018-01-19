@@ -573,7 +573,7 @@ namespace YaChH.Application.Service.SxcManage
 
             string pid = "null";
 
-            if (entity.PID != null)
+            if (entity.PID.HasValue)
             {
                 pid = entity.PID.Value.ToString();
             }

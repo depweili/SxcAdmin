@@ -233,7 +233,8 @@ namespace YaChH.Application.Service.SxcManage
 
             var agent = db.FindEntity<Sxc_AgentEntity>(t => t.ID == entity.UserID);
 
-            if (agent.Type == 1 && agent.IsValid.Value)
+            //&& agent.IsValid.Value 不需要本身是有效代理
+            if (agent.Type == 1)
             {
                 if (agent.PID.HasValue)
                 {
@@ -293,7 +294,8 @@ namespace YaChH.Application.Service.SxcManage
                 }
             }
 
-            if (agent.Type == 2 && agent.IsValid.Value)
+            //&& agent.IsValid.Value
+            if (agent.Type == 2 )
             {
                 if (agent.PID.HasValue)
                 {
@@ -366,6 +368,102 @@ namespace YaChH.Application.Service.SxcManage
                     }
                 }
             }
+            //直属
+            if (agent.Type == 3)
+            {
+                if (agent.PID.HasValue)
+                {
+                    var agent1 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent.PID);
+
+                    //公司直招
+                    if (agent1.Level < 4)
+                    {
+                        var distrAmount = entity.DistrAmount * 0.3m;
+                        var amount1 = distrAmount * GetFzxsCommission(agent1.Level);
+
+                        entity.Commission += amount1;
+                        agent1.Commission += amount1;
+
+                        var record1 = new Sxc_CommissionRecordEntity
+                        {
+                            AgentID = agent1.ID,
+                            CreateTime = DateTime.Now,
+                            State = 0,
+                            UserPaymentID = entity.ID,
+                            Commission = amount1
+                        };
+
+                        db.Insert(record1);
+                        db.Update(agent1);
+
+                        List<Sxc_AgentEntity> SupAgents = new List<Sxc_AgentEntity>();
+                        GetSupAgents(db, agent1, SupAgents);
+
+                        foreach (var sup in SupAgents)
+                        {
+                            var amountsup = distrAmount * 0.15m;
+                            entity.Commission += amountsup;
+                            sup.Commission += amountsup;
+
+                            var recordsup = new Sxc_CommissionRecordEntity
+                            {
+                                AgentID = sup.ID,
+                                CreateTime = DateTime.Now,
+                                State = 0,
+                                UserPaymentID = entity.ID,
+                                Commission = amountsup
+                            };
+
+                            db.Insert(recordsup);
+                            db.Update(sup);
+                        }
+                    }
+                    //学员发展
+                    //level=4
+                    else
+                    {
+                        var amount1 = entity.DistrAmount * GetFzxsCommission(agent1.Level);
+
+                        entity.Commission += amount1;
+                        agent1.Commission += amount1;
+
+                        var record1 = new Sxc_CommissionRecordEntity
+                        {
+                            AgentID = agent1.ID,
+                            CreateTime = DateTime.Now,
+                            State = 0,
+                            UserPaymentID = entity.ID,
+                            Commission = amount1
+                        };
+
+                        db.Insert(record1);
+                        db.Update(agent1);
+
+                        if (agent1.PID.HasValue)
+                        {
+                            var agent2 = db.FindEntity<Sxc_AgentEntity>(t => t.ID == agent1.PID);
+                            
+                            var amount2 = entity.DistrAmount * 0.05m;
+
+                            entity.Commission += amount2;
+                            agent2.Commission += amount2;
+
+                            var record2 = new Sxc_CommissionRecordEntity
+                            {
+                                AgentID = agent2.ID,
+                                CreateTime = DateTime.Now,
+                                State = 0,
+                                UserPaymentID = entity.ID,
+                                Commission = amount2
+                            };
+
+                            db.Insert(record2);
+                            db.Update(agent2);
+
+                        }
+                    }
+                }
+            }
 
             entity.FinalAmount = entity.Amount - entity.Commission;
         }
@@ -428,6 +526,35 @@ namespace YaChH.Application.Service.SxcManage
                 case 3:
                     //per = 6000;
                     per = 0.3m;
+                    break;
+                case 4:
+                    //per = 5000;
+                    per = 0.25m;
+                    break;
+                default:
+                    break;
+            }
+            return per;
+        }
+
+
+        public decimal GetCompanyCommission(int level)
+        {
+            decimal per = 0;
+
+            switch (level)
+            {
+                case 1:
+                    //per = 8000;
+                    per = 1m;
+                    break;
+                case 2:
+                    //per = 7000;
+                    per = 0.85m;
+                    break;
+                case 3:
+                    //per = 6000;
+                    per = 0.7m;
                     break;
                 case 4:
                     //per = 5000;

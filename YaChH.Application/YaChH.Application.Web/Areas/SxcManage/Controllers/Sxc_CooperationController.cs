@@ -166,7 +166,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             }
             else
             {
-                return Success(msg);
+                return Error(msg);
             }
             
         }
@@ -189,7 +189,7 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             }
             else
             {
-                return Success(msg);
+                return Error(msg);
             }
         }
         #endregion

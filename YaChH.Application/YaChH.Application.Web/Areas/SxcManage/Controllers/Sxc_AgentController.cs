@@ -221,9 +221,13 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         [HttpPost]
         public ActionResult AgentQuit(string keyValue)
         {
-            var data = sxc_agentbll.AgentQuit(keyValue);
+            string msg = sxc_agentbll.AgentQuit(keyValue);
 
-            return ToJsonResult(data);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                return Error("失败：" + msg);
+            }
+            return Success("执行成功！");
         }
     }
 }

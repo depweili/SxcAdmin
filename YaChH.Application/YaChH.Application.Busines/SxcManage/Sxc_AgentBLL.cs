@@ -197,7 +197,6 @@ namespace YaChH.Application.Busines.SxcManage
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
