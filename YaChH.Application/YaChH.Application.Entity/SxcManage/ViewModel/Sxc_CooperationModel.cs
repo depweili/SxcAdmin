@@ -79,5 +79,8 @@ namespace YaChH.Application.Entity.SxcManage.ViewModel
      
         public string TypeName { get; set; }
         public string LevelName { get; set; }
+
+        public string NickName { get; set; }
+        public string RealName { get; set; }
     }
 }

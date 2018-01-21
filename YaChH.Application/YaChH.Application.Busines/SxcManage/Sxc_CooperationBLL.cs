@@ -4,6 +4,7 @@ using YaChH.Application.Service.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace YaChH.Application.Busines.SxcManage
 {

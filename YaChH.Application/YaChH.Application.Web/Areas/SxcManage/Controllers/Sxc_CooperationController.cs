@@ -69,7 +69,9 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
                 Sxc_CooperationModel item = new Sxc_CooperationModel
                 {
                     ID=d.ID,
-                    Address=d.Address,
+                    NickName = d.User.UserProfile.NickName,
+                    RealName = d.User.UserProfile.RealName,
+                    Address =d.Address,
                     AreaID=d.AreaID,
                     CreateTime=d.CreateTime,
                     AgentAreaInfo=d.AgentAreaInfo,
