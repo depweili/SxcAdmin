@@ -22,10 +22,13 @@
     function GetGrid() {
         var selectedRowIndex = 0;
         var $gridTable = $('#gridTable');
+        var initqueryJson = $("form").GetWebControls();
+
         $gridTable.jqGrid({
             autowidth: true,
             height: $(window).height() - 136.5,
             url: "../../SxcManage/Sxc_Agent/GetPageListJson",
+            postData: { queryJson: JSON.stringify(initqueryJson) },
             datatype: "json",
             colModel: [
                 { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true  },
@@ -107,10 +110,12 @@
         });
         //查询事件
         $("#btn_Search").click(function () {
+            var extqueryJson = $("form").GetWebControls();
             var queryJson = {
                 condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
-                keyword: $("#txt_Keyword").val()
+                keyword: $("#txt_Keyword").val(),
             }
+            $.extend(queryJson, extqueryJson);
             $gridTable.jqGrid('setGridParam', {
                 postData: { queryJson: JSON.stringify(queryJson) },
                 page: 1
@@ -209,29 +214,45 @@
 </script>
 <div class="titlePanel">
     <div class="title-search">
-        <table>
-            <tr>
-                <td>
-                    <div id="queryCondition" class="btn-group">
-                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="Name">名称</a></li>
-                            @*<li><a data-value="IDCard">身份证</a></li>
-                            <li><a data-value="Mobile">手机</a></li>*@
-                            <li><a data-value="Area">地区</a></li>
-                            <li><a data-value="SupAgent">上级代理</a></li>
-                        </ul>
-                    </div>
-                </td>
-                <td>
-                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
-                </td>
-                <td style="padding-left: 5px;">
-                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i> 查询</a>
-                </td>
-            </tr>
-        </table>
+        <form id="searchForm">
+            <table>
+                <tr>
+                    <td>
+                        <div id="queryCondition" class="btn-group">
+                            <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a data-value="Name">名称</a></li>
+                                @*<li><a data-value="IDCard">身份证</a></li>
+                                <li><a data-value="Mobile">手机</a></li>*@
+                                <li><a data-value="Area">地区</a></li>
+                                <li><a data-value="SupAgent">上级代理</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                    </td>
+                    <td class="formTitle">是否有效:</td>
+                    <td class="formValue" style="padding-left: 2px;">
+                        <select id="IsValid" class="form-control">
+                            <option value="">全部</option>
+                            <option value="true" selected="selected">是</option>
+                            <option value="false">否</option>
+                        </select>
+                        @*<div id="IsValid" type="select" class="ui-select" data-value="1">
+                            <ul>
+                                <li data-value="1">是</li>
+                                <li data-value="0">否</li>
+                            </ul>
+                        </div>*@
+                    </td>
+                    <td style="padding-left: 5px;">
+                        <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i> 查询</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
     <div class="toolbar">
         <div class="btn-group">

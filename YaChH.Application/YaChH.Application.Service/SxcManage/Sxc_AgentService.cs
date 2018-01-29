@@ -91,6 +91,13 @@ namespace YaChH.Application.Service.SxcManage
                 }
             }
 
+            if (!queryParam["IsValid"].IsEmpty())
+            {
+                string keyord = queryParam["IsValid"].ToString();
+                bool isValid = keyord.ToBool();
+                expression = expression.And(t => t.IsValid == isValid);
+            }
+
             if (!OperatorProvider.Provider.Current().IsAdmin && !isQueryByParent)
             {
                 var account = OperatorProvider.Provider.Current().Account;
