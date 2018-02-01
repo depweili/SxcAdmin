@@ -60,7 +60,7 @@ namespace YaChH.Application.Service.SxcManage
                 }
             }
 
-            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Descending) };
             var query = this.BaseRepository(DbName).IQueryable().Include(t=>t.User.UserProfile).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
             pagination.records = total;
             return query;
@@ -130,31 +130,60 @@ namespace YaChH.Application.Service.SxcManage
 
                 Sxc_Base_AreaEntity area = null;
 
-                if (cooper.Type == 1)
+                if (area3 == null)
                 {
-                    area = area3;
-
-                    if (area1.Type.Value != 1)
-                    {
-                        msg = "地区错误";
-                    }
+                    msg = "地区未找到";
                 }
-                else if (cooper.Level != null)
+
+                if (msg.IsEmpty())
                 {
-                    switch (cooper.Level)
+                    if (cooper.Type == 1)//直辖市
                     {
-                        case 1:
-                            area = area1;
-                            break;
-                        case 2:
-                            area = area2;
-                            break;
-                        case 3:
+                        area = area3;
+
+                        if (area1.Type.Value != 1)
+                        {
+                            msg = "地区错误";
+                        }
+                    }
+                    else
+                    {
+                        if (cooper.Type == 2)//非直辖市
+                        {
+                            if (area1.Type.Value == 1)
+                            {
+                                msg = "地区错误";
+                            }
+                            else
+                            {
+                                if (cooper.Level != null)
+                                {
+                                    switch (cooper.Level)
+                                    {
+                                        case 1:
+                                            area = area1;
+                                            break;
+                                        case 2:
+                                            area = area2;
+                                            break;
+                                        case 3:
+                                            area = area3;
+                                            break;
+                                        default:
+                                            area = area3;
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        else//直属
+                        {
                             area = area3;
-                            break;
+                        }
                     }
                 }
 
+                    
 
                 //重复
                 //var areaName = "";
