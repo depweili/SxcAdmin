@@ -125,14 +125,19 @@ namespace YaChH.Application.Service.SxcManage
             {
                 var queryJson = "{" + string.Format(@"'condition': 'Area','keyword': '{0}'", cooper.AreaInfo) + "}";
                 var area3 = areaService.QueryEntity(queryJson);
-                var area2 = areaService.GetEntity(area3.PID.Value.ToString());
-                var area1 = areaService.GetEntity(area2.PID.Value.ToString());
+                Sxc_Base_AreaEntity area2 = null;
+                Sxc_Base_AreaEntity area1 = null;
 
                 Sxc_Base_AreaEntity area = null;
 
                 if (area3 == null)
                 {
                     msg = "地区未找到";
+                }
+                else
+                {
+                    area2 = areaService.GetEntity(area3.PID.Value.ToString());
+                    area1 = areaService.GetEntity(area2.PID.Value.ToString());
                 }
 
                 if (msg.IsEmpty())
