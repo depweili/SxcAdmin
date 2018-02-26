@@ -28,7 +28,7 @@ namespace YaChH.Application.Service.SxcManage
     /// </summary>
     public class Sxc_AgentService : RepositoryFactory<Sxc_AgentEntity>, Sxc_AgentIService
     {
-        
+        //测试git
         private string DbName = "SXC";
 
         Sxc_Base_AreaIService areaService = new Sxc_Base_AreaService();
