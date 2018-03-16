@@ -111,6 +111,7 @@
     <Compile Include="PublicInfoManage\NewsEntity.cs" />
     <Compile Include="PublicInfoManage\ScheduleEntity.cs" />
     <Compile Include="ReportManage\RptTempEntity.cs" />
+    <Compile Include="SxcManage\Sxc_AccountWithdrawEntity.cs" />
     <Compile Include="SxcManage\Sxc_AgentEntity.cs" />
     <Compile Include="SxcManage\Sxc_Base_AreaEntity.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordEntity.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="SxcManage\Sxc_OrderInfoEntity.cs" />
     <Compile Include="SxcManage\Sxc_ReservationEntity.cs" />
     <Compile Include="SxcManage\Sxc_TeacherEntity.cs" />
+    <Compile Include="SxcManage\Sxc_UserAccountEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserIntegralEntity.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentEntity.cs" />

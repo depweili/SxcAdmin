@@ -208,6 +208,7 @@
     <Compile Include="Areas\ReportManage\Controllers\ReportController.cs" />
     <Compile Include="Areas\ReportManage\Controllers\ReportDemoController.cs" />
     <Compile Include="Areas\ReportManage\ReportManageAreaRegistration.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_AccountWithdrawController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_AgentController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_Base_AreaController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_CommissionRecordController.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Areas\SxcManage\Controllers\Sxc_OrderInfoController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_ReservationController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_TeacherController.cs" />
+    <Compile Include="Areas\SxcManage\Controllers\Sxc_UserAccountController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserPaymentController.cs" />
     <Compile Include="Areas\SxcManage\Controllers\Sxc_UserProfileController.cs" />
     <Compile Include="Areas\SxcManage\SxcManageAreaRegistration.cs" />
@@ -1366,6 +1368,10 @@
     <Content Include="Areas\SxcManage\Views\Sxc_Reservation\Sxc_ReservationForm.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Reservation\Sxc_ReservationIndex.cshtml" />
     <Content Include="Areas\SxcManage\Views\Sxc_Agent\Sxc_AgentEditSupForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_AccountWithdraw\Sxc_AccountWithdrawForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_AccountWithdraw\Sxc_AccountWithdrawIndex.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserAccount\Sxc_UserAccountForm.cshtml" />
+    <Content Include="Areas\SxcManage\Views\Sxc_UserAccount\Sxc_UserAccountIndex.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LiFolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\lr6.1.2.1.pubxml" />

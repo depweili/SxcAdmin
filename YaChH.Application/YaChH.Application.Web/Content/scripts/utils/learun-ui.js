@@ -461,6 +461,9 @@ $.fn.SetWebControls = function (data) {
                 case "datepicker":
                     id.val(formatDate(value, 'yyyy-MM-dd'));
                     break;
+                case "label":
+                    id.text(value);
+                    break;
                 default:
                     id.val(value);
                     break;

@@ -99,6 +99,7 @@
     <Compile Include="PublicInfoManage\INoticeService.cs" />
     <Compile Include="PublicInfoManage\IScheduleService.cs" />
     <Compile Include="ReportManage\IRptTempService.cs" />
+    <Compile Include="SxcManage\Sxc_AccountWithdrawIService.cs" />
     <Compile Include="SxcManage\Sxc_AgentIService.cs" />
     <Compile Include="SxcManage\Sxc_Base_AreaIService.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordIService.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="SxcManage\Sxc_OrderInfoIService.cs" />
     <Compile Include="SxcManage\Sxc_ReservationIService.cs" />
     <Compile Include="SxcManage\Sxc_TeacherIService.cs" />
+    <Compile Include="SxcManage\Sxc_UserAccountIService.cs" />
     <Compile Include="SxcManage\Sxc_UserIntegralIService.cs" />
     <Compile Include="SxcManage\Sxc_UserIService.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentIService.cs" />

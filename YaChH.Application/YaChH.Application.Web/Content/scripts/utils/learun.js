@@ -1023,9 +1023,13 @@ function(n, t) {
             case "datepicker":
                 i.val(formatDate(r, "yyyy-MM-dd"));
                 break;
+            case "label":
+                i.text(r);
+                break;
             case "uploadify":
             case "webUploader":
                 i.uploadifyExSet(r);
+                break;
             default:
                 i.val(r)
             }

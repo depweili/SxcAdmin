@@ -1,0 +1,114 @@
+﻿@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 108.5,
+            url: "../../SxcManage/Sxc_UserAccount/GetListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true,hidden: true  },
+                { label: 'AccountID', name: 'AccountID', index: 'AccountID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: true },
+                { label: '姓名', name: 'RealName', index: 'Name', width: 100, align: 'left', sortable: true  },
+                { label: '余额', name: 'Balance', index: 'Balance', width: 100, align: 'left',sortable: true  },
+                { label: '锁定金额', name: 'LockBalance', index: 'LockBalance', width: 100, align: 'left',sortable: true  },
+                { label: '提现', name: 'Cash', index: 'Cash', width: 100, align: 'left',sortable: true  },
+                { label: '消费', name: 'Expense', index: 'Expense', width: 100, align: 'left',sortable: true  },
+                { label: '卡号', name: 'BankCard', index: 'BankCard', width: 100, align: 'left', sortable: true,hidden: true  },
+                
+                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: true,hidden: true  },
+                { label: 'IsVerified', name: 'IsVerified', index: 'IsVerified', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '银行', name: 'BankName', index: 'BankName', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '支行', name: 'BranchBankName', index: 'BranchBankName', width: 100, align: 'left', sortable: true, hidden: true  },
+                
+                { label: '电话', name: 'MobilePhone', index: 'MobilePhone', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true, hidden: true }
+            ],
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加Sxc_UserAccount',
+            url: '/SxcManage/Sxc_UserAccount/Sxc_UserAccountForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑Sxc_UserAccount',
+                url: '/SxcManage/Sxc_UserAccount/Sxc_UserAccountForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../SxcManage/Sxc_UserAccount/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的Sxc_UserAccount！', 0);
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>*@
+            @*<a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>*@
+            @*<a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>*@
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+</div>

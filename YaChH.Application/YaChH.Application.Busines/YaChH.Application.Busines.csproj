@@ -94,6 +94,7 @@
     <Compile Include="PublicInfoManage\NoticeBLL.cs" />
     <Compile Include="PublicInfoManage\ScheduleBLL.cs" />
     <Compile Include="ReportManage\RptTempBLL.cs" />
+    <Compile Include="SxcManage\Sxc_AccountWithdrawBLL.cs" />
     <Compile Include="SxcManage\Sxc_AgentBLL.cs" />
     <Compile Include="SxcManage\Sxc_Base_AreaBLL.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordBLL.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="SxcManage\Sxc_OrderInfoBLL.cs" />
     <Compile Include="SxcManage\Sxc_ReservationBLL.cs" />
     <Compile Include="SxcManage\Sxc_TeacherBLL.cs" />
+    <Compile Include="SxcManage\Sxc_UserAccountBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserIntegralBLL.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentBLL.cs" />

@@ -105,6 +105,7 @@
     <Compile Include="PublicInfoManage\NewsMap.cs" />
     <Compile Include="PublicInfoManage\ScheduleMap.cs" />
     <Compile Include="ReportManage\RptTempMap.cs" />
+    <Compile Include="SxcManage\Sxc_AccountWithdrawMap.cs" />
     <Compile Include="SxcManage\Sxc_AgentMap.cs" />
     <Compile Include="SxcManage\Sxc_Base_AreaMap.cs" />
     <Compile Include="SxcManage\Sxc_CommissionRecordMap.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="SxcManage\Sxc_OrderInfoMap.cs" />
     <Compile Include="SxcManage\Sxc_ReservationMap.cs" />
     <Compile Include="SxcManage\Sxc_TeacherMap.cs" />
+    <Compile Include="SxcManage\Sxc_UserAccountMap.cs" />
     <Compile Include="SxcManage\Sxc_UserIntegralMap.cs" />
     <Compile Include="SxcManage\Sxc_UserMap.cs" />
     <Compile Include="SxcManage\Sxc_UserPaymentMap.cs" />
