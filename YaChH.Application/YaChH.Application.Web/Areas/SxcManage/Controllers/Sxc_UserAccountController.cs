@@ -42,6 +42,27 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
         /// <summary>
         /// 获取列表
         /// </summary>
+        /// <param name="pagination">分页参数</param>
+        /// <param name="queryJson">查询参数</param>
+        /// <returns>返回分页列表Json</returns>
+        [HttpGet]
+        public ActionResult GetPageListJson(Pagination pagination, string queryJson)
+        {
+            var watch = CommonHelper.TimerStart();
+            var data = sxc_useraccountbll.GetPageList(pagination, queryJson);
+            var jsonData = new
+            {
+                rows = data,
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records,
+                costtime = CommonHelper.TimerEnd(watch)
+            };
+            return ToJsonResult(jsonData);
+        }
+        /// <summary>
+        /// 获取列表
+        /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表Json</returns>
         [HttpGet]

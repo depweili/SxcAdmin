@@ -26,6 +26,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="keyValue">主键值</param>
         /// <returns></returns>
         Sxc_UserAccountEntity GetEntity(string keyValue);
+        IEnumerable<Sxc_UserAccountEntity> GetPageList(Pagination pagination, string queryJson);
         #endregion
 
         #region 提交数据

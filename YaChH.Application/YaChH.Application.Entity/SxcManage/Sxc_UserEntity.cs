@@ -70,6 +70,8 @@ namespace YaChH.Application.Entity.SxcManage
 
         public virtual Sxc_UserIntegralEntity UserIntegral { get; set; }
 
+        public virtual Sxc_UserAccountEntity UserAccount { get; set; }
+
         #endregion
 
         #region 扩展操作

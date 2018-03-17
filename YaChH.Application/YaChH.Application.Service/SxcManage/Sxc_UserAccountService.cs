@@ -8,6 +8,10 @@ using System.Linq;
 using YaChH.Util;
 
 using YaChH.Util.Extension;
+using YaChH.Data.EF.Tool;
+using YaChH.Data.EF.Extension;
+using System.ComponentModel;
+using System.Data.Entity;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -30,6 +34,34 @@ namespace YaChH.Application.Service.SxcManage
         public IEnumerable<Sxc_UserAccountEntity> GetList(string queryJson)
         {
             return this.BaseRepository(DbName).IQueryable().ToList();
+        }
+
+        public IEnumerable<Sxc_UserAccountEntity> GetPageList(Pagination pagination, string queryJson)
+        {
+            int total;
+
+            var expression = LinqExtensions.True<Sxc_UserAccountEntity>();
+            var queryParam = queryJson.ToJObject();
+            //客户名称
+            if (!queryParam["UserName"].IsEmpty())
+            {
+                string CustomerName = queryParam["UserName"].ToString();
+                expression = expression.And(t => t.User.UserProfile.NickName.Contains(CustomerName) || t.User.UserProfile.RealName.Contains(CustomerName));
+            }
+
+
+            //if (!OperatorProvider.Provider.Current().IsAdmin)
+            //{
+            //    var account = OperatorProvider.Provider.Current().Account;
+            //    expression = expression.And(t => t.UserPayment.User.SystemAccount == account);
+            //}
+
+            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            //Include("Agent").Include("UserPayment").  Where(x=>true  
+            //Include(t=>t.UserPayment.User.UserProfile).
+            var query = this.BaseRepository(DbName).IQueryable().Include(t=>t.User.UserProfile).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
+            pagination.records = total;
+            return query;
         }
         /// <summary>
         /// 获取实体

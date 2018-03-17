@@ -22,6 +22,7 @@ namespace YaChH.Application.Mapping.SxcManage
             #endregion
 
             #region 配置关系
+            this.HasRequired(t => t.User).WithRequiredDependent(t => t.UserAccount);
             #endregion
         }
     }
