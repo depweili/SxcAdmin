@@ -55,8 +55,9 @@ namespace YaChH.Application.Service.SxcManage
             //    var account = OperatorProvider.Provider.Current().Account;
             //    expression = expression.And(t => t.UserPayment.User.SystemAccount == account);
             //}
-
-            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Ascending) };
+            var SortDirection = pagination.sord.ToLower() == "asc" ? ListSortDirection.Ascending : ListSortDirection.Descending;
+            var SortProperty = pagination.sidx.IsEmpty() ? "ID" : pagination.sidx;
+            PropertySortCondition[] ps = new[] { new PropertySortCondition(SortProperty, SortDirection) };
             //Include("Agent").Include("UserPayment").  Where(x=>true  
             //Include(t=>t.UserPayment.User.UserProfile).
             var query = this.BaseRepository(DbName).IQueryable().Include(t=>t.User.UserProfile).Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();

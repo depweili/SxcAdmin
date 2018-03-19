@@ -124,7 +124,8 @@
         var $grid = $("#gridTable");
         $grid.jqGrid({
             unwritten: false,
-            datatype: "local",            height: '100%',
+            datatype: "local",
+            height: '100%',
             autowidth: true,
             colModel: [
                 { label: '主键', name: 'OrderEntryId', hidden: true },
@@ -138,7 +139,8 @@
                 { label: '含税单价', name: 'Taxprice', width: 80, align: 'center', sortable: false, resizable: false },
                 { label: '税额', name: 'Tax', width: 80, align: 'center', sortable: false, resizable: false },
                 { label: '含税金额', name: 'TaxAmount', width: 80, align: 'center', sortable: false, resizable: false },
-                { label: '说明信息', name: 'Description', width: 200, align: 'left', sortable: false, resizable: false }            ],
+                { label: '说明信息', name: 'Description', width: 200, align: 'left', sortable: false, resizable: false }
+            ],
             pager: false,
             rownumbers: true,
             shrinkToFit: false,

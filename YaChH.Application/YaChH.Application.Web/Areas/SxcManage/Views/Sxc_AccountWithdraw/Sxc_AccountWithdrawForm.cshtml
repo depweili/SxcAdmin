@@ -4,13 +4,22 @@
 }
 <script>
     var keyValue = request('keyValue');
+    var step = request('step');
     $(function () {
         initControl();
     });
     //初始化控件
     function initControl() {
+        //[{ "text": "申请中", "value": "0" }, { "text": "驳回", "value": "1" }, { "text": "批准", "value": "2" },{ "text": "完成", "value": "1" }, { "text": "失败", "value": "1" }];
+        var data = [{ "text": "申请中", "value": "0" }, { "text": "驳回", "value": "1" }, { "text": "批准", "value": "2" }];
+
+        if (step == '2') {
+            data = [{ "text": "批准", "value": "2" },{ "text": "完成", "value": "3" }, { "text": "失败", "value": "4" }];
+        }
+
         $("#State").ComboBox({
-            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=clzt",
+            data:data,
+            //url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=clzt",
             id: "value",
             text: "text",
             height: '200px'
@@ -23,7 +32,7 @@
                 success: function (data) {
                     $("#form1").SetWebControls(data);
 
-                    if (data.State != 0)
+                    if (data.State != 0 && data.State != 2)
                     {
                         $("#State").attr('disabled', 'disabled');
                         $("#Memo").attr('disabled', 'disabled');
@@ -106,7 +115,7 @@
             <td class="formTitle">处理详情</td>
             <td class="formValue">
                 @*<input id="ProcessDetail" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />*@
-                <textarea id="Memo" style="height: 80px;" class="form-control" isvalid="yes" checkexpession="NotNull"></textarea>
+                <textarea id="Memo" style="height: 80px;" class="form-control" ></textarea>
             </td>
         </tr>
 

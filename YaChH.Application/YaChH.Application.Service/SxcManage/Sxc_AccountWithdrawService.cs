@@ -58,6 +58,16 @@ namespace YaChH.Application.Service.SxcManage
                 DateTime endTime = queryParam["EndTime"].ToDate().AddDays(1);
                 expression = expression.And(t => t.CreateTime >= startTime && t.CreateTime <= endTime);
             }
+            //环节
+            if (!queryParam["Step"].IsEmpty() && !queryParam["Step"].IsEmpty())
+            {
+                if (queryParam["Step"].ToString() == "2")
+                {
+                    expression = expression.And(t => t.State >= 2);
+                }
+                
+            }
+
             //客户名称
             //if (!queryParam["UserName"].IsEmpty())
             //{
@@ -71,8 +81,9 @@ namespace YaChH.Application.Service.SxcManage
             //    var account = OperatorProvider.Provider.Current().Account;
             //    expression = expression.And(t => t.UserPayment.User.SystemAccount == account);
             //}
-
-            PropertySortCondition[] ps = new[] { new PropertySortCondition("ID", ListSortDirection.Descending) };
+            var SortDirection = pagination.sord.ToLower() == "asc" ? ListSortDirection.Ascending : ListSortDirection.Descending;
+            var SortProperty = pagination.sidx.IsEmpty() ? "ID" : pagination.sidx;
+            PropertySortCondition[] ps = new[] { new PropertySortCondition(SortProperty, SortDirection) };
             //Include("Agent").Include("UserPayment").  Where(x=>true  
             //Include(t=>t.UserPayment.User.UserProfile).
             var query = this.BaseRepository(DbName).IQueryable().Where(expression, pagination.page, pagination.rows, out total, ps).AsEnumerable();
@@ -122,22 +133,23 @@ namespace YaChH.Application.Service.SxcManage
                 if (!string.IsNullOrEmpty(keyValue))
                 {
                     var wd = db.FindEntity<Sxc_AccountWithdrawEntity>(int.Parse(keyValue));
-                    if (wd.State == 0)
+                    if (wd.State == 0|| wd.State == 2)
                     {
                         wd.Memo = entity.Memo;
-                        if (entity.State != 0)
+                        wd.State = entity.State;
+
+                        if (entity.State != 0|| entity.State != 2)
                         {
-                            wd.State = entity.State;
                             wd.CompleteTime = DateTime.Now;
                             var account = db.FindEntity<Sxc_UserAccountEntity>(wd.UserAccountID);
 
-                            if (entity.State == 1)
+                            if (entity.State == 3)//成功
                             {
                                 account.LockBalance = account.LockBalance - wd.Amount;
                                 account.Cash = account.Cash + wd.Amount;
                             }
 
-                            if (entity.State == 2)
+                            if (entity.State == 1|| entity.State == 4)//驳回和失败
                             {
                                 account.LockBalance = account.LockBalance - wd.Amount;
                                 account.Balance = account.Balance + wd.Amount;

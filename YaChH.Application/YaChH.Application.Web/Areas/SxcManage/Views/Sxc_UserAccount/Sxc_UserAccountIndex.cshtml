@@ -28,23 +28,23 @@
             url: "../../SxcManage/Sxc_UserAccount/GetPageListJson",
             datatype: "json",
             colModel: [
-                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left',sortable: true,hidden: true  },
-                { label: 'AccountID', name: 'AccountID', index: 'AccountID', width: 100, align: 'left', sortable: true, hidden: true },
-                { label: '昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: true },
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: false, hidden: true },
+                { label: 'AccountID', name: 'AccountID', index: 'AccountID', width: 100, align: 'left', sortable: false, hidden: true },
+                { label: '昵称', name: 'NickName', index: 'Name', width: 100, align: 'left', sortable: false },
                 { label: '姓名', name: 'RealName', index: 'Name', width: 100, align: 'left', sortable: true  },
                 { label: '余额', name: 'Balance', index: 'Balance', width: 100, align: 'left',sortable: true  },
                 { label: '锁定金额', name: 'LockBalance', index: 'LockBalance', width: 100, align: 'left',sortable: true  },
                 { label: '提现', name: 'Cash', index: 'Cash', width: 100, align: 'left',sortable: true  },
                 { label: '消费', name: 'Expense', index: 'Expense', width: 100, align: 'left',sortable: true  },
-                { label: '卡号', name: 'BankCard', index: 'BankCard', width: 100, align: 'left', sortable: true,hidden: true  },
+                { label: '卡号', name: 'BankCard', index: 'BankCard', width: 100, align: 'left', sortable: false,hidden: false  },
                 
-                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: true,hidden: true  },
-                { label: 'IsVerified', name: 'IsVerified', index: 'IsVerified', width: 100, align: 'left', sortable: true, hidden: true },
-                { label: '银行', name: 'BankName', index: 'BankName', width: 100, align: 'left', sortable: true, hidden: true },
-                { label: '支行', name: 'BranchBankName', index: 'BranchBankName', width: 100, align: 'left', sortable: true, hidden: true  },
+                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 100, align: 'left', sortable: false,hidden: true  },
+                { label: 'IsVerified', name: 'IsVerified', index: 'IsVerified', width: 100, align: 'left', sortable: false, hidden: true },
+                { label: '银行', name: 'BankName', index: 'BankName', width: 100, align: 'left', sortable: false, hidden: true },
+                { label: '支行', name: 'BranchBankName', index: 'BranchBankName', width: 100, align: 'left', sortable: false, hidden: true  },
                 
-                { label: '电话', name: 'MobilePhone', index: 'MobilePhone', width: 100, align: 'left', sortable: true, hidden: true },
-                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: true, hidden: true }
+                { label: '电话', name: 'MobilePhone', index: 'MobilePhone', width: 100, align: 'left', sortable: false, hidden: true },
+                { label: 'IsValid', name: 'IsValid', index: 'IsValid', width: 100, align: 'left', sortable: false, hidden: true }
             ],
             viewrecords: true,
             rowNum: 30,

@@ -2,10 +2,19 @@
     ViewBag.Title = "列表页面";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<script>    ;
+<script>    
+    var step = request('step');
     $(function () {
         InitialPage();
         GetGrid();
+
+        if (step == '2') {
+            $('#lr-approve').hide();
+        }
+        else
+        {
+            $('#lr-edit').hide();
+        }
     });
     //初始化页面
     function InitialPage() {
@@ -27,6 +36,7 @@
             height: $(window).height() - 136.5,
             url: "../../SxcManage/Sxc_AccountWithdraw/GetPageListJson",
             datatype: "json",
+            postData: { queryJson: '{ "Step": "'+step+ '"}' },
             colModel: [
                 { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: false,hidden: true },
                 { label: 'UserAccountID', name: 'UserAccountID', index: 'UserAccountID', width: 100, align: 'left', sortable: true, hidden: true },
@@ -42,8 +52,10 @@
                     label: '状态', name: 'State', index: 'State', width: 100, align: 'left', sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         if (cellvalue == "0") { return "申请中"; }
-                        if (cellvalue == "1") { return "完成"; }
-                        if (cellvalue == "2") { return "失败"; }
+                        if (cellvalue == "1") { return "驳回"; }
+                        if (cellvalue == "2") { return "批准"; }
+                        if (cellvalue == "3") { return "完成"; }
+                        if (cellvalue == "4") { return "失败"; }
                     }
                 },
                 { label: '备注', name: 'Memo', index: 'Memo', width: 100, align: 'left', sortable: false  },
@@ -103,6 +115,7 @@
             $("#SelectedStartTime").html($("#StartTime").val());
             $("#SelectedEndTime").html($("#EndTime").val());
             var queryJson = $("#filter-form").GetWebControls();
+            queryJson.Step = step;
             $gridTable.jqGrid('setGridParam', {
                 postData: { queryJson: JSON.stringify(queryJson) },
                 page: 1
@@ -134,6 +147,40 @@
                 top.frames[iframeId].AcceptClick();
             }
 
+            if (state != "申请中" && state !='批准') {
+                btn = ['关闭'];
+                callback = function (iframeId) {
+                    top.frames[iframeId].Close();
+                }
+            }
+            dialogOpen({
+                id: 'Form',
+                title: '提现处理',
+                url: '/SxcManage/Sxc_AccountWithdraw/Sxc_AccountWithdrawForm?keyValue=' + keyValue+'&step=2',
+                width: '500px',
+                height: '400px',
+                btn: btn,
+                callBack:callback
+                //callBack: function (iframeId) {
+                //    top.frames[iframeId].AcceptClick();
+                //}
+            })
+
+        }
+    }
+
+    //审批
+    function btn_approve() {
+        var keyValue = $('#gridTable').jqGridRowValue('ID');
+        if (checkedRow(keyValue)) {
+            //var index = $("#gridTable").jqGrid('getGridParam', 'selrow');
+            //$('#gridTable').jqGrid('getRowData', index)['State'];
+            var state = $('#gridTable').jqGridRowValue('State');
+            var btn = ['确认', '关闭'];
+            var callback = function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+
             if (state != "申请中") {
                 btn = ['关闭'];
                 callback = function (iframeId) {
@@ -147,7 +194,7 @@
                 width: '500px',
                 height: '400px',
                 btn: btn,
-                callBack:callback
+                callBack: callback
                 //callBack: function (iframeId) {
                 //    top.frames[iframeId].AcceptClick();
                 //}
@@ -155,6 +202,8 @@
 
         }
     }
+
+
     //删除
     function btn_delete() {
         var keyValue = $('#gridTable').jqGridRowValue('ID');
@@ -225,6 +274,7 @@
         <div class="btn-group">
             <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;处理</a>
+            <a id="lr-approve" class="btn btn-default" onclick="btn_approve()"><i class="fa fa-pencil-square-o"></i>&nbsp;审批</a>
             @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>*@
