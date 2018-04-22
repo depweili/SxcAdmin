@@ -13,6 +13,9 @@ using YaChH.Data.EF.Tool;
 using System.ComponentModel;
 using System.Data.Entity;
 using YaChH.Data.EF.Extension;
+using System.Data;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace YaChH.Application.Service.SxcManage
 {
@@ -75,6 +78,13 @@ namespace YaChH.Application.Service.SxcManage
             //    expression = expression.And(t => t.UserPayment.User.UserProfile.NickName.Contains(CustomerName) || t.UserPayment.User.UserProfile.RealName.Contains(CustomerName));
             //}
 
+            //客户名称
+            if (!queryParam["UserName"].IsEmpty())
+            {
+                string CustomerName = queryParam["UserName"].ToString();
+                expression = expression.And(t => t.Name== CustomerName);
+            }
+
 
             //if (!OperatorProvider.Provider.Current().IsAdmin)
             //{
@@ -95,9 +105,53 @@ namespace YaChH.Application.Service.SxcManage
         /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表</returns>
-        public IEnumerable<Sxc_AccountWithdrawEntity> GetList(string queryJson)
+        //IEnumerable<Sxc_AccountWithdrawEntity>
+        public dynamic GetList(string queryJson)
         {
-            return this.BaseRepository(DbName).IQueryable().ToList();
+            //return this.BaseRepository(DbName).IQueryable().ToList();
+
+            var expression = LinqExtensions.True<Sxc_AccountWithdrawEntity>();
+            var queryParam = queryJson.ToJObject();
+            //单据日期
+            if (!queryParam["StartTime"].IsEmpty() && !queryParam["EndTime"].IsEmpty())
+            {
+                DateTime startTime = queryParam["StartTime"].ToDate();
+                DateTime endTime = queryParam["EndTime"].ToDate().AddDays(1);
+                expression = expression.And(t => t.CreateTime >= startTime && t.CreateTime <= endTime);
+            }
+            //环节
+            if (!queryParam["Step"].IsEmpty() && !queryParam["Step"].IsEmpty())
+            {
+                if (queryParam["Step"].ToString() == "2")
+                {
+                    expression = expression.And(t => t.State >= 2);
+                }
+            }
+
+            //客户名称
+            if (!queryParam["UserName"].IsEmpty())
+            {
+                string CustomerName = queryParam["UserName"].ToString();
+                expression = expression.And(t => t.Name == CustomerName);
+            }
+
+            var query = this.BaseRepository(DbName).IQueryable().Where(expression).OrderByDescending(t=>t.ID).Select(t=>new {
+                t.AccountRecordID,
+                t.Amount,
+                t.BankCard,
+                t.BankName,
+                t.BranchBankName,
+                t.CompleteTime,
+                t.CreateTime,
+                t.Memo,
+                t.MobilePhone,
+                t.Name,
+                State=t.State==0? "申请中":(t.State==1? "驳回" : (t.State==2? "批准" : (t.State==3? "完成" : (t.State==4? "失败" : ""))))
+            }).AsEnumerable();
+            
+
+            return query;
+
         }
         /// <summary>
         /// 获取实体
@@ -180,5 +234,26 @@ namespace YaChH.Application.Service.SxcManage
             
         }
         #endregion
+
+        public DataTable GetExportData(string queryJson)
+        {
+            try
+            {
+                var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
+                var json = JsonConvert.SerializeObject(GetList(queryJson), timeConverter);
+
+                //var json = GetList(queryJson).ToJson();
+
+                //var data = json.ToTable();
+                var data = JsonConvert.DeserializeObject<DataTable>(json);
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

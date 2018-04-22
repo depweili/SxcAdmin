@@ -1,6 +1,7 @@
 ﻿using YaChH.Application.Entity.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
+using System.Data;
 
 namespace YaChH.Application.IService.SxcManage
 {
@@ -26,7 +27,8 @@ namespace YaChH.Application.IService.SxcManage
         /// </summary>
         /// <param name="queryJson">查询参数</param>
         /// <returns>返回列表</returns>
-        IEnumerable<Sxc_AccountWithdrawEntity> GetList(string queryJson);
+        //IEnumerable<Sxc_AccountWithdrawEntity> GetList(string queryJson);
+        dynamic GetList(string queryJson);
         /// <summary>
         /// 获取实体
         /// </summary>
@@ -48,6 +50,7 @@ namespace YaChH.Application.IService.SxcManage
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
         void SaveForm(string keyValue, Sxc_AccountWithdrawEntity entity);
+        DataTable GetExportData(string queryJson);
         #endregion
     }
 }

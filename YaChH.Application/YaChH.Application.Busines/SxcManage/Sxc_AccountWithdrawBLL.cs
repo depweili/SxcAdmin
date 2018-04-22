@@ -4,6 +4,8 @@ using YaChH.Application.Service.SxcManage;
 using YaChH.Util.WebControl;
 using System.Collections.Generic;
 using System;
+using YaChH.Util.Offices;
+using System.Data;
 
 namespace YaChH.Application.Busines.SxcManage
 {
@@ -78,6 +80,41 @@ namespace YaChH.Application.Busines.SxcManage
                 service.SaveForm(keyValue, entity);
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void GetExportData(string queryJson)
+        {
+            try
+            {
+                DataTable exportTable = service.GetExportData(queryJson);
+                //设置导出格式
+                ExcelConfig excelconfig = new ExcelConfig();
+                excelconfig.Title = "提现导出";
+                excelconfig.TitleFont = "微软雅黑";
+                excelconfig.TitlePoint = 25;
+                excelconfig.FileName = "提现导出"+DateTime.Now.ToString("yyyyMMddHHmmss")+".xls";
+                excelconfig.IsAllSizeColumn = true;
+                //每一列的设置,没有设置的列信息，系统将按datatable中的列名导出
+                List<ColumnEntity> listColumnEntity = new List<ColumnEntity>();
+                excelconfig.ColumnEntity = listColumnEntity;
+                ColumnEntity columnentity = new ColumnEntity();
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "Name", ExcelColumn = "姓名" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "BankCard", ExcelColumn = "卡号" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "BankName", ExcelColumn = "开户行" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "BranchBankName", ExcelColumn = "开户支行" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "Amount", ExcelColumn = "提现金额" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "MobilePhone", ExcelColumn = "手机" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "CreateTime", ExcelColumn = "申请时间" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "CompleteTime", ExcelColumn = "完成时间" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "State", ExcelColumn = "状态" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "Memo", ExcelColumn = "备注" });
+                //调用导出方法
+                ExcelHelper.ExcelDownload(exportTable, excelconfig);
+            }
+            catch (Exception ex)
             {
                 throw;
             }

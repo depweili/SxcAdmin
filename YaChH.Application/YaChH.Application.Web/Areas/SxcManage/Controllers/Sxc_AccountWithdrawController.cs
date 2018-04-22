@@ -113,5 +113,12 @@ namespace YaChH.Application.Web.Areas.SxcManage.Controllers
             return Success("操作成功。");
         }
         #endregion
+
+        [HttpGet]
+        public ActionResult Export(string queryJson)
+        {
+            sxc_accountwithdrawbll.GetExportData(queryJson);
+            return Success("导出成功。");
+        }
     }
 }

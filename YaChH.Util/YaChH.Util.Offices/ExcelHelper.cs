@@ -107,6 +107,16 @@ namespace YaChH.Util.Offices
                 }
             }
 
+            int colindex = 0;
+            for (int j = 0; j < excelConfig.ColumnEntity.Count; j++)
+            {
+                if (dtSource.Columns.Contains(excelConfig.ColumnEntity[j].Column))
+                {
+                    dtSource.Columns[excelConfig.ColumnEntity[j].Column].SetOrdinal(colindex);
+                    colindex++;
+                }
+            }
+
             HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet();
             #region 右击文件 属性信息
@@ -116,12 +126,12 @@ namespace YaChH.Util.Offices
                 workbook.DocumentSummaryInformation = dsi;
 
                 SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
-                si.Author = "刘晓雷"; //填加xls文件作者信息
-                si.ApplicationName = "力软信息"; //填加xls文件创建程序信息
-                si.LastAuthor = "刘晓雷"; //填加xls文件最后保存者信息
-                si.Comments = "刘晓雷"; //填加xls文件作者信息
-                si.Title = "标题信息"; //填加xls文件标题信息
-                si.Subject = "主题信息";//填加文件主题信息
+                si.Author = ""; //填加xls文件作者信息刘晓雷
+                si.ApplicationName = ""; //填加xls文件创建程序信息
+                si.LastAuthor = ""; //填加xls文件最后保存者信息
+                si.Comments = ""; //填加xls文件作者信息
+                si.Title = ""; //填加xls文件标题信息
+                si.Subject = "";//填加文件主题信息
                 si.CreateDateTime = System.DateTime.Now;
                 workbook.SummaryInformation = si;
             }

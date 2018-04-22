@@ -31,12 +31,17 @@
     function GetGrid() {
         var selectedRowIndex = 0;
         var $gridTable = $('#gridTable');
+
+        var queryJson = $("#filter-form").GetWebControls();
+        queryJson.Step = step;
+
         $gridTable.jqGrid({
             autowidth: true,
             height: $(window).height() - 136.5,
             url: "../../SxcManage/Sxc_AccountWithdraw/GetPageListJson",
             datatype: "json",
-            postData: { queryJson: '{ "Step": "'+step+ '"}' },
+            //postData: { queryJson: '{ "Step": "' + step + '"}' },
+            postData: { queryJson: JSON.stringify(queryJson) },
             colModel: [
                 { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: false,hidden: true },
                 { label: 'UserAccountID', name: 'UserAccountID', index: 'UserAccountID', width: 100, align: 'left', sortable: true, hidden: true },
@@ -219,6 +224,25 @@
             dialogMsg('请选择需要删除的Sxc_AccountWithdraw！', 0);
         }
     }
+
+    //导出
+    function btn_export() {
+        if (!$(".ui-filter-text").next('.ui-filter-list').is(":hidden")) {
+            $(".ui-filter-text").trigger("click");
+        }
+        $("#SelectedStartTime").html($("#StartTime").val());
+        $("#SelectedEndTime").html($("#EndTime").val());
+        var queryJson = $("#filter-form").GetWebControls();
+        queryJson.Step = step;
+        
+        //var data = { queryJson: JSON.stringify(queryJson) };
+        //$.get('../../SxcManage/Sxc_AccountWithdraw/Export',data);
+
+        location.href = '../../SxcManage/Sxc_AccountWithdraw/Export?queryJson=' + JSON.stringify(queryJson);
+    }
+
+
+
 </script>
 <div class="titlePanel">
     <div class="title-search">
@@ -278,6 +302,9 @@
             @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>*@
+
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-pencil-square-o"></i>&nbsp;导出</a>
+
         </div>
     </div>
 </div>
